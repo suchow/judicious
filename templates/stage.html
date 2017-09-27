@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block body %}
+<p>Task <code>{{ id }}</code></p>
+
+{% if name == "joke" %}
+<p>Tell us a joke</p>
+{% endif %}
+
+{% endblock %}

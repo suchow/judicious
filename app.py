@@ -143,18 +143,36 @@ def get_task_result(id):
 @app.route('/task', methods=['GET'])
 def get_task_from_queue():
     """Get the next task from the queue."""
+    task = get_next_task()
+    return jsonify(
+        status="success",
+        message="Task with id {}.".format(task.id),
+        data={
+            "id": task.id,
+        }
+    ), 200
+
+
+def get_next_task():
+    """Get the next task from the queue."""
     id = todo_queue.get().data['id']
     task = Task.query.filter_by(id=id).one_or_none()
     task.in_progress = True
     db.session.add(task)
     db.session.commit()
-    return jsonify(
-        status="success",
-        message="Task with id {}.".format(id),
-        data={
-            "id": id,
-        }
-    ), 200
+    return task
+
+
+@app.route('/stage/', methods=['GET'])
+def stage():
+    """Go to the experiment stage."""
+    task = get_next_task()
+    return render_template(
+        "stage.html",
+        name=task.name,
+        id=task.id,
+    )
+
 
 
 if __name__ == '__main__':
