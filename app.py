@@ -15,14 +15,16 @@ from psycopg2 import connect
 from sqlalchemy.dialects.postgresql import UUID
 
 app = Flask(__name__)
-app.config[
-    'SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres@localhost/judicious'
+
+DB_URL_DEFAULT = 'postgresql://postgres@localhost/judicious'
+DB_URL = os.environ.get("DATABASE_URL", DB_URL_DEFAULT)
+app.config['SQLALCHEMY_DATABASE_URI'] = DB_URL
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 db.create_all()
 
 # Create the todo queue.
-conn = connect('dbname=judicious user=postgres')
+conn = connect(DB_URL)
 pq = PQ(conn)
 todo_queue = pq['tasks']
 
