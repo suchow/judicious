@@ -7,6 +7,7 @@ import uuid
 from flask import (
     Flask,
     jsonify,
+    render_template,
     request,
 )
 from flask_sqlalchemy import SQLAlchemy
@@ -51,9 +52,15 @@ class Task(db.Model):
 
 
 @app.route('/')
-def hello_world():
-    """Sample route."""
-    return 'Hello, World!'
+def index():
+    """Index route."""
+    return render_template('index.html')
+
+
+@app.route('/consent/')
+def about():
+    """Render the consent form."""
+    return render_template('consent.html')
 
 
 @app.route('/task', methods=['POST'], defaults={'id': str(uuid.uuid4())})
