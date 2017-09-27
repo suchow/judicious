@@ -21,7 +21,6 @@ DB_URL = os.environ.get("DATABASE_URL", DB_URL_DEFAULT)
 app.config['SQLALCHEMY_DATABASE_URI'] = DB_URL
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
-db.create_all()
 
 # Create the todo queue.
 conn = connect(DB_URL)
