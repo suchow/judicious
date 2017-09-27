@@ -6,6 +6,8 @@ python:
 - 3.3
 - 2.7
 - 2.6
+before_script:
+- createdb judicious
 script: tox
 deploy:
   - provider: heroku
