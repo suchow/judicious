@@ -39,16 +39,16 @@ class Task(db.Model):
 
     id = db.Column(UUID, primary_key=True, nullable=False)
     timestamp = db.Column(db.DateTime, nullable=False, default=timenow)
-    name = db.Column(db.String(64), nullable=False)
+    type = db.Column(db.String(64), nullable=False)
     result = db.Column(db.String(128))
     in_progress = db.Column(db.Boolean(), default=False)
 
-    def __init__(self, id, name):
+    def __init__(self, id, type):
         self.id = id
-        self.name = name
+        self.type = type
 
     def __repr__(self):
-        return '<Task %r>' % self.name
+        return '<Task %r>' % self.type
 
 
 @app.route('/')
@@ -67,12 +67,12 @@ def about():
 @app.route('/task/<uuid:id>', methods=['POST'])
 def post_task(id):
     """Add a new task to the queue."""
-    name = request.values["name"]
+    type = request.values["type"]
     id_string = str(id)
     task_exists = Task.query.filter_by(id=id_string).count() > 0
     if not task_exists:
         app.logger.info("Creating task with id {}".format(id_string))
-        task = Task(id_string, name)
+        task = Task(id_string, type)
         db.session.add(task)
         db.session.commit()
         todo_queue.put({"id": id_string})
@@ -91,7 +91,7 @@ def post_task(id):
             message="Already exists.",
             data={
                 "id": id_string,
-                "name": name,
+                "type": type,
             }
         ), 409
 
@@ -125,7 +125,7 @@ def get_task_result(id):
             message="Task complete.",
             data={
                 "id": task.id,
-                "name": task.name,
+                "type": task.type,
                 "result": task.result,
                 "timestamp": task.timestamp,
             }
@@ -169,7 +169,7 @@ def stage():
     task = get_next_task()
     return render_template(
         "stage.html",
-        name=task.name,
+        type=task.type,
         id=task.id,
     )
 
