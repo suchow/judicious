@@ -11,10 +11,6 @@ with open('README.rst') as readme_file:
 with open('HISTORY.rst') as history_file:
     history = history_file.read()
 
-requirements = [
-    # TODO: put package requirements here
-]
-
 setup_requirements = [
     'pytest-runner',
     # TODO(suchow): put setup requirements (distutils extensions, etc.) here
@@ -35,7 +31,6 @@ setup(
     url='https://github.com/suchow/judicious',
     packages=find_packages(include=['judicious']),
     include_package_data=True,
-    install_requires=requirements,
     license="MIT license",
     zip_safe=False,
     keywords='judicious',
