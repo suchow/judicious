@@ -63,8 +63,8 @@ def about():
     return render_template('consent.html')
 
 
-@app.route('/task', methods=['POST'], defaults={'id': str(uuid.uuid4())})
-@app.route('/task/<uuid:id>', methods=['POST'])
+@app.route('/tasks', methods=['POST'], defaults={'id': str(uuid.uuid4())})
+@app.route('/tasks/<uuid:id>', methods=['POST'])
 def post_task(id):
     """Add a new task to the queue."""
     type = request.values["type"]
@@ -96,7 +96,7 @@ def post_task(id):
         ), 409
 
 
-@app.route('/task/<uuid:id>', methods=['PATCH'])
+@app.route('/tasks/<uuid:id>', methods=['PATCH'])
 def patch_task(id):
     """Add a result to the given task."""
     result = request.values["result"]
@@ -115,9 +115,9 @@ def patch_task(id):
     ), 200
 
 
-@app.route('/task/<uuid:id>', methods=['GET'])
+@app.route('/tasks/<uuid:id>', methods=['GET'])
 def get_task_result(id):
-    """Add a new task to the queue."""
+    """Pull a task off the queue."""
     task = Task.query.filter_by(id=str(id)).one()
     if not task.in_progress:
         return jsonify(
@@ -140,7 +140,7 @@ def get_task_result(id):
         ), 202
 
 
-@app.route('/task', methods=['GET'])
+@app.route('/tasks', methods=['GET'])
 def get_task_from_queue():
     """Get the next task from the queue."""
     task = get_next_task()
