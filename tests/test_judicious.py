@@ -6,7 +6,7 @@
 import pytest
 
 
-from judicious import judicious
+import judicious
 
 
 @pytest.fixture
