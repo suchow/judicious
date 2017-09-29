@@ -1,0 +1,17 @@
+{% extends "task.html" %}
+
+{% block scripts %}
+  {{ super() }}
+  <script>
+    Judicious.result = function () {
+      return {
+        text: $("#joke").val()
+      };
+    }
+  </script>
+{% endblock %}
+
+{% block task %}
+  <p><strong>Instructions:</strong> Tell your favorite joke.</p>
+  <textarea id="joke"></textarea>
+{% endblock %}

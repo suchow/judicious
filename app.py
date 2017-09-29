@@ -168,8 +168,7 @@ def stage():
     """Go to the experiment stage."""
     task = get_next_task()
     return render_template(
-        "stage.html",
-        type=task.type,
+        "tasks/{}.html".format(task.type),
         id=task.id,
     )
 

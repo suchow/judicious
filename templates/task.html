@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block scripts %}
+  {{ super() }}
+  <script type="text/javascript" src="{{ url_for('static', filename='task.js') }}"></script>
+  <script>
+    Judicious.taskUUID = "{{ id }}";
+  </script>
+{% endblock %}
+
+{% block body %}
+  {% block task %}
+  {% endblock %}
+  <a class="button" id="submit-task" href="#">Submit</a>
+  <input class="button button-clear" type="submit" value="Skip" id="skip-task">
+  <div class="task-id"><p><code>{{ id }}</code></p></div>
+{% endblock %}
