@@ -9,9 +9,11 @@ __version__ = '0.1.0'
 from .judicious import (
     BASE_URL,
     register,
+    run,
 )
 
 __all__ = (
     "BASE_URL",
     "register",
+    "run",
 )
