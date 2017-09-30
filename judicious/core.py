@@ -9,7 +9,9 @@ import uuid
 
 import requests
 
-BASE_URL = os.environ.get("JUDICIOUS_URL", "http://imprudent.herokuapp.com")
+
+def base_url():
+    return os.environ.get("JUDICIOUS_URL", "http://imprudent.herokuapp.com")
 
 
 def register(url):
@@ -32,7 +34,7 @@ def post_task(task_type, task_id=None):
     if not task_id:
         task_id = generate_id()
     return requests.post(
-        "{}/tasks/{}".format(BASE_URL, task_id),
+        "{}/tasks/{}".format(base_url(), task_id),
         data={'type': task_type},
     )
 
@@ -40,14 +42,14 @@ def post_task(task_type, task_id=None):
 def get_task(id):
     """Get the result of an existing task."""
     return requests.get(
-        "{}/tasks/{}".format(BASE_URL, id),
+        "{}/tasks/{}".format(base_url(), id),
     )
 
 
 def post_result(id, result):
     """Post the result of an existing task."""
     return requests.patch(
-        "{}/tasks/{}".format(BASE_URL, id),
+        "{}/tasks/{}".format(base_url(), id),
         data={'result': result},
     )
 

@@ -7,14 +7,14 @@ __email__ = 'jwsuchow@gmail.com'
 __version__ = '0.1.0'
 
 from .core import (
-    BASE_URL,
+    base_url,
     collect,
     register,
     seed,
 )
 
 __all__ = (
-    "BASE_URL",
+    "base_url",
     "collect",
     "register",
     "seed",
