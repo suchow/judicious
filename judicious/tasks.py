@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-"""Main module."""
+"""Pseudorandom generators for human computation."""
 
 from .core import collect
 
