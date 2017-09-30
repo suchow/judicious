@@ -6,7 +6,7 @@ __author__ = """Jordan W. Suchow"""
 __email__ = 'jwsuchow@gmail.com'
 __version__ = '0.1.0'
 
-from .judicious import (
+from .core import (
     BASE_URL,
     register,
     run,
