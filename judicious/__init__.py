@@ -10,10 +10,12 @@ from .judicious import (
     BASE_URL,
     register,
     run,
+    seed,
 )
 
 __all__ = (
     "BASE_URL",
     "register",
     "run",
+    "seed",
 )

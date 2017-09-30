@@ -17,6 +17,11 @@ def register(url):
     os.environ["JUDICIOUS_URL"] = url
 
 
+def seed(s):
+    """Seed the PRNG."""
+    random.seed(s)
+
+
 def generate_id():
     """Generate a UUID from pseudorandom bits."""
     return str(uuid.UUID(int=random.getrandbits(128)))
