@@ -117,9 +117,25 @@ def patch_task(id):
 
 @app.route('/tasks/<uuid:id>', methods=['GET'])
 def get_task_result(id):
-    """Pull a task off the queue."""
-    task = Task.query.filter_by(id=str(id)).one()
-    if not task.in_progress:
+    """Get the result of a task."""
+    task = Task.query.filter_by(id=str(id)).one_or_none()
+    if not task:
+        return jsonify(
+            status="success",
+            message="No task with id {} found.".format(id),
+            data={
+                "id": task.id,
+            }
+        ), 404
+    elif task.in_progress or not task.result:
+        return jsonify(
+            status="success",
+            message="Task is not yet complete.",
+            data={
+                "id": id,
+            }
+        ), 202
+    else:
         return jsonify(
             status="success",
             message="Task complete.",
@@ -130,14 +146,6 @@ def get_task_result(id):
                 "timestamp": task.timestamp,
             }
         ), 200
-    else:
-        return jsonify(
-            status="success",
-            message="Task is not yet complete.",
-            data={
-                "id": id,
-            }
-        ), 202
 
 
 @app.route('/tasks', methods=['GET'])
