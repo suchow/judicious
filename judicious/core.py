@@ -2,6 +2,7 @@
 
 """Main module."""
 
+import json
 import os
 import random
 import time
@@ -68,4 +69,4 @@ def collect(type):
         time.sleep(1)
         r = get_task(task_id)
 
-    return r.json()['data']['result']
+    return json.loads(r.json()['data']['result'])
