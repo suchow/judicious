@@ -124,7 +124,7 @@ def get_task_result(id):
             status="success",
             message="No task with id {} found.".format(id),
             data={
-                "id": task.id,
+                "id": id,
             }
         ), 404
     elif task.in_progress or not task.result:
