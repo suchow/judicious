@@ -52,7 +52,7 @@ def post_result(id, result):
     )
 
 
-def run(type):
+def collect(type):
     """Collect result of a task of the given type."""
     task_id = generate_id()
     r = get_task(task_id)

@@ -8,14 +8,14 @@ __version__ = '0.1.0'
 
 from .core import (
     BASE_URL,
+    collect,
     register,
-    run,
     seed,
 )
 
 __all__ = (
     "BASE_URL",
+    "collect",
     "register",
-    "run",
     "seed",
 )
