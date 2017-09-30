@@ -13,9 +13,14 @@ from .core import (
     seed,
 )
 
+from .tasks import (
+    joke
+)
+
 __all__ = (
     "base_url",
     "collect",
+    "joke",
     "register",
     "seed",
 )
