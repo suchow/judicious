@@ -16,6 +16,7 @@ from .core import (
 from .tasks import (
     copyedit,
     joke,
+    label,
 )
 
 __all__ = (
@@ -23,6 +24,7 @@ __all__ = (
     "collect",
     "copyedit",
     "joke",
+    "label",
     "register",
     "seed",
 )

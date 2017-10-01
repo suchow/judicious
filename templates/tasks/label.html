@@ -1,0 +1,29 @@
+{% extends "task.html" %}
+
+{% block styles %}
+  {{ super() }}
+{% endblock %}
+
+{% block scripts %}
+  {{ super() }}
+  <script>
+    $(document).ready(function() {
+      Judicious.result = function () {
+        return {
+          label: $("#label").val().toLowerCase()
+        };
+      }
+      Judicious.validate = function () {
+        return $("#label").val().length > 0;
+      }
+    });
+  </script>
+{% endblock %}
+
+{% block task %}
+  <p>
+    <strong>Instructions:</strong> Name the object or thing depicted in this image (e.g. <code>cat</code>)?
+  </p>
+  <img width="400px" id="image" src="{{ parameters.src }}" />
+  <input id="label" placeholder="Your description&hellip;" type="text" autofocus>
+{% endblock %}

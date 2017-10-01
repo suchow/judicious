@@ -13,3 +13,8 @@ def joke():
 def copyedit(text):
     r = collect("copyedit", text=text)
     return r['text']
+
+
+def label(src):
+    r = collect("label", src=src)
+    return r['label']
