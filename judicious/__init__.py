@@ -14,12 +14,14 @@ from .core import (
 )
 
 from .tasks import (
-    joke
+    copyedit,
+    joke,
 )
 
 __all__ = (
     "base_url",
     "collect",
+    "copyedit",
     "joke",
     "register",
     "seed",

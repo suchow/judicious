@@ -1,0 +1,33 @@
+{% extends "task.html" %}
+
+{% block styles %}
+  {{ super() }}
+  <style type="text/css">
+    textarea {
+      height: 300px;
+    }
+  </style>
+{% endblock %}
+
+{% block scripts %}
+  {{ super() }}
+  <script>
+    $( document ).ready(function() {
+      Judicious.result = function () {
+        return {
+          text: $("#text").val()
+        };
+      }
+    });
+  </script>
+{% endblock %}
+
+{% block task %}
+  <p>
+    <strong>Instructions:</strong>
+    Review the following text and copy edit it: improve its readability and
+    accuracy and ensure that it has no errors (spelling, grammar,
+    or style), omissions, inconsistencies, or repetition.
+  </p>
+  <textarea id="text" >{{ parameters.text|e }}</textarea>
+{% endblock %}
