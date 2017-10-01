@@ -13,7 +13,7 @@ var Judicious = (function () {
       url: '/tasks/' + uuid,
       type: 'PATCH',
       dataType: 'JSON',
-      success: function (data) {
+      complete: function (data) {
         callback();
       },
       data: {'result': JSON.stringify(result)},

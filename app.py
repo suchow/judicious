@@ -39,11 +39,13 @@ class Task(db.Model):
     """A task to be completed by a judicious participant."""
 
     id = db.Column(UUID, primary_key=True, nullable=False)
-    timestamp = db.Column(db.DateTime, nullable=False, default=timenow)
+    created_at = db.Column(db.DateTime, nullable=False, default=timenow)
     type = db.Column(db.String(64), nullable=False)
     parameters = db.Column(db.JSON)
-    result = db.Column(db.String(2**16))
     in_progress = db.Column(db.Boolean(), default=False)
+    started_at = db.Column(db.DateTime)
+    finished_at = db.Column(db.DateTime)
+    result = db.Column(db.String(2**16))
 
     def __init__(self, id, type, parameters=None):
         self.id = id
@@ -106,17 +108,27 @@ def patch_task(id):
     result = request.values["result"]
     id_string = str(id)
     task = Task.query.filter_by(id=id_string).one()
-    task.result = result
-    task.in_progress = False
-    db.session.add(task)
-    db.session.commit()
-    return jsonify(
-        status="success",
-        message="Result added.",
-        data={
-            "id": id,
-        }
-    ), 200
+    if task.result:
+        return jsonify(
+            status="error",
+            message="A result has already been added.",
+            data={
+                "id": id,
+            }
+        ), 409
+    else:
+        task.result = result
+        task.in_progress = False
+        task.finished_at = timenow()
+        db.session.add(task)
+        db.session.commit()
+        return jsonify(
+            status="success",
+            message="Result added.",
+            data={
+                "id": id,
+            }
+        ), 200
 
 
 @app.route('/tasks/<uuid:id>', methods=['GET'])
@@ -147,7 +159,9 @@ def get_task_result(id):
                 "id": task.id,
                 "type": task.type,
                 "result": task.result,
-                "timestamp": task.timestamp,
+                "created_at": task.created_at,
+                "started_at": task.started_at,
+                "finished_at": task.finished_at,
             }
         ), 200
 
@@ -159,6 +173,7 @@ def stage():
     if next_task:
         task = Task.query.filter_by(id=next_task.data['id']).one_or_none()
         task.in_progress = True
+        task.started_at = timenow()
         db.session.add(task)
         db.session.commit()
         return render_template(
