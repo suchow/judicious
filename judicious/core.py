@@ -30,13 +30,16 @@ def generate_id():
     return str(uuid.UUID(int=random.getrandbits(128)))
 
 
-def post_task(task_type, task_id=None):
+def post_task(task_type, task_id=None, parameters={}):
     """Create a new task."""
     if not task_id:
         task_id = generate_id()
     return requests.post(
         "{}/tasks/{}".format(base_url(), task_id),
-        data={'type': task_type},
+        data={
+            'type': task_type,
+            'parameters': json.dumps(parameters),
+        },
     )
 
 
@@ -55,7 +58,7 @@ def post_result(id, result):
     )
 
 
-def collect(type):
+def collect(type, **kwargs):
     """Collect result of a task of the given type."""
     task_id = generate_id()
     r = get_task(task_id)
@@ -63,7 +66,7 @@ def collect(type):
         return r.json()['data']['result']
 
     elif r.status_code == 404:
-        post_task(type, task_id=task_id)
+        post_task(type, task_id=task_id, parameters=kwargs)
 
     while r.status_code != 200:
         time.sleep(1)

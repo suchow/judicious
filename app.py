@@ -1,6 +1,7 @@
 """Imprudent."""
 
 from datetime import datetime
+import json
 import os
 import uuid
 
@@ -40,12 +41,14 @@ class Task(db.Model):
     id = db.Column(UUID, primary_key=True, nullable=False)
     timestamp = db.Column(db.DateTime, nullable=False, default=timenow)
     type = db.Column(db.String(64), nullable=False)
-    result = db.Column(db.String(128))
+    parameters = db.Column(db.JSON)
+    result = db.Column(db.String(2**16))
     in_progress = db.Column(db.Boolean(), default=False)
 
-    def __init__(self, id, type):
+    def __init__(self, id, type, parameters=None):
         self.id = id
         self.type = type
+        self.parameters = parameters
 
     def __repr__(self):
         return '<Task %r>' % self.type
@@ -67,12 +70,13 @@ def about():
 @app.route('/tasks/<uuid:id>', methods=['POST'])
 def post_task(id):
     """Add a new task to the queue."""
-    type = request.values["type"]
+    task_type = request.values["type"]
     id_string = str(id)
     task_exists = Task.query.filter_by(id=id_string).count() > 0
     if not task_exists:
         app.logger.info("Creating task with id {}".format(id_string))
-        task = Task(id_string, type)
+        parameters = json.loads(request.values["parameters"])
+        task = Task(id_string, task_type, parameters)
         db.session.add(task)
         db.session.commit()
         todo_queue.put({"id": id_string})
@@ -160,6 +164,7 @@ def stage():
         return render_template(
             "tasks/{}.html".format(task.type),
             id=task.id,
+            parameters=task.parameters,
         )
     else:
         return render_template("no_tasks.html")
