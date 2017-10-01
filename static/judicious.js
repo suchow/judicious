@@ -2,6 +2,7 @@ var Judicious = (function () {
   result = {
     foo: 'bar',
   };
+  validate = function () { return true; };
   var postResult = function (uuid, result, callback) {
     if (typeof result === "function") {
       result = result();
@@ -19,7 +20,8 @@ var Judicious = (function () {
     });
   };
   return {
-    result: result,
     postResult: postResult,
+    result: result,
+    validate: validate,
   };
 })();
