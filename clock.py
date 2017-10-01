@@ -7,6 +7,7 @@ from pq import PQ
 from psycopg2 import connect
 
 from app import db, Task
+from recruiters import HotAirRecruiter
 
 # Set up connection to queue.
 DB_URL_DEFAULT = 'postgresql://postgres@localhost/judicious'
@@ -28,15 +29,34 @@ logger.setLevel(logging.DEBUG)
 sched = BlockingScheduler()
 
 JUDICIOUS_RECRUIT_INTERVAL = os.environ.get(
-    "JUDICIOUS_RECRUIT_INTERVAL", 150000)
+    "JUDICIOUS_RECRUIT_INTERVAL", 10)
 
 JUDICIOUS_CLEANUP_INTERVAL = os.environ.get(
-    "JUDICIOUS_CLEANUP_INTERVAL", 5)
+    "JUDICIOUS_CLEANUP_INTERVAL", 2)
+
+
+recruiter = HotAirRecruiter()
 
 
 @sched.scheduled_job('interval', seconds=JUDICIOUS_RECRUIT_INTERVAL)
 def recruitment():
-    logger.info('Recruitment.')
+    WINDOW = 600
+    window_ago = datetime.now() - timedelta(seconds=WINDOW)
+    num_recent_tasks = Task.query\
+        .filter(Task.created_at > window_ago).count()
+    rate_in = float(num_recent_tasks) / WINDOW
+    num_recent_completions = Task.query\
+        .filter(Task.finished_at > window_ago).count()
+    rate_out = float(num_recent_completions) / WINDOW
+    num_unfinished_tasks = Task.query.filter_by(result=None).count()
+    logger.info("Rate in: {}".format(rate_in))
+    logger.info("Rate out: {}".format(rate_out))
+    logger.info("Task flow: {}".format(rate_in - rate_out))
+    logger.info("Number of unfinished tasks: {}".format(num_unfinished_tasks))
+    extra_flow = float(num_unfinished_tasks) / WINDOW
+    if rate_in - rate_out + extra_flow > 0:
+        logger.info("Recruiting!")
+        recruiter.recruit()
 
 
 @sched.scheduled_job('interval', seconds=JUDICIOUS_CLEANUP_INTERVAL)
