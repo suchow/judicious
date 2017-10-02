@@ -11,6 +11,7 @@ from flask import (
     redirect,
     render_template,
     request,
+    session,
     url_for,
 )
 from flask_sqlalchemy import SQLAlchemy
@@ -19,6 +20,8 @@ from psycopg2 import connect
 from sqlalchemy.dialects.postgresql import UUID
 
 app = Flask(__name__)
+
+app.secret_key = os.environ["JUDICIOUS_SECRET_KEY"]
 
 DB_URL_DEFAULT = 'postgresql://postgres@localhost/judicious'
 DB_URL = os.environ.get("DATABASE_URL", DB_URL_DEFAULT)
