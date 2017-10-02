@@ -8,8 +8,10 @@ import uuid
 from flask import (
     Flask,
     jsonify,
+    redirect,
     render_template,
     request,
+    url_for,
 )
 from flask_sqlalchemy import SQLAlchemy
 from pq import PQ
@@ -56,10 +58,20 @@ class Task(db.Model):
         return '<Task %r>' % self.type
 
 
-@app.route('/')
-def index():
+@app.route('/ad/')
+def ad():
     """Index route."""
-    return render_template('index.html')
+    assignmentId = request.values.get("assignmentId", None)
+    if assignmentId == "ASSIGNMENT_ID_NOT_AVAILABLE":
+        return render_template(
+            'ad_mturk.html',
+            hitId=request.values.get("hitId", None),
+            assignmentId=assignmentId,
+        )
+    elif assignmentId:
+        return redirect(url_for('consent'))
+    else:
+        return render_template('index.html')
 
 
 @app.route('/consent/')
