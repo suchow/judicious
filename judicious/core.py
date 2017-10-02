@@ -63,7 +63,7 @@ def collect(type, **kwargs):
     task_id = generate_id()
     r = get_task(task_id)
     if r.status_code == 200:
-        return r.json()['data']['result']
+        return json.loads(r.json()['data']['result'])
 
     elif r.status_code == 404:
         post_task(type, task_id=task_id, parameters=kwargs)
