@@ -63,7 +63,7 @@ def index():
 
 
 @app.route('/consent/')
-def about():
+def consent():
     """Render the consent form."""
     return render_template('consent.html')
 
