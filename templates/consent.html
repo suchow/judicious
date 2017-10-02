@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block body %}
-<h1>Consent to participate in research</h1>
+<h2>Consent to participate in research</h2>
 <blockquote>
 
 <p>This research is being conducted by Jordan Suchow and Thomas Griffiths at the University of California, Berkeley in collaboration with Thomas Morgan at Arizona State University. This study takes 5 minutes. Funding for this research is provided by the Defense Advanced Research Projects Agency (DARPA).</p>
@@ -25,6 +25,6 @@
 <button type="button" id="print-consent" class="button button-outline">Print a copy of this</button>
 <hr/>
 <h4>Do you understand and agree to participate?</h4>
-<button type="button" id="consent" class="button">I agree</button>
-<button type="button" id="no-consent" class="button">No thanks (exit)</button>
+<button type="button" id="consent" class="button" onclick="window.location.href='{{ url_for('stage') }}';">I agree</button>
+<button type="button" id="no-consent" class="button" onclick="window.location.href='https://google.com/'">No thanks (exit)</button>
 {% endblock %}
