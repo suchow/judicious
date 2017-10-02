@@ -5,6 +5,7 @@ python:
 - 3.4
 - 3.3
 - 2.7
+cache: pip
 before_script:
 - createdb judicious
 - pip install --upgrade pip
