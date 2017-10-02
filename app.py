@@ -67,11 +67,7 @@ def ad():
     if assignmentId == "ASSIGNMENT_ID_NOT_AVAILABLE":
         return render_template('ad_mturk.html')
     elif assignmentId:
-        return redirect(url_for(
-            'stage',
-            assignmentId=assignmentId,
-            turkSubmitTo=request.values["turkSubmitTo"],
-        ))
+        return redirect(url_for('stage', **request.args))
     else:
         return render_template('index.html')
 
@@ -194,8 +190,6 @@ def stage():
             "tasks/{}.html".format(task.type),
             id=task.id,
             parameters=task.parameters,
-            turkSubmitTo=request.values.get('turkSubmitTo', None),
-            assignmentId=request.values.get('assignmentId', None)
         )
     else:
         return render_template("no_tasks.html")

@@ -11,9 +11,9 @@
 {% block body %}
   {% block task %}
   {% endblock %}
-  {% if turkSubmitTo %}
-    <form name='mturk_form' method='post' id='mturk_form' action='{{ turkSubmitTo }}/mturk/externalSubmit'>
-      <input type='hidden' value='{{ assignmentId }}' name='assignmentId' id='assignmentId'/>
+  {% if request.values['turkSubmitTo'] %}
+    <form name='mturk_form' method='post' id='mturk_form' action='{{ request.values['turkSubmitTo'] }}/mturk/externalSubmit'>
+      <input type='hidden' value='{{ request.values['assignmentId'] }}' name='assignmentId' id='assignmentId'/>
       <input class="button" type="submit" value="Submit" id="submit-to-mturk">
     </form>
   {% else %}
