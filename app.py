@@ -11,7 +11,6 @@ from flask import (
     redirect,
     render_template,
     request,
-    session,
     url_for,
 )
 from flask_sqlalchemy import SQLAlchemy
@@ -66,16 +65,13 @@ def ad():
     """Index route."""
     assignmentId = request.values.get("assignmentId", None)
     if assignmentId == "ASSIGNMENT_ID_NOT_AVAILABLE":
-        return render_template(
-            'ad_mturk.html',
-            hitId=request.values.get("hitId", None),
-            assignmentId=assignmentId,
-        )
+        return render_template('ad_mturk.html')
     elif assignmentId:
-        session['assignmentId'] = assignmentId
-        session['JUDICIOUS_MTURK'] = True
-        session['JUDICIOUS_MTURK_SUBMIT_TO'] = request.values["turkSubmitTo"]
-        return redirect(url_for('consent'))
+        return redirect(url_for(
+            'stage',
+            assignmentId=assignmentId,
+            turkSubmitTo=request.values["turkSubmitTo"],
+        ))
     else:
         return render_template('index.html')
 
@@ -198,6 +194,8 @@ def stage():
             "tasks/{}.html".format(task.type),
             id=task.id,
             parameters=task.parameters,
+            turkSubmitTo=request.values.get('turkSubmitTo', None),
+            assignmentId=request.values.get('assignmentId', None)
         )
     else:
         return render_template("no_tasks.html")
