@@ -25,3 +25,9 @@ class HotAirRecruiter(Recruiter):
     def recruit(self):
         logger.info("Recruiting a new participant...")
 
+
+class MTurkRecruiter(Recruiter):
+    """Recruits from Amazon Mechanical Turk."""
+
+    def recruit(self):
+        raise NotImplementedError
