@@ -17,7 +17,7 @@ pq = PQ(conn)
 todo_queue = pq['tasks']
 
 # Set up logging.
-logger = logging.getLogger()
+logger = logging.getLogger(__name__)
 handler = logging.StreamHandler()
 formatter = logging.Formatter(
         '%(asctime)s [clock.1]: %(message)s')
@@ -49,6 +49,7 @@ def recruitment():
         .filter(Task.finished_at > window_ago).count()
     rate_out = float(num_recent_completions) / WINDOW
     num_unfinished_tasks = Task.query.filter_by(result=None).count()
+    logger.info("Analyzing unfinished tasks for recruitment...")
     logger.info("Rate in: {}".format(rate_in))
     logger.info("Rate out: {}".format(rate_out))
     logger.info("Task flow: {}".format(rate_in - rate_out))
@@ -61,7 +62,7 @@ def recruitment():
 
 @sched.scheduled_job('interval', seconds=JUDICIOUS_CLEANUP_INTERVAL)
 def cleanup():
-    logger.info('Cleanup.')
+    logger.info('Cleaning up task table...')
     incomplete_tasks = Task.query\
         .filter_by(in_progress=True).filter_by(result=None).all()
     for task in incomplete_tasks:

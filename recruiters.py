@@ -6,10 +6,10 @@ import os
 import boto3
 
 # Set up logging.
-logger = logging.getLogger()
+logger = logging.getLogger(__name__)
 handler = logging.StreamHandler()
 formatter = logging.Formatter(
-        '%(asctime)s [clock.1]: %(message)s')
+        '%(asctime)s [recruiter.1]: %(message)s')
 handler.setFormatter(formatter)
 logger.addHandler(handler)
 logger.setLevel(logging.DEBUG)
