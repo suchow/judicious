@@ -14,14 +14,14 @@ script: tox
 deploy:
   - provider: heroku
     true:
-      python: 3.5
+      python: 3.6
     api_key:
       secure: VJuBGVe1G46Q8IWKWxX4MYcmsXzEP0hPOuU8DCGqtMWu1ZEHf8lHhhSS/r8PqpzGl6DJVit7oNH9OgWBWW5gx6jBfbk81FQeAolkmhmlSTPMOK/l2QjiM1C2klDcuStPcprF9uBfC7+TcPh0oEQal8GYwTHUdy+2NmzZ+5sTV5bKcpu9R6URBL5fzZvhOMB6H+Ws4Zo7L6dV9GI4I7crwXaMipjpIzfVQOVTAi1NSVKob9XWMaN//woWnH2ufNBZkGSvaycYCGDlx0wDTt68VnMs56Ub3Qr9aC7j9bFT9ufqOar6bmwSJTVzRqqvXqWFVLlCRCuYly9HHFyHjfAvX57IDndYPaqqY87/rEB4HKDuP7zeOT4AYd7ykAqxZga+0M3jsboos7fpgozvHb7uX3x1oz03mUBYgPTspjnOb+QTXTmLRPRPqqYfy21dyh6rVGl+rDelb6mCJhyY5x2JihAkQ9JhRjenHFVQxiiLJEbEwsoN1Bqn/z4LShNf8s5KX2EYM4d9IsTlUQCBZz2PS+Dsrv/bLcjsGYi1pi51SFtUT2XeCwDe799X+anqhPWLap/C3j3LchGmaK9+yUfHQeAHmVUAQwANlI29OD4rozhzUpBXPXQG1RFIw05sUmEZe2vfefpdBevuiAff2OxJO1gsLsHqofb63X9feP241YQ=
     app: imprudent
   - provider: pypi
     user: suchow
     true:
-       python: 2.7
+       python: 3.6
        repo: suchow/judicious
        tags: true
     distributions: sdist bdist_wheel
