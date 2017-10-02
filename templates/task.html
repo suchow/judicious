@@ -11,7 +11,16 @@
 {% block body %}
   {% block task %}
   {% endblock %}
-  <a class="button" id="submit-task" href="#">Submit</a>
-  <input class="button button-clear" type="submit" value="Skip" id="skip-task">
-  <div class="task-id"><p><code>{{ id }}</code></p></div>
+  {% if session.get("JUDICIOUS_MTURK", False) %}
+    <form name='mturk_form' method='post' id='mturk_form' action='https://www.mturk.com/mturk/externalSubmit'>
+      <input type='hidden' value='' name='assignmentId' id='assignmentId'/>
+      <input class="button" type="submit" value="Submit" id="submit-to-mturk">
+    </form>
+  {% else %}
+    <form>
+      <a class="button" id="submit-task" href="#">Submit</a>
+      <input class="button button-clear" type="submit" value="Skip" id="skip-task">
+      <div class="task-id"><p><code>{{ id }}</code></p></div>
+    </form>
+  {% endif %}
 {% endblock %}

@@ -72,6 +72,8 @@ def ad():
             assignmentId=assignmentId,
         )
     elif assignmentId:
+        session['assignmentId'] = assignmentId
+        session['JUDICIOUS_MTURK'] = True
         return redirect(url_for('consent'))
     else:
         return render_template('index.html')
