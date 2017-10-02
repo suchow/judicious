@@ -11,6 +11,7 @@ from flask import (
     redirect,
     render_template,
     request,
+    session,
     url_for,
 )
 from flask_sqlalchemy import SQLAlchemy
@@ -67,15 +68,25 @@ def ad():
     if assignmentId == "ASSIGNMENT_ID_NOT_AVAILABLE":
         return render_template('ad_mturk.html')
     elif assignmentId:
-        return redirect(url_for('stage', **request.args))
+        return redirect(url_for('consent', **request.args))
     else:
         return render_template('index.html')
 
 
-@app.route('/consent/')
+@app.route('/consent/', methods=['GET'])
 def consent():
     """Render the consent form."""
-    return render_template('consent.html')
+    if session.get('JUDICIOUS_CONSENTED', False) is True:
+        return redirect(url_for('stage', **request.args))
+    else:
+        return render_template('consent.html')
+
+
+@app.route('/assent/', methods=['GET'])
+def assent():
+    """Assent to participanting in the experiment."""
+    session['JUDICIOUS_CONSENTED'] = True
+    return redirect(url_for('stage', **request.args))
 
 
 @app.route('/tasks', methods=['POST'], defaults={'id': str(uuid.uuid4())})

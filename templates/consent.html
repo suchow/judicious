@@ -36,6 +36,6 @@
 <button type="button" id="print-consent" class="button button-outline">Print a copy of this</button>
 <hr/>
 <h4>Do you understand and agree to participate?</h4>
-<button type="button" id="consent" class="button" onclick="window.location.href='{{ url_for('stage') }}';">I agree</button>
+<button type="button" id="consent" class="button" onclick="window.location.href='{{ url_for('assent', **request.args) }}';">I agree</button>
 <button type="button" id="no-consent" class="button" onclick="window.location.href='https://google.com/'">No thanks (exit)</button>
 {% endblock %}
