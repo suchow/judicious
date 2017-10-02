@@ -1,5 +1,16 @@
 {% extends "base.html" %}
 
+{% block scripts %}
+  {{ super() }}
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $("#print-consent").click(function() {
+        window.print();
+      });
+    });
+  </script>
+{% endblock %}
+
 {% block body %}
 <h2>Consent to participate in research</h2>
 <blockquote>
