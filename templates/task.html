@@ -12,7 +12,7 @@
   {% block task %}
   {% endblock %}
   {% if session.get("JUDICIOUS_MTURK", False) %}
-    <form name='mturk_form' method='post' id='mturk_form' action='https://www.mturk.com/mturk/externalSubmit'>
+    <form name='mturk_form' method='post' id='mturk_form' action='{{ session.get("JUDICIOUS_MTURK_SUBMIT_TO") }}mturk/externalSubmit'>
       <input type='hidden' value='' name='assignmentId' id='assignmentId'/>
       <input class="button" type="submit" value="Submit" id="submit-to-mturk">
     </form>
