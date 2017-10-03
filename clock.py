@@ -65,6 +65,7 @@ def cleanup():
             logger.info("Timeout on task {}".format(task.id))
             task.in_progress = False
             task.started_at = None
+            task.last_queued_at = datetime.now()
             db.session.add(task)
             db.session.commit()
             todo_queue.put({"id": task.id})
