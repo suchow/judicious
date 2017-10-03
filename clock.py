@@ -7,7 +7,7 @@ from pq import PQ
 from psycopg2 import connect
 
 from app import db, Task
-from recruiters import MTurkRecruiter
+import recruiters
 
 # Set up connection to queue.
 DB_URL_DEFAULT = 'postgresql://postgres@localhost/judicious'
@@ -35,7 +35,9 @@ JUDICIOUS_CLEANUP_INTERVAL = os.environ.get(
     "JUDICIOUS_CLEANUP_INTERVAL", 2)
 
 
-recruiter = MTurkRecruiter()
+recruiter_class_ = getattr(recruiters, os.environ["JUDICIOUS_RECRUITER"])
+recruiter = recruiter_class_()
+
 
 
 @sched.scheduled_job('interval', seconds=JUDICIOUS_RECRUIT_INTERVAL)
