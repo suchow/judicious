@@ -7,8 +7,6 @@ var Judicious = (function () {
     if (typeof result === "function") {
       result = result();
     }
-    console.log("Submitting result");
-    console.log(result);
     $.ajax({
       url: '/tasks/' + uuid,
       type: 'PATCH',
