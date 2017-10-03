@@ -9,7 +9,11 @@ $(document).ready(function() {
         Judicious.taskUUID,
         Judicious.result,
         function () {
-          location.reload();
+          if (Judicious.turkSubmitTo !== '') {
+            $("#mturk_form").submit();
+          } else {
+            location.reload();
+          }
         }
       );
     });
