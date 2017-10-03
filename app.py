@@ -35,16 +35,12 @@ pq = PQ(conn)
 todo_queue = pq['tasks']
 
 
-def timenow():
-    """Represent the current date and time."""
-    return datetime.now()
-
-
 class Task(db.Model):
     """A task to be completed by a judicious participant."""
 
     id = db.Column(UUID, primary_key=True, nullable=False)
-    created_at = db.Column(db.DateTime, nullable=False, default=timenow)
+    created_at = db.Column(db.DateTime, nullable=False, default=datetime.now)
+    last_queued_at = db.Column(db.DateTime)
     type = db.Column(db.String(64), nullable=False)
     parameters = db.Column(db.JSON)
     in_progress = db.Column(db.Boolean(), default=False)
@@ -100,9 +96,10 @@ def post_task(id):
         app.logger.info("Creating task with id {}".format(id_string))
         parameters = json.loads(request.values["parameters"])
         task = Task(id_string, task_type, parameters)
+        todo_queue.put({"id": id_string}, expected_at=timedelta(minutes=10))
+        task.last_queued_at = datetime.now()
         db.session.add(task)
         db.session.commit()
-        todo_queue.put({"id": id_string})
         return jsonify(
             status="success",
             message="Task posted.",
@@ -140,7 +137,7 @@ def patch_task(id):
     else:
         task.result = result
         task.in_progress = False
-        task.finished_at = timenow()
+        task.finished_at = datetime.now()
         db.session.add(task)
         db.session.commit()
         return jsonify(
@@ -182,6 +179,7 @@ def get_task_result(id):
                 "result": task.result,
                 "created_at": task.created_at,
                 "started_at": task.started_at,
+                "last_queued_at": task.last_queued_at,
                 "finished_at": task.finished_at,
             }
         ), 200
@@ -194,7 +192,7 @@ def stage():
     if next_task:
         task = Task.query.filter_by(id=next_task.data['id']).one_or_none()
         task.in_progress = True
-        task.started_at = timenow()
+        task.started_at = datetime.now()
         db.session.add(task)
         db.session.commit()
         return render_template(

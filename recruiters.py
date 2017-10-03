@@ -26,7 +26,7 @@ class HotAirRecruiter(Recruiter):
     """Talks about recruiting, but does not recruit."""
 
     def recruit(self):
-        logger.info("Recruiting a new participant...")
+        logger.info("Recruiting a participant.")
 
 
 class MTurkRecruiter(Recruiter):

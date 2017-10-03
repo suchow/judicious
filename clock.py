@@ -40,34 +40,22 @@ recruiter = MTurkRecruiter()
 
 @sched.scheduled_job('interval', seconds=JUDICIOUS_RECRUIT_INTERVAL)
 def recruitment():
-    WINDOW = 600
-    window_ago = datetime.now() - timedelta(seconds=WINDOW)
-    num_recent_tasks = Task.query\
-        .filter(Task.created_at > window_ago).count()
-    rate_in = float(num_recent_tasks) / WINDOW
-    num_recent_completions = Task.query\
-        .filter(Task.finished_at > window_ago).count()
-    rate_out = float(num_recent_completions) / WINDOW
-    num_unfinished_tasks = Task.query.filter_by(result=None).count()
-    logger.info("Analyzing unfinished tasks for recruitment...")
-    logger.info("Rate in: {}".format(rate_in))
-    logger.info("Rate out: {}".format(rate_out))
-    logger.info("Task flow: {}".format(rate_in - rate_out))
-    logger.info("Number of unfinished tasks: {}".format(num_unfinished_tasks))
-    extra_flow = float(num_unfinished_tasks) / WINDOW
-    if rate_in - rate_out + extra_flow > 0:
-        logger.info("Recruiting!")
+    logger.info('Running recruiter...')
+    last_check = datetime.now() - timedelta(seconds=JUDICIOUS_RECRUIT_INTERVAL)
+    num_new_tasks = Task.query.filter(Task.last_queued_at > last_check).count()
+    logger.info("Found {} new tasks.".format(num_new_tasks))
+    for _ in xrange(num_new_tasks):
         recruiter.recruit()
 
 
 @sched.scheduled_job('interval', seconds=JUDICIOUS_CLEANUP_INTERVAL)
 def cleanup():
     logger.info('Cleaning up task table...')
+    logger.info(len(todo_queue))
     incomplete_tasks = Task.query\
         .filter_by(in_progress=True).filter_by(result=None).all()
     for task in incomplete_tasks:
         duration = datetime.now() - task.started_at
-        logger.info(duration)
         if duration > timedelta(seconds=30):
             logger.info("Timeout on task {}".format(task.id))
             task.in_progress = False
