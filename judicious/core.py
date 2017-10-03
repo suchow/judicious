@@ -2,7 +2,6 @@
 
 """Main module."""
 
-from datetime import timedelta
 import json
 import os
 import random
