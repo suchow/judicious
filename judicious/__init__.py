@@ -17,14 +17,19 @@ from .tasks import (
     copyedit,
     joke,
     label,
+    select_the,
 )
 
 __all__ = (
+    # Core functions
     "base_url",
     "collect",
+    "register",
+    "seed",
+
+    # Tasks
     "copyedit",
     "joke",
     "label",
-    "register",
-    "seed",
+    "select_the",
 )
