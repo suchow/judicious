@@ -9,6 +9,7 @@ __version__ = '0.1.0'
 from .core import (
     base_url,
     collect,
+    priority,
     register,
     seed,
 )
@@ -25,6 +26,7 @@ __all__ = (
     # Core functions
     "base_url",
     "collect",
+    "priority",
     "register",
     "seed",
 

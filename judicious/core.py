@@ -2,6 +2,7 @@
 
 """Main module."""
 
+from datetime import timedelta
 import json
 import os
 import random
@@ -18,6 +19,11 @@ def base_url():
 def register(url):
     """Set the base URL of the decision server."""
     os.environ["JUDICIOUS_URL"] = url
+
+
+def priority(level=1):
+    """Set the priority of new tasks."""
+    os.environ["JUDICIOUS_PRIORITY_LEVEL"] = str(level)
 
 
 def seed(s):
@@ -39,6 +45,7 @@ def post_task(task_type, task_id=None, parameters={}):
         data={
             'type': task_type,
             'parameters': json.dumps(parameters),
+            'priority': os.environ.get("JUDICIOUS_PRIORITY_LEVEL", 1),
         },
     )
 

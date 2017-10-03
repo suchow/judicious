@@ -3,6 +3,7 @@
 from datetime import datetime, timedelta
 import json
 import os
+import random
 import uuid
 
 from flask import (
@@ -92,14 +93,30 @@ def post_task(id):
     task_type = request.values["type"]
     id_string = str(id)
     task_exists = Task.query.filter_by(id=id_string).count() > 0
+
     if not task_exists:
         app.logger.info("Creating task with id {}".format(id_string))
-        parameters = json.loads(request.values["parameters"])
-        task = Task(id_string, task_type, parameters)
-        todo_queue.put({"id": id_string}, expected_at=timedelta(minutes=10))
+
+        # Create the task.
+        task = Task(
+            id_string,
+            task_type,
+            json.loads(request.values["parameters"])
+        )
         task.last_queued_at = datetime.now()
         db.session.add(task)
         db.session.commit()
+
+        # Put it on the queue.
+        priority = int(request.values.get("priority"))
+        timeout = int(os.environ['JUDICIOUS_TASK_TIMEOUT'])
+        app.logger.info(timeout)
+        if priority > 0:
+            expected_at = timedelta(seconds=timeout)
+        else:
+            expected_at = timedelta(days=random.randint(1, 365*10))
+        todo_queue.put({"id": id_string}, expected_at=expected_at)
+
         return jsonify(
             status="success",
             message="Task posted.",

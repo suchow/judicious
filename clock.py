@@ -61,7 +61,8 @@ def cleanup():
         .filter_by(in_progress=True).filter_by(result=None).all()
     for task in incomplete_tasks:
         duration = datetime.now() - task.started_at
-        if duration > timedelta(seconds=os.environ['JUDICIOUS_TASK_TIMEOUT']):
+        task_timeout = int(os.environ['JUDICIOUS_TASK_TIMEOUT'])
+        if duration > timedelta(seconds=task_timeout):
             logger.info("Timeout on task {}".format(task.id))
             task.in_progress = False
             task.started_at = None
