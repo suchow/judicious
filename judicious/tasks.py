@@ -23,3 +23,8 @@ def label(src):
 def select_the(category, src_0, src_1):
     r = collect("select_the", category=category, src_0=src_0, src_1=src_1)
     return r['selection']
+
+
+def define(word):
+    r = collect("define", word=word)
+    return r['definition']

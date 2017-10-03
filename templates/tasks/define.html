@@ -1,0 +1,28 @@
+{% extends "task.html" %}
+
+{% block styles %}
+  {{ super() }}
+{% endblock %}
+
+{% block scripts %}
+  {{ super() }}
+  <script>
+    $(document).ready(function() {
+      Judicious.result = function () {
+        return {
+          definition: $("#definition").val()
+        };
+      }
+      Judicious.validate = function () {
+        return $("#definition").val().length > 1;
+      }
+    });
+  </script>
+{% endblock %}
+
+{% block task %}
+  <p>
+    <strong>Instructions:</strong> Define the word <code>{{ parameters.word }}</code>.
+  </p>
+  <input id="definition" placeholder="Your definition&hellip;" type="text" autofocus>
+{% endblock %}

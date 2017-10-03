@@ -15,6 +15,7 @@ from .core import (
 
 from .tasks import (
     copyedit,
+    define,
     joke,
     label,
     select_the,
@@ -29,6 +30,7 @@ __all__ = (
 
     # Tasks
     "copyedit",
+    "define",
     "joke",
     "label",
     "select_the",
