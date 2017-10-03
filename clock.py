@@ -50,7 +50,7 @@ def recruitment():
     last_check = datetime.now() - timedelta(seconds=JUDICIOUS_RECRUIT_INTERVAL)
     num_new_tasks = Task.query.filter(Task.last_queued_at > last_check).count()
     logger.info("Found {} new tasks.".format(num_new_tasks))
-    for _ in xrange(num_new_tasks):
+    for _ in range(num_new_tasks):
         recruiter.recruit()
 
 
