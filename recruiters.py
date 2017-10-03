@@ -51,8 +51,13 @@ class MTurkRecruiter(Recruiter):
         logger.info("Current MTurk balance is ${}.".format(balance))
 
     def recruit(self):
+        if self.mode == "sandbox":
+            HITTypeId = os.environ["JUDICIOUS_MTURK_HIT_TYPE_ID_SANDBOX"]
+        elif self.mode == "live":
+            HITTypeId = os.environ["JUDICIOUS_MTURK_HIT_TYPE_ID_LIVE"]
+
         response = self._client.create_hit_with_hit_type(
-            HITTypeId=os.environ["JUDICIOUS_MTURK_HIT_TYPE_ID"],
+            HITTypeId=HITTypeId,
             MaxAssignments=1,
             LifetimeInSeconds=int(os.environ["JUDICIOUS_MTURK_LIFETIME"]),
             Question=open("external.xml", "r").read(),
