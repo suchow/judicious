@@ -39,6 +39,10 @@ recruiter_class_ = getattr(recruiters, os.environ["JUDICIOUS_RECRUITER"])
 recruiter = recruiter_class_()
 
 
+@sched.scheduled_job('interval', seconds=5)
+def outstanding():
+    logger.info("There are {} outstanding tasks.".format(len(todo_queue)))
+
 
 @sched.scheduled_job('interval', seconds=JUDICIOUS_RECRUIT_INTERVAL)
 def recruitment():
@@ -53,7 +57,6 @@ def recruitment():
 @sched.scheduled_job('interval', seconds=JUDICIOUS_CLEANUP_INTERVAL)
 def cleanup():
     logger.info('Cleaning up task table...')
-    logger.info(len(todo_queue))
     incomplete_tasks = Task.query\
         .filter_by(in_progress=True).filter_by(result=None).all()
     for task in incomplete_tasks:
