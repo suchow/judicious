@@ -36,3 +36,8 @@ def compare_numerosity(a, b):
     cb = random.random() > 0.5
     r = collect("compare_numerosity", a=a, b=b, counterbalancer=cb)
     return r['selection']
+
+
+def agree(prompt):
+    r = collect("agree", prompt=prompt)
+    return r['agreement']

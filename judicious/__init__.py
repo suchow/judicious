@@ -15,6 +15,7 @@ from .core import (
 )
 
 from .tasks import (
+    agree,
     compare_numerosity,
     copyedit,
     define,
@@ -32,6 +33,7 @@ __all__ = (
     "seed",
 
     # Tasks
+    "agree",
     "compare_numerosity",
     "copyedit",
     "define",

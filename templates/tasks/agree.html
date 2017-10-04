@@ -1,0 +1,105 @@
+{% extends "task.html" %}
+
+{% block styles %}
+  {{ super() }}
+  <style type="text/css">
+    form .statement {
+      display:block;
+      padding: 15px 0 0 4.25%;
+      margin-bottom:20px;
+      color: #9b4dca;
+    }
+    form .likert {
+      list-style:none;
+      width:100%;
+      margin:0;
+      display:block;
+      border-bottom:2px solid #efefef;
+    }
+    form .likert:last-of-type {
+      border-bottom:0;
+    }
+    form .likert:before {
+      content: '';
+      position:relative;
+      top:11px;
+      left:5.5%;
+      display:block;
+      background-color:#efefef;
+      height:4px;
+      width:78%;
+    }
+    form .likert li {
+      display:inline-block;
+      width:12%;
+      text-align:center;
+      vertical-align: top;
+    }
+    form .likert li input[type=radio] {
+      display:block;
+      position:relative;
+      color: #000;
+      top:0;
+      left:50%;
+      margin-left:-6px;
+    }
+    form .likert li label {
+      width:100%;
+      font-weight: normal;
+      font-size: calc(9px + 0.50vw);
+      transform: scale(0.85, 1);
+      -webkit-transform: scale(0.85, 1);
+      display: inline-block;
+    }
+  </style>
+{% endblock %}
+
+{% block scripts %}
+  {{ super() }}
+  <script>
+    $(document).ready(function() {
+      Judicious.result = function () {
+        return {agreement: $('input[name=likert]:radio:checked').val()};
+      }
+    });
+  </script>
+{% endblock %}
+
+{% block task %}
+  <p>
+    <strong>Instructions:</strong> To what extent do you agree or disagree with the following statement?
+  </p>
+  <form action="">
+    <label class="statement">&ldquo;{{ parameters.prompt }}&rdquo;</label>
+    <ul class='likert'>
+      <li>
+        <input type="radio" name="likert" value="1">
+        <label>Strongly disagree</label>
+      </li>
+      <li>
+        <input type="radio" name="likert" value="2">
+        <label>Disagree</label>
+      </li>
+      <li>
+        <input type="radio" name="likert" value="3">
+        <label>Somewhat disagree</label>
+      </li>
+      <li>
+        <input type="radio" name="likert" value="4">
+        <label>Neither agree nor disagree</label>
+      </li>
+      <li>
+        <input type="radio" name="likert" value="5">
+        <label>Somewhat agree</label>
+      </li>
+      <li>
+        <input type="radio" name="likert" value="6">
+        <label>Agree</label>
+      </li>
+      <li>
+        <input type="radio" name="likert" value="7">
+        <label>Strongly agree</label>
+      </li>
+    </ul>
+  </form>
+{% endblock %}
