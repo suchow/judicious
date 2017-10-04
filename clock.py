@@ -60,16 +60,10 @@ def cleanup():
     incomplete_tasks = Task.query\
         .filter_by(in_progress=True).filter_by(result=None).all()
     for task in incomplete_tasks:
-        duration = datetime.now() - task.started_at
-        task_timeout = int(os.environ['JUDICIOUS_TASK_TIMEOUT'])
-        if duration > timedelta(seconds=task_timeout):
-            logger.info("Timeout on task {}".format(task.id))
-            task.in_progress = False
-            task.started_at = None
-            task.last_queued_at = datetime.now()
-            db.session.add(task)
-            db.session.commit()
-            todo_queue.put({"id": task.id})
+        time_since = datetime.now() - task.started_at
+        time_given = timedelta(seconds=int(os.environ['JUDICIOUS_TASK_TIMEOUT']))
+        if time_since > time_given:
+            task.timeout()
 
 
 sched.start()

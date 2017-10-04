@@ -57,6 +57,16 @@ class Task(db.Model):
     def __repr__(self):
         return '<Task %r>' % self.type
 
+    def timeout(self):
+        """Placed timed-out tasks back on the queue."""
+        app.logger.info("Timeout on task {}".format(self.id))
+        self.in_progress = False
+        self.started_at = None
+        self.last_queued_at = datetime.now()
+        db.session.add(self)
+        db.session.commit()
+        todo_queue.put({"id": self.id})
+
 
 @app.route('/ad/')
 def ad():
@@ -110,7 +120,6 @@ def post_task(id):
         # Put it on the queue.
         priority = int(request.values.get("priority"))
         timeout = int(os.environ['JUDICIOUS_TASK_TIMEOUT'])
-        app.logger.info(timeout)
         if priority > 0:
             expected_at = timedelta(seconds=timeout)
         else:
