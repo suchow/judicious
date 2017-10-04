@@ -1,0 +1,140 @@
+{% extends "task.html" %}
+
+{% block styles %}
+  {{ super() }}
+  <style type="text/css">
+    #stimulus {
+      width: 400px;
+      height: 200px;
+      border: 1px solid #cccccc;
+      margin-bottom: 20px;
+    }
+    #a {
+      color: {{ ["#428bca", "#FBB829"][parameters.counterbalancer] }};
+    }
+    #b {
+      color: {{ ["#FBB829", "#428bca"][parameters.counterbalancer] }};
+    }
+    #response {
+      display:none;
+    }
+  </style>
+{% endblock %}
+
+{% block scripts %}
+  {{ super() }}
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.2.7/raphael.min.js"></script>
+  <script>
+    (function() {
+      $(document).ready(function() {
+        var dots = [];
+
+        // Click handlers for all the buttons.
+        $("#show-stimulus").click(function () {
+          dots.map(function (d) { d.show(); });
+          setTimeout(function () {
+            $("#response").show();
+            $("#show-stimulus").hide();
+            dots.map(function (d) { d.hide(); });
+          }, 1500);
+        });
+
+        $("#a").click(function () {
+          Judicious.result = { selection: "a" };
+          $("#b").fadeTo(100, 0.25);
+          $("#a").fadeTo(100, 1.00);
+          $("#stimulus").fadeTo(100, 0.00);
+        });
+
+        $("#b").click(function () {
+          Judicious.result = { selection: "b" };
+          $("#a").fadeTo(100, 0.25);
+          $("#b").fadeTo(100, 1.00);
+          $("#stimulus").fadeTo(100, 0.00);
+        });
+
+        var randi = function (min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        var shuffle = function(o) {
+            for(var j, x, i = o.length; i; j = Math.floor(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
+            return o;
+        }
+
+        var createStimulus = function () {
+          // Display parameters
+          var width = 375;
+          var height = 175;
+          var blueDots = {{ [parameters.a, parameters.b][parameters.counterbalancer] }};
+          var yellowDots = {{ [parameters.b, parameters.a][parameters.counterbalancer] }};
+          var stimulusOffset = $("#stimulus").offset();
+          var paper = Raphael(7.5+stimulusOffset.left, 7.5+stimulusOffset.top, width, height);
+          var colorsRGB = ["#428bca", "#FBB829"];
+          var stimulusColors = [];
+
+          for (var i = blueDots - 1; i >= 0; i--) {
+            stimulusColors.push(0);
+          }
+          for (var i = yellowDots - 1; i >= 0; i--) {
+            stimulusColors.push(1);
+          }
+          stimulusColors = shuffle(stimulusColors);
+
+          var dotSizes = [];
+
+          while (dots.length < (blueDots + yellowDots)) {
+
+            // Pick a random location for a new dot.
+            var r = randi(5, 10);  // Dot radius
+            var x = randi(r, width - r);
+            var y = randi(r, height - r);
+
+            // Check if there is overlap with any other dots...
+            var pass = true;
+            for (var i = dots.length - 1; i >= 0; i--) {
+              var distance = Math.sqrt(Math.pow(dots[i].attrs.cx - x, 2) + Math.pow(dots[i].attrs.cy - y, 2));
+              if (distance < (dotSizes[i] + r)) {
+                pass = false;
+              }
+            }
+
+            // If not, add this dot to the stimulus.
+            if (pass) {
+              var dot = paper.circle(x, y, r);
+              dot.hide();
+              dot.attr("fill", colorsRGB[stimulusColors[dots.length]]);
+              dot.attr("stroke", "#fff");
+              dots.push(dot);
+              dotSizes.push(r);
+            }
+          }
+        };
+        createStimulus();
+      });
+    })();
+  </script>
+{% endblock %}
+
+{% block task %}
+  <p><strong>Instructions:</strong> When ready, click the button below. A set
+  of blue and yellow dots will briefly appear. Look at the dots, but do not
+  count them. In your estimation, were there more blue or yellow dots?</p>
+
+  <div id="show-stimulus">
+    <a class="button button-outline" id="show-dots" href="#">Show the dots</a>
+  </div>
+
+  <div id="response">
+    {% if parameters.counterbalancer %}
+      <a class="button button-outline" id="a" href="#">More yellow</a>
+      <a class="button button-outline" id="b" href="#">More blue</a>
+    {% else %}
+      <a class="button button-outline" id="a" href="#">More blue</a>
+      <a class="button button-outline" id="b" href="#">More yellow</a>
+    {% endif %}
+  </div>
+
+  <div id="stimulus"></div>
+
+{% endblock %}

@@ -2,6 +2,8 @@
 
 """Pseudorandom generators for human computation."""
 
+import random
+
 from .core import collect
 
 
@@ -28,3 +30,9 @@ def select_the(category, src_0, src_1):
 def define(word):
     r = collect("define", word=word)
     return r['definition']
+
+
+def compare_numerosity(a, b):
+    cb = random.random() > 0.5
+    r = collect("compare_numerosity", a=a, b=b, counterbalancer=cb)
+    return r['selection']
