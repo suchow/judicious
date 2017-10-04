@@ -57,10 +57,13 @@ def recruitment():
 @sched.scheduled_job('interval', seconds=JUDICIOUS_CLEANUP_INTERVAL)
 def cleanup():
     logger.info('Cleaning up task table...')
-    incomplete_tasks = Task.query\
-        .filter_by(in_progress=True).filter_by(result=None).all()
-    for task in incomplete_tasks:
-        time_since = datetime.now() - task.started_at
+    # Timed out tasks have no result AND were last started over JUDICIOUS_TASK_TIMEOUT seconds ago.
+    unfinished_tasks = Task.query\
+        .filter_by(result=None)\
+        .filter(Task.last_started_at.isnot(None))\
+        .all()
+    for task in unfinished_tasks:
+        time_since = datetime.now() - task.last_started_at
         time_given = timedelta(seconds=int(os.environ['JUDICIOUS_TASK_TIMEOUT']))
         if time_since > time_given:
             task.timeout()

@@ -44,8 +44,7 @@ class Task(db.Model):
     last_queued_at = db.Column(db.DateTime)
     type = db.Column(db.String(64), nullable=False)
     parameters = db.Column(db.JSON)
-    in_progress = db.Column(db.Boolean(), default=False)
-    started_at = db.Column(db.DateTime)
+    last_started_at = db.Column(db.DateTime)
     finished_at = db.Column(db.DateTime)
     result = db.Column(db.String(2**16))
 
@@ -60,8 +59,7 @@ class Task(db.Model):
     def timeout(self):
         """Placed timed-out tasks back on the queue."""
         app.logger.info("Timeout on task {}".format(self.id))
-        self.in_progress = False
-        self.started_at = None
+        self.last_started_at = None
         self.last_queued_at = datetime.now()
         db.session.add(self)
         db.session.commit()
@@ -162,7 +160,6 @@ def patch_task(id):
         ), 409
     else:
         task.result = result
-        task.in_progress = False
         task.finished_at = datetime.now()
         db.session.add(task)
         db.session.commit()
@@ -187,7 +184,7 @@ def get_task_result(id):
                 "id": id,
             }
         ), 404
-    elif task.in_progress or not task.result:
+    elif not task.result:
         return jsonify(
             status="success",
             message="Task is not yet complete.",
@@ -204,7 +201,7 @@ def get_task_result(id):
                 "type": task.type,
                 "result": task.result,
                 "created_at": task.created_at,
-                "started_at": task.started_at,
+                "last_started_at": task.last_started_at,
                 "last_queued_at": task.last_queued_at,
                 "finished_at": task.finished_at,
             }
@@ -217,8 +214,7 @@ def stage():
     next_task = todo_queue.get()
     if next_task:
         task = Task.query.filter_by(id=next_task.data['id']).one_or_none()
-        task.in_progress = True
-        task.started_at = datetime.now()
+        task.last_started_at = datetime.now()
         db.session.add(task)
         db.session.commit()
         return render_template(
