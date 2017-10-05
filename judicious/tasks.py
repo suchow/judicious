@@ -46,3 +46,8 @@ def agree(prompt):
 def trolley_problem():
     r = collect("trolley_problem")
     return r['decision']
+
+
+def intertemporal_choice(SS, LL, delay):
+    r = collect("intertemporal_choice", SS=SS, LL=LL, delay=delay)
+    return r['choice']

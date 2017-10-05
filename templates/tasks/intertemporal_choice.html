@@ -1,0 +1,33 @@
+{% extends "task.html" %}
+
+{% block styles %}
+  {{ super() }}
+  <style type="text/css">
+  input[type='radio'] {
+    margin-right: 7px;
+  }
+  </style>
+{% endblock %}
+
+{% block scripts %}
+  {{ super() }}
+  <script type="text/javascript">
+    $(document).ready(function() {
+      Judicious.result = function () {
+        return {decision: $('input[name=decision]:radio:checked').val()};
+      }
+    });
+  </script>
+{% endblock %}
+
+{% block task %}
+  <p><strong>Instructions:</strong> Imagine you face a choice about receiving
+    ${{ parameters.SS }} immediately, or ${{ parameters.LL }} in {{ parameters.delay }}
+    from now. Which option would you choose?</p>
+
+  <form action="">
+    <p><input type="radio" name="decision" value="ss">${{ parameters.SS }} immediately.</p>
+    <p><input type="radio" name="decision" value="ll">${{ parameters.LL }} in {{ parameters.delay }} from now.</p>
+  </form>
+
+{% endblock %}
