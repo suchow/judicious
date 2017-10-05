@@ -41,3 +41,8 @@ def compare_numerosity(a, b):
 def agree(prompt):
     r = collect("agree", prompt=prompt)
     return r['agreement']
+
+
+def trolley_problem():
+    r = collect("trolley_problem")
+    return r['decision']

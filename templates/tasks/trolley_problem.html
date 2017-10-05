@@ -1,0 +1,42 @@
+{% extends "task.html" %}
+
+{% block styles %}
+  {{ super() }}
+  <style type="text/css">
+  input[type='radio'] {
+    margin-right: 7px;
+  }
+  </style>
+{% endblock %}
+
+{% block scripts %}
+  {{ super() }}
+  <script type="text/javascript">
+    $(document).ready(function() {
+      Judicious.result = function () {
+        return {decision: $('input[name=decision]:radio:checked').val()};
+      }
+    });
+  </script>
+{% endblock %}
+
+{% block task %}
+  <p><strong>Instructions:</strong> Read the following scenario and select an option.</p>
+
+  <p>
+    There is a runaway trolley barreling down the railway tracks. Ahead, on
+    the tracks, there are five people tied up and unable to move. The trolley
+    is headed straight for them. You are standing some distance off in the
+    train yard, next to a lever. If you pull this lever, the trolley will
+    switch to a different set of tracks. However, you notice that there is one
+    person on the side track.
+  </p>
+
+  <p>You have two options. Which is the most ethical choice?</p>
+
+  <form action="">
+    <p><input type="radio" name="decision" value="nothing" id="nothing">Do nothing, and the trolley kills the five people on the main track.</p>
+    <p><input type="radio" name="decision" value="pull" id="pull">Pull the lever, diverting the trolley onto the side track where it will kill one person.</p>
+  </form>
+
+{% endblock %}

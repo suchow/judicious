@@ -22,6 +22,7 @@ from .tasks import (
     joke,
     label,
     select_the,
+    trolley_problem,
 )
 
 __all__ = (
@@ -40,4 +41,5 @@ __all__ = (
     "joke",
     "label",
     "select_the",
+    "trolley_problem",
 )
