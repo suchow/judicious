@@ -1,0 +1,42 @@
+{% extends "task.html" %}
+
+{% block styles %}
+  {{ super() }}
+{% endblock %}
+
+{% block scripts %}
+  {{ super() }}
+  <script src='https://www.google.com/recaptcha/api.js'></script>
+  <script>
+    $(document).ready(function () {
+      $("#submit-task").attr("disabled", "disabled");
+      var solved;
+      recaptchaCallback = function (r) {
+        $.ajax({
+          url: '/recaptcha/',
+          type: 'POST',
+          dataType: 'JSON',
+          success: function (r) {
+            solved = r.data.solved;
+            $("#submit-task").removeAttr("disabled");
+          },
+          data: {
+            response: r,
+          },
+        });
+      };
+      Judicious.result = function () {
+        return {
+          solved: solved,
+        }
+      }
+    })
+  </script>
+{% endblock %}
+
+{% block task %}
+  <p><strong>Instructions:</strong> Confirm that you are a human.</p>
+  <form>
+    <div class="g-recaptcha" data-sitekey="{{ RECAPTCHA_SITE_KEY }}" data-callback="recaptchaCallback"></div>
+  </form>
+{% endblock %}

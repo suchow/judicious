@@ -18,6 +18,7 @@ from flask import (
 from flask_sqlalchemy import SQLAlchemy
 from pq import PQ
 from psycopg2 import connect
+import requests
 from sqlalchemy.dialects.postgresql import UUID
 
 app = Flask(__name__)
@@ -221,9 +222,30 @@ def stage():
             "tasks/{}.html".format(task.type),
             id=task.id,
             parameters=task.parameters,
+            RECAPTCHA_SITE_KEY=os.environ['RECAPTCHA_SITE_KEY']
         )
     else:
         return render_template("no_tasks.html")
+
+
+@app.route('/recaptcha/', methods=['POST'])
+def recaptcha():
+    """Verify the recaptcha."""
+    app.logger.info(request.values["response"])
+    r = requests.post(
+        'https://www.google.com/recaptcha/api/siteverify',
+        data={
+            'secret': os.environ['RECAPTCHA_SECRET_KEY'],
+            'response': request.values["response"],
+        }
+    )
+    return jsonify(
+        status="success",
+        message="Recaptcha passed.",
+        data={
+            "solved": r.json()['success'],
+        }
+    ), 200
 
 
 if __name__ == '__main__':

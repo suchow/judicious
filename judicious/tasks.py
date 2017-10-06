@@ -51,3 +51,8 @@ def trolley_problem():
 def intertemporal_choice(SS, LL, delay):
     r = collect("intertemporal_choice", SS=SS, LL=LL, delay=delay)
     return r['choice']
+
+
+def recaptcha():
+    r = collect("recaptcha")
+    return r["solved"]

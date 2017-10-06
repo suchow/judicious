@@ -22,6 +22,7 @@ from .tasks import (
     intertemporal_choice,
     joke,
     label,
+    recaptcha,
     select_the,
     trolley_problem,
 )
@@ -42,6 +43,7 @@ __all__ = (
     "intertemporal_choice",
     "joke",
     "label",
+    "recaptcha",
     "select_the",
     "trolley_problem",
 )
