@@ -56,3 +56,13 @@ def intertemporal_choice(SS, LL, delay):
 def recaptcha():
     r = collect("recaptcha")
     return r["solved"]
+
+
+def chess(board="rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"):
+    turn_dict = {
+        "b": "black",
+        "w": "white"
+    }
+    turn = turn_dict[board.split(" ")[1]]
+    r = collect("chess", board=board, turn=turn)
+    return r["board"]
