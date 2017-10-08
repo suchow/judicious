@@ -71,3 +71,8 @@ def chess(board="rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"):
 def noun():
     r = collect("noun")
     return r["word"]
+
+
+def verb():
+    r = collect("verb")
+    return r["word"]

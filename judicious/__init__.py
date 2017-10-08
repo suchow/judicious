@@ -27,6 +27,7 @@ from .tasks import (
     recaptcha,
     select_the,
     trolley_problem,
+    verb,
 )
 
 __all__ = (
@@ -50,4 +51,5 @@ __all__ = (
     "recaptcha",
     "select_the",
     "trolley_problem",
+    "verb",
 )
