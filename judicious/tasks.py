@@ -76,3 +76,8 @@ def noun():
 def verb():
     r = collect("verb")
     return r["word"]
+
+
+def adjective():
+    r = collect("adjective")
+    return r["word"]
