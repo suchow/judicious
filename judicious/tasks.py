@@ -81,3 +81,10 @@ def verb():
 def adjective():
     r = collect("adjective")
     return r["word"]
+
+
+def summarize(text, max_words=None):
+    if not max_words:
+        max_words = len(text.split(" "))
+    r = collect("summarize", text=text, max_words=max_words)
+    return r["summary"]

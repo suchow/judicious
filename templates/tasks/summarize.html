@@ -1,0 +1,49 @@
+{% extends "task.html" %}
+
+{% block styles %}
+  {{ super() }}
+  <style type="text/css">
+    textarea {
+      height: 150px;
+      margin-bottom: 0px;
+      float: right;
+    }
+  </style>
+{% endblock %}
+
+{% block scripts %}
+  {{ super() }}
+  <script>
+    $(document).ready(function() {
+      var wordCount = 0;
+      var text = "";
+      $("#summary").on('change keyup paste', function () {
+        // Update the word count.
+        text = $("#summary").val().trim();
+        wordCount = text.split(" ").length;
+        if (text.length === 0) {
+          $("#word-count").text("0 words");
+        } else if (wordCount === 1) {
+          $("#word-count").text("1 word");
+        } else {
+          $("#word-count").text(wordCount + " words");
+        }
+      });
+      Judicious.result = function () {
+        return {
+          summary: text
+        };
+      }
+      Judicious.validate = function () {
+        return (wordCount > 1) && (wordCount <= {{ parameters.max_words }});
+      }
+    });
+  </script>
+{% endblock %}
+
+{% block task %}
+  <p><strong>Instructions:</strong> Write a summary of the following text, using at most {{ parameters.max_words }} words.</p>
+  <blockquote>{{ parameters.text|e }}</blockquote>
+  <textarea id="summary" placeholder="Your summary&hellip;"></textarea>
+  <p id="word-count">0 words</p>
+{% endblock %}

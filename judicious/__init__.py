@@ -27,6 +27,7 @@ from .tasks import (
     noun,
     recaptcha,
     select_the,
+    summarize,
     trolley_problem,
     verb,
 )
@@ -52,6 +53,7 @@ __all__ = (
     "noun",
     "recaptcha",
     "select_the",
+    "summarize",
     "trolley_problem",
     "verb",
 )
