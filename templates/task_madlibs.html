@@ -1,0 +1,26 @@
+{% extends "task.html" %}
+
+{% block styles %}
+  {{ super() }}
+{% endblock %}
+
+{% block scripts %}
+  {{ super() }}
+  <script>
+    $(document).ready(function() {
+      Judicious.result = function () {
+        return {
+          word: $("#word").val()
+        };
+      }
+      Judicious.validate = function () {
+        return $("#word").val().length > 0;
+      }
+    });
+  </script>
+{% endblock %}
+
+{% block task %}
+  <p><strong>Instructions:</strong> Enter {% block madlib_category %}{% endblock %} in the space below.</p>
+  <input id="word" placeholder="Your word&hellip;" type="text" autofocus>
+{% endblock %}

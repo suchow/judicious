@@ -66,3 +66,8 @@ def chess(board="rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"):
     turn = turn_dict[board.split(" ")[1]]
     r = collect("chess", board=board, turn=turn)
     return r["board"]
+
+
+def noun():
+    r = collect("noun")
+    return r["word"]
