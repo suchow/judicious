@@ -62,6 +62,10 @@
       };
 
       board = ChessBoard('board', cfg);
+
+      Judicious.validate = function () {
+        return moved;
+      }
     });
   </script>
 {% endblock %}
