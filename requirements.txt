@@ -1,7 +1,7 @@
 APScheduler==3.3.1
 boto3==1.4.7
 Flask==0.12.2
-Flask-SQLAlchemy==2.3.1
+Flask-SQLAlchemy==2.3.2
 gunicorn==19.7.1
 pq==1.5
 psycopg2==2.7.3.1
