@@ -92,12 +92,12 @@ def summarize(text, max_words=None):
 
 def age(src):
     r = collect("age", src=src)
-    return r["age"]
+    return int(r["age"])
 
 
 def dimorphism(src):
     r = collect("dimorphism", src=src)
-    return r["dimorphism"]
+    return int(r["dimorphism"])
 
 
 def attractiveness(src):
