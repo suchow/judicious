@@ -1,13 +1,19 @@
 $(document).ready(function() {
   (function () {
     $("#submit-task").click(function () {
-      if (!Judicious.validate()) {
+      var result;
+      if (typeof Judicious.result === "function") {
+        result = Judicious.result();
+      } else {
+        result = Judicious.result;
+      }
+      if (!Judicious.validate(result)) {
         return;
       }
       $('body').fadeOut(650);
       Judicious.postResult(
         Judicious.taskUUID,
-        Judicious.result,
+        result,
         function () {
           if (Judicious.turkSubmitTo !== '') {
             $("#mturk_form").submit();

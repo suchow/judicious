@@ -4,9 +4,6 @@ var Judicious = (function () {
   };
   validate = function () { return true; };
   var postResult = function (uuid, result, callback) {
-    if (typeof result === "function") {
-      result = result();
-    }
     $.ajax({
       url: '/tasks/' + uuid,
       type: 'PATCH',
