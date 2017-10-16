@@ -16,6 +16,7 @@ from .core import (
 
 from .tasks import (
     adjective,
+    age,
     agree,
     chess,
     compare_numerosity,
@@ -42,6 +43,7 @@ __all__ = (
 
     # Tasks
     "adjective",
+    "age",
     "agree",
     "chess",
     "compare_numerosity",

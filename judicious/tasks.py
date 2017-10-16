@@ -88,3 +88,8 @@ def summarize(text, max_words=None):
         max_words = len(text.split(" "))
     r = collect("summarize", text=text, max_words=max_words)
     return r["summary"]
+
+
+def age(src):
+    r = collect("age", src=src)
+    return r["age"]
