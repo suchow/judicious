@@ -3,12 +3,16 @@
 """Main module."""
 
 import json
+import logging
 import os
 import random
 import time
 import uuid
 
 import requests
+
+logger = logging.getLogger(__name__)
+logging.basicConfig(level=os.environ.get("JUDICIOUS_LOG_LEVEL", "INFO"))
 
 
 def base_url():
@@ -67,15 +71,23 @@ def post_result(id, result):
 def collect(type, **kwargs):
     """Collect result of a task of the given type."""
     task_id = generate_id()
-    r = get_task(task_id)
-    if r.status_code == 200:
-        return json.loads(r.json()['data']['result'])
-
-    elif r.status_code == 404:
-        post_task(type, task_id=task_id, parameters=kwargs)
-
-    while r.status_code != 200:
-        time.sleep(1)
+    while True:
         r = get_task(task_id)
 
-    return json.loads(r.json()['data']['result'])
+        if r.status_code == 200:
+            result = json.loads(r.json()['data']['result'])
+            logging.info("Result found for {}".format(task_id))
+            logging.info(result)
+            return result
+
+        elif r.status_code == 202:
+            logging.info("{} is still in progress")
+
+        elif r.status_code == 404:
+            logging.info("Posting {}".format(task_id))
+            post_task(type, task_id=task_id, parameters=kwargs)
+
+        else:
+            raise Exception("Unknown status code returned")
+
+        time.sleep(1)
