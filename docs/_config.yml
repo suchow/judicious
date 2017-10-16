@@ -7,8 +7,8 @@ permalink:        :title/
 
 # Setup
 title:            Judicious
-tagline:          'A Jekyll theme'
-description:      'Pseudorandom generators for human decisions.'
+tagline:          'Pseudorandom generators of human decisions'
+description:      'Pseudorandom generators of human decisions.'
 url:              https://github.com/suchow/judicious
 baseurl:          /
 
