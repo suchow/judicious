@@ -81,7 +81,7 @@ def collect(type, **kwargs):
             return result
 
         elif r.status_code == 202:
-            logging.info("{} is still in progress")
+            logging.info("{} is still in progress".format(task_id))
 
         elif r.status_code == 404:
             logging.info("Posting {}".format(task_id))
