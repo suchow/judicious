@@ -1,0 +1,55 @@
+{% extends "task.html" %}
+
+{% block styles %}
+  <style type="text/css">
+    .face {
+      width: 64px;
+    }
+  </style>
+  {{ super() }}
+{% endblock %}
+
+{% block scripts %}
+  {{ super() }}
+  <script>
+    $(document).ready(function() {
+      Judicious.result = function() {
+        var data = {};
+        $("#survey").serializeArray().map(
+          function(x) {
+            data[x.name] = x.value;
+          }
+        )
+        return data;
+      }
+      Judicious.validate = function(result) {
+        return result.dimorphism !== "";
+      }
+    });
+  </script>
+{% endblock %}
+
+{% block task %}
+  <p><strong>Instructions:</strong> How masculine or feminine is the person depicted here?</p>
+  <form id="survey">
+    <div class="row">
+      <div class="column column-50">
+        <img class="face" src="{{ parameters.src }}" />
+      </div>
+    </div>
+    <div class="row">
+      <div class="column column-50">
+        <select name="dimorphism" id="dimorphism" required>
+          <option value=""></option>
+          <option value="1">Very masculine</option>
+          <option value="2">Moderately masculine</option>
+          <option value="3">Mildly masculine</option>
+          <option value="4">Amorphous</option>
+          <option value="5">Mildly feminine</option>
+          <option value="6">Moderately feminine</option>
+          <option value="7">Very feminine</option>
+        </select>
+      </div>
+    </div>
+  </form>
+{% endblock %}
