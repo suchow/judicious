@@ -13,17 +13,19 @@
   {% block task %}
   {% endblock %}
 
-  {% if request.values.get('turkSubmitTo') %}
-    <form name='mturk_form' method='post' id='mturk_form' action='{{ request.values['turkSubmitTo'] }}/mturk/externalSubmit'>
-      <input type='hidden' value='{{ request.values['assignmentId'] }}' name='assignmentId' id='assignmentId'/>
-      <input type='hidden' value='bar' name='foo' id='foo-bar'/>
-      <a class="button" id="submit-task" href="#">Submit</a>
-    </form>
-  {% else %}
-    <form>
-      <input class="button" value="Submit" id="submit-task">
-      <input class="button button-clear" type="submit" value="Skip" id="skip-task">
-      <div class="task-id"><p><code>{{ id }}</code></p></div>
-    </form>
-  {% endif %}
+  <div id="submit-or-skip">
+    {% if request.values.get('turkSubmitTo') %}
+      <form name='mturk_form' method='post' id='mturk_form' action='{{ request.values['turkSubmitTo'] }}/mturk/externalSubmit'>
+        <input type='hidden' value='{{ request.values['assignmentId'] }}' name='assignmentId' id='assignmentId'/>
+        <input type='hidden' value='bar' name='foo' id='foo-bar'/>
+        <a class="button" id="submit-task" href="#">Submit</a>
+      </form>
+    {% else %}
+      <form>
+        <input class="button" value="Submit" id="submit-task" readonly>
+        <input class="button button-clear" type="submit" value="Skip" id="skip-task" readonly>
+        <div class="task-id"><p><code>{{ id }}</code></p></div>
+      </form>
+    {% endif %}
+  </div>
 {% endblock %}
