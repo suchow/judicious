@@ -1,0 +1,28 @@
+# Dependencies
+markdown:         redcarpet
+highlighter:      pygments
+
+# Permalinks
+permalink:        :title/
+
+# Setup
+title:            Judicious
+tagline:          'A Jekyll theme'
+description:      'Pseudorandom generators for human decisions.'
+url:              https://github.com/suchow/judicious
+baseurl:          /
+
+author:
+  name:           'Jordan Suchow'
+  url:            https://twitter.com/suchow
+
+paginate:         100
+
+version:          0.1.0
+
+github:
+  repo:           https://github.com/suchow/Judicious
+
+plugins:
+  - jekyll-gist
+  - jekyll-paginate
