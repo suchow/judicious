@@ -103,3 +103,8 @@ def dimorphism(src):
 def attractiveness(src):
     r = collect("attractiveness", src=src)
     return int(r["attractiveness"])
+
+
+def resemblance(src, target):
+    r = collect("resemblance", src=src, target=target)
+    return int(r["resemblance"])

@@ -1,0 +1,44 @@
+{% extends "task.html" %}
+
+{% block styles %}
+  <style type="text/css">
+    .face {
+      width: 64px;
+    }
+  </style>
+  {{ super() }}
+{% endblock %}
+
+{% block scripts %}
+  {{ super() }}
+  <script>
+    $(document).ready(function() {
+      Judicious.result = function () {
+        return {
+          resemblance: $("#resemblance").val(),
+        };
+      }
+      Judicious.validate = function () {
+        var resemblance = parseInt($("#resemblance").val());
+        return (resemblance > 0 && resemblance < 101);
+      }
+    });
+  </script>
+{% endblock %}
+
+{% block task %}
+  <p><strong>Instructions:</strong> On a scale from 0&ndash;100, how much does the depicted person resemble {{ parameters.target }}?</p>
+  <form id="survey">
+    <div class="row">
+      <div class="column column-50">
+        <img class="face" src="{{ parameters.src }}" />
+      </div>
+    </div>
+    <div class="row">
+      <div class="column column-50">
+        <label class="float-right">Resemblance (1&ndash;100)</label>
+        <input name="resemblance" id="resemblance" type="number" min=0 max=100 autofocus>
+      </div>
+    </div>
+  </form>
+{% endblock %}
