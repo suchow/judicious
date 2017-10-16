@@ -98,3 +98,8 @@ def age(src):
 def dimorphism(src):
     r = collect("dimorphism", src=src)
     return r["dimorphism"]
+
+
+def attractiveness(src):
+    r = collect("attractiveness", src=src)
+    return int(r["attractiveness"])
