@@ -1,22 +1,24 @@
-var Judicious = (function () {
+var Judicious = (function() {
   result = {
-    foo: 'bar',
+    foo: "bar"
   };
-  validate = function () { return true; };
-  var postResult = function (uuid, result, callback) {
+  validate = function() {
+    return true;
+  };
+  var postResult = function(uuid, result, callback) {
     $.ajax({
-      url: '/tasks/' + uuid,
-      type: 'PATCH',
-      dataType: 'JSON',
-      complete: function (data) {
+      url: "/tasks/" + uuid,
+      type: "PATCH",
+      dataType: "JSON",
+      complete: function(data) {
         callback();
       },
-      data: {'result': JSON.stringify(result)},
+      data: { result: JSON.stringify(result) }
     });
   };
   return {
     postResult: postResult,
     result: result,
-    validate: validate,
+    validate: validate
   };
 })();
