@@ -1,0 +1,50 @@
+{% extends "task.html" %}
+
+{% block styles %}
+  {{ super() }}
+  <style type="text/css">
+    #images {
+      padding-bottom: 20px;
+    }
+  </style>
+{% endblock %}
+
+{% block scripts %}
+  {{ super() }}
+  <script>
+    $(document).ready(function() {
+      Judicious.result = { "ranks" : new Array({{ parameters.srcs|length }}) };
+      var currentRank = 1;
+      {% for src in parameters.srcs %}
+        $("#image-{{ loop.index0 }}").click(function () {
+          $("#image-{{ loop.index0 }}").fadeTo(200, 0.25);
+          $("#image-{{ loop.index0 }}").unbind();
+          Judicious.result.ranks[{{ loop.index0 }}] = currentRank;
+          currentRank += 1;
+        });
+      {% endfor %}
+      Judicious.validate = function() {
+        for (var i = 0; i < Judicious.result.ranks.length; i++) {
+          if (typeof Judicious.result.ranks[i] === "undefined") {
+            return false;
+          }
+        }
+        return true;
+      }
+    });
+  </script>
+{% endblock %}
+
+{% block task %}
+  <p>
+    <strong>Instructions:</strong> Rank these images in order of how closely
+    they resemble {{ parameters.category }} by clicking on them one by one,
+    most similar first.
+  </p>
+  <br/>
+  <div class="row" id="images">
+    {% for src in parameters.srcs %}
+      <div class="column"><img src="{{ src }}" id="image-{{ loop.index0 }}" /></div>
+    {% endfor %}
+  </div>
+{% endblock %}

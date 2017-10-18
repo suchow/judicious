@@ -90,6 +90,15 @@ def summarize(text, max_words=None):
     return r["summary"]
 
 
+def rank_the(category, srcs):
+    r = collect(
+        "rank_the",
+        category=category,
+        srcs=srcs,
+    )
+    return [int(rank) for rank in r["ranks"]]
+
+
 def age(src):
     r = collect("age", src=src)
     return int(r["age"])
