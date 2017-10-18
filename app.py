@@ -123,7 +123,9 @@ def post_task(id):
             expected_at = timedelta(seconds=timeout)
         else:
             expected_at = timedelta(days=random.randint(1, 365*10))
-        todo_queue.put({"id": id_string}, expected_at=expected_at)
+
+        for _ in range(int(os.environ.get("JUDICIOUS_REDUNDANCY", 1))):
+            todo_queue.put({"id": id_string}, expected_at=expected_at)
 
         return jsonify(
             status="success",
