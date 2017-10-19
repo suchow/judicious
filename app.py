@@ -118,13 +118,13 @@ def post_task(id):
 
         # Put it on the queue.
         priority = int(request.values.get("priority"))
-        timeout = int(os.environ['JUDICIOUS_TASK_TIMEOUT'])
-        if priority > 0:
-            expected_at = timedelta(seconds=timeout)
-        else:
-            expected_at = timedelta(days=random.randint(1, 365*10))
 
-        for _ in range(int(os.environ.get("JUDICIOUS_REDUNDANCY", 1))):
+        for i in range(int(os.environ.get("JUDICIOUS_REDUNDANCY", 1))):
+            if priority > 0:
+                expected_at = timedelta(seconds=i*20)
+            else:
+                expected_at = timedelta(days=random.randint(1, 365*10))
+
             todo_queue.put({"id": id_string}, expected_at=expected_at)
 
         return jsonify(
