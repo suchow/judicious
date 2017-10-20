@@ -11,7 +11,7 @@
 
 {% block scripts %}
   {{ super() }}
-  <script>
+  <script type="text/javascript">
     $(document).ready(function() {
       Judicious.result = { "ranks" : new Array({{ parameters.srcs|length }}) };
       var currentRank = 1;
@@ -38,7 +38,7 @@
 {% block task %}
   <p>
     <strong>Instructions:</strong> Rank these images in order of how closely
-    they resemble {{ parameters.category }} by clicking on them one by one,
+    they resemble {{ parameters.category|safe }} by clicking on them one by one,
     most similar first.
   </p>
   <br/>
