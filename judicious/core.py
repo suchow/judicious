@@ -6,6 +6,7 @@ import json
 import logging
 import multiprocessing as mp
 import os
+import pickle
 import random
 import time
 import uuid
@@ -15,6 +16,9 @@ import requests
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=os.environ.get("JUDICIOUS_LOG_LEVEL", "INFO"))
+
+CACHE_DIR = os.path.join(os.environ["HOME"], ".local", "share", "judicious")
+CACHE_FILEPATH = os.path.join(CACHE_DIR, "cache.pkl")
 
 
 def unpack_seed_apply(fargseed):
@@ -70,10 +74,27 @@ def post_task(task_type, task_id=None, parameters={}):
     )
 
 
-def get_task(id):
-    """Get the result of an existing task."""
+def load_cache():
+    """Load the cache from disk."""
+    if not os.path.exists(CACHE_FILEPATH):
+        os.makedirs(CACHE_DIR)
+        with open(CACHE_FILEPATH, 'w+') as f:  # Initialize w/ empty cache.
+            pickle.dump({}, f, pickle.HIGHEST_PROTOCOL)
+
+    with open(CACHE_FILEPATH, 'rb') as f:
+        return pickle.load(f)
+
+
+def dump_cache(cache):
+    """Dump the cache to disk."""
+    with open(CACHE_FILEPATH, 'wb') as f:
+        pickle.dump(cache, f, pickle.HIGHEST_PROTOCOL)
+
+
+def get_task(task_id):
+    """Get the result of a task."""
     return requests.get(
-        "{}/tasks/{}".format(base_url(), id),
+        "{}/tasks/{}".format(base_url(), task_id),
     )
 
 
@@ -88,6 +109,13 @@ def post_result(id, result):
 def collect(type, **kwargs):
     """Collect result of a task of the given type."""
     task_id = generate_id()
+
+    # Check if the task is in the local cache.
+    cache = load_cache()
+    if task_id in cache:
+        logging.info("Cached result found for {}".format(task_id))
+        return cache[task_id]
+
     while True:
         r = get_task(task_id)
 
@@ -95,6 +123,11 @@ def collect(type, **kwargs):
             result = json.loads(r.json()['data']['result'])
             logging.info("Result found for {}".format(task_id))
             logging.info(result)
+
+            # Cache the result.
+            cache[task_id] = result
+            dump_cache(cache)
+
             return result
 
         elif r.status_code == 202:
