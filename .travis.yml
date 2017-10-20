@@ -6,6 +6,8 @@ python:
 - 3.3
 - 2.7
 cache: pip
+env:
+  - HOME=/home/travis
 install:
   - pip install -U tox-travis
   - gem install jekyll -v 2.4.0
