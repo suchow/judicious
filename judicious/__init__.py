@@ -9,9 +9,11 @@ __version__ = '0.1.0'
 from .core import (
     base_url,
     collect,
+    map,
     priority,
     register,
     seed,
+    unpack_seed_apply,
 )
 
 from .tasks import (
@@ -41,9 +43,11 @@ __all__ = (
     # Core functions
     "base_url",
     "collect",
+    "map",
     "priority",
     "register",
     "seed",
+    "unpack_seed_apply",
 
     # Tasks
     "adjective",

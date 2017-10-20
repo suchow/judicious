@@ -4,6 +4,7 @@
 
 import json
 import logging
+import multiprocessing as mp
 import os
 import random
 import time
@@ -11,8 +12,24 @@ import uuid
 
 import requests
 
+
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=os.environ.get("JUDICIOUS_LOG_LEVEL", "INFO"))
+
+
+def unpack_seed_apply(fargseed):
+    """Unpack, seed the PRNG, and apply the function."""
+    (f, args, seed) = fargseed
+    random.seed(seed)
+    return f(args)
+
+
+def map(f, args):
+    """Reproducible map with a multiprocessing pool."""
+    fs = [f for _ in args]
+    seeds = [random.getrandbits(128)+i for i in range(len(args))]
+    fargseeds = zip(fs, args, seeds)
+    return pool.map(unpack_seed_apply, fargseeds)
 
 
 def base_url():
@@ -91,3 +108,6 @@ def collect(type, **kwargs):
             raise Exception("Unknown status code returned")
 
         time.sleep(1)
+
+
+pool = mp.Pool(20)  # Create pool last, giving access to everything above.
