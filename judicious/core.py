@@ -76,10 +76,11 @@ def post_task(task_type, task_id=None, parameters={}):
 
 def load_cache():
     """Load the cache from disk."""
-    if not os.path.exists(CACHE_FILEPATH):
+    if not os.path.exists(CACHE_DIR):
         os.makedirs(CACHE_DIR)
-        with open(CACHE_FILEPATH, 'w+') as f:  # Initialize w/ empty cache.
-            pickle.dump({}, f, pickle.HIGHEST_PROTOCOL)
+
+    with open(CACHE_FILEPATH, 'wb+') as f:  # Initialize w/ empty cache.
+        pickle.dump({}, f, pickle.HIGHEST_PROTOCOL)
 
     with open(CACHE_FILEPATH, 'rb') as f:
         return pickle.load(f)
