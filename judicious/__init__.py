@@ -39,14 +39,20 @@ from .tasks import (
     verb,
 )
 
+from . import tasks
+
+from .person import Person
+
 __all__ = (
     # Core functions
     "base_url",
     "collect",
     "map",
+    "Person",
     "priority",
     "register",
     "seed",
+    "tasks",
     "unpack_seed_apply",
 
     # Tasks
