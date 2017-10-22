@@ -67,6 +67,20 @@ class Task(db.Model):
         todo_queue.put({"id": self.id})
 
 
+class Person(db.Model):
+    """An identity to be claimed by a judicious participant."""
+
+    id = db.Column(UUID, primary_key=True, nullable=False)
+    created_at = db.Column(db.DateTime, nullable=False, default=datetime.now)
+    claimed_at = db.Column(db.DateTime)
+
+    def __init__(self, id):
+        self.id = id
+
+    def __repr__(self):
+        return '<Person %r>' % self.id
+
+
 @app.route('/ad/')
 def ad():
     """Index route."""
