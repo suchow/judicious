@@ -142,29 +142,26 @@ def post_person(person_id):
 @app.route('/tasks/<uuid:id>', methods=['POST'])
 def post_task(id):
     """Add a new task to the queue."""
-    task_type = request.values["type"]
-    id_string = str(id)
-    task_exists = Task.query.filter_by(id=id_string).count() > 0
 
-    if not task_exists:
-        app.logger.info("Creating task with id {}".format(id_string))
-        app.logger.info("Context is {}".format(request.values["context"]))
-
-        # Create the context.
+    # Create the context.
+    if not Context.query.filter_by(id=request.values["context"]).one_or_none():
         context = Context(request.values["context"])
         db.session.add(context)
         db.session.commit()
 
+    id_string = str(id)
+    if not Task.query.filter_by(id=id_string).one_or_none():
         # Create the task.
+        app.logger.info("Creating task with id {}".format(id_string))
         task = Task(
             id_string,
             request.values["context"],
-            task_type,
+            request.values["type"],
             json.loads(request.values["parameters"]),
         )
         task.last_queued_at = datetime.now()
 
-        # Check if the person exists, creating if necessary.
+        # Check the person.
         person_id = request.values.get("person")
         if person_id and not Person.query.filter_by(id=person_id).one_or_none():
             person = Person(person_id, request.values["context"])
