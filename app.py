@@ -40,17 +40,22 @@ todo_queue = pq['tasks']
 class Task(db.Model):
     """A task to be completed by a judicious participant."""
 
+    __tablename__ = "task"
+
     id = db.Column(UUID, primary_key=True, nullable=False)
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.now)
     last_queued_at = db.Column(db.DateTime)
     type = db.Column(db.String(64), nullable=False)
     parameters = db.Column(db.JSON)
+    person_id = db.Column(UUID, db.ForeignKey('person.id'))
+    context_id = db.Column(UUID, db.ForeignKey('context.id'), nullable=False)
     last_started_at = db.Column(db.DateTime)
     finished_at = db.Column(db.DateTime)
     result = db.Column(db.String(2**16))
 
-    def __init__(self, id, type, parameters=None):
+    def __init__(self, id, context_id, type, parameters=None):
         self.id = id
+        self.context_id = context_id
         self.type = type
         self.parameters = parameters
 
@@ -70,15 +75,31 @@ class Task(db.Model):
 class Person(db.Model):
     """An identity to be claimed by a judicious participant."""
 
+    __tablename__ = "person"
+
     id = db.Column(UUID, primary_key=True, nullable=False)
+    context_id = db.Column(UUID, db.ForeignKey('context.id'))
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.now)
     claimed_at = db.Column(db.DateTime)
+    tasks = db.relationship("Task", backref='person')
+
+    def __init__(self, id, context_id):
+        self.id = id
+        self.context_id = context_id
+
+    def __repr__(self):
+        return '<Person %r>' % self.id
+
+
+class Context(db.Model):
+    """A particular run of a script."""
 
     def __init__(self, id):
         self.id = id
 
-    def __repr__(self):
-        return '<Person %r>' % self.id
+    id = db.Column(UUID, primary_key=True, nullable=False)
+    tasks = db.relationship("Task", backref='context')
+    persons = db.relationship("Person", backref='context')
 
 
 @app.route('/ad/')
@@ -109,6 +130,14 @@ def assent():
     return redirect(url_for('stage', **request.args))
 
 
+@app.route('/persons/<uuid:id>', methods=['POST'])
+def post_person(person_id):
+    """Add a new person."""
+    person = Person(person_id)
+    db.session.add(person)
+    db.session.commit()
+
+
 @app.route('/tasks', methods=['POST'], defaults={'id': str(uuid.uuid4())})
 @app.route('/tasks/<uuid:id>', methods=['POST'])
 def post_task(id):
@@ -119,14 +148,30 @@ def post_task(id):
 
     if not task_exists:
         app.logger.info("Creating task with id {}".format(id_string))
+        app.logger.info("Context is {}".format(request.values["context"]))
+
+        # Create the context.
+        context = Context(request.values["context"])
+        db.session.add(context)
+        db.session.commit()
 
         # Create the task.
         task = Task(
             id_string,
+            request.values["context"],
             task_type,
-            json.loads(request.values["parameters"])
+            json.loads(request.values["parameters"]),
         )
         task.last_queued_at = datetime.now()
+
+        # Check if the person exists, creating if necessary.
+        person_id = request.values.get("person")
+        if person_id and not Person.query.filter_by(id=person_id).one_or_none():
+            person = Person(person_id, request.values["context"])
+            db.session.add(person)
+            db.session.commit()
+
+        task.person_id = person_id
         db.session.add(task)
         db.session.commit()
 

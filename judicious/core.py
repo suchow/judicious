@@ -82,12 +82,15 @@ def post_task(task_type, task_id=None, parameters={}):
     """Create a new task."""
     if not task_id:
         task_id = generate_uuid()
+    person = parameters.pop("person", None)
     return requests.post(
         "{}/tasks/{}".format(base_url(), task_id),
         data={
             'type': task_type,
             'parameters': json.dumps(parameters),
             'priority': os.environ.get("JUDICIOUS_PRIORITY_LEVEL", 1),
+            'person': person,
+            'context': context(),
         },
     )
 
