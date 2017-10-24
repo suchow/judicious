@@ -6,9 +6,11 @@ __author__ = """Jordan W. Suchow"""
 __email__ = 'jwsuchow@gmail.com'
 __version__ = '0.1.0'
 
+
 from .core import (
     base_url,
     collect,
+    context,
     map,
     priority,
     register,
@@ -39,14 +41,22 @@ from .tasks import (
     verb,
 )
 
+from . import tasks
+
+from .person import Person
+
+
 __all__ = (
     # Core functions
     "base_url",
     "collect",
+    "context",
     "map",
+    "Person",
     "priority",
     "register",
     "seed",
+    "tasks",
     "unpack_seed_apply",
 
     # Tasks

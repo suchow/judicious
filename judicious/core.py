@@ -8,10 +8,38 @@ import multiprocessing as mp
 import os
 import pickle
 import random
+import sys
 import time
 import uuid
 
 import requests
+
+this = sys.modules[__name__]
+
+
+def generate_uuid():
+    """Generate a UUID from pseudorandom bits."""
+    return str(uuid.UUID(int=random.getrandbits(128)))
+
+
+_ctx = None
+
+
+def context():
+    return this._ctx
+
+
+def seed(s=None):
+    """Seed the PRNG."""
+    if not s:
+        s = generate_uuid()
+    random.seed(s)
+    global _ctx
+    this._ctx = s
+    return s
+
+
+seed()
 
 
 logger = logging.getLogger(__name__)
@@ -50,26 +78,19 @@ def priority(level=1):
     os.environ["JUDICIOUS_PRIORITY_LEVEL"] = str(level)
 
 
-def seed(s):
-    """Seed the PRNG."""
-    random.seed(s)
-
-
-def generate_id():
-    """Generate a UUID from pseudorandom bits."""
-    return str(uuid.UUID(int=random.getrandbits(128)))
-
-
 def post_task(task_type, task_id=None, parameters={}):
     """Create a new task."""
     if not task_id:
-        task_id = generate_id()
+        task_id = generate_uuid()
+    person = parameters.pop("person", None)
     return requests.post(
         "{}/tasks/{}".format(base_url(), task_id),
         data={
             'type': task_type,
             'parameters': json.dumps(parameters),
             'priority': os.environ.get("JUDICIOUS_PRIORITY_LEVEL", 1),
+            'person': person,
+            'context': context(),
         },
     )
 
@@ -109,7 +130,7 @@ def post_result(id, result):
 
 def collect(type, **kwargs):
     """Collect result of a task of the given type."""
-    task_id = generate_id()
+    task_id = generate_uuid()
 
     # Check if the task is in the local cache.
     cache = load_cache()
