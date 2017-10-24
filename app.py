@@ -294,8 +294,9 @@ def stage():
     if not task_id:
         app.logger.info("Looking for tasks assigned to existing persons...")
         for person in persons:
-            task_id = pq[person.id.replace("-", "_")].get()
-            if task_id:
+            queue = pq[person.id.replace("-", "_")]
+            if len(queue):
+                task_id = queue.get()
                 break
 
     contexts = [person.context for person in persons]
