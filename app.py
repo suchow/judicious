@@ -330,7 +330,9 @@ def stage():
 
     if not task_id:
         app.logger.info("Popping a task off the open queue.")
-        task_id = pq["open"].get()
+        open_queue = pq["open"]
+        if len(open_queue):
+            task_id = open_queue.get()
 
     if not task_id:
         app.logger.info("No tasks are available.")
