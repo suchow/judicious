@@ -7,172 +7,156 @@ import random
 from .core import collect
 
 
-class Task(object):
-    """A callable task."""
-    def __init__(self, *args, **kwargs):
-        self.person = kwargs.get("person")
-        self.__call__()
-
-    def collect(self, *args, **kwargs):
-        return collect(*args, person=self.person, **kwargs)
-
-    def __call__(self):
-        raise NotImplementedError
-
-
-class joke(Task):
+def joke(person=None):
     """Tell a joke."""
-    def __call__(self):
-        r = self.collect("joke")
-        return r['text']
+    r = collect("joke", person=person)
+    return r['text']
 
 
-class copyedit(Task):
+def copyedit(text, person=None):
     """Copyedit some text."""
-    def __call__(self, text):
-        r = self.collect("copyedit", text=text)
-        return r['text']
+    r = collect("copyedit", text=text, person=person)
+    return r['text']
 
 
-class label(Task):
+def label(src, person=None):
     """Label an image."""
-    def __call__(self, src):
-        r = self.collect("label", src=src)
-        return r['label']
+    r = collect("label", src=src, person=person)
+    return r['label']
 
 
-class select_the(Task):
+def select_the(category, src_0, src_1, person=None):
     """Select the image belonging to the category."""
-    def __call__(self, category, src_0, src_1):
-        r = self.collect(
-            "select_the",
-            category=category,
-            src_0=src_0,
-            src_1=src_1
-        )
-        return r['selection']
+    r = collect(
+        "select_the",
+        category=category,
+        src_0=src_0,
+        src_1=src_1,
+        person=person,
+    )
+    return r['selection']
 
 
-class define(Task):
+def define(word, person=None):
     """Define the word."""
-    def __call__(self, word):
-        r = self.collect("define", word=word)
-        return r['definition']
+    r = collect("define", word=word, person=person)
+    return r['definition']
 
 
-class compare_numerosity(Task):
+def compare_numerosity(a, b, person=None):
     """Determine which numerosity is greater."""
-    def __call__(self, a, b):
-        cb = random.random() > 0.5
-        r = self.collect("compare_numerosity", a=a, b=b, counterbalancer=cb)
-        return r['selection']
+    cb = random.random() > 0.5
+    r = collect(
+        "compare_numerosity",
+        a=a,
+        b=b,
+        counterbalancer=cb,
+        person=person
+    )
+    return r['selection']
 
 
-class agree(Task):
+def agree(prompt, person=None):
     """Rate agreement with a prompt."""
-    def __call__(self, prompt):
-        r = self.collect("agree", prompt=prompt)
-        return r['agreement']
+    r = collect("agree", prompt=prompt, person=person)
+    return r['agreement']
 
 
-class trolley_problem(Task):
+def trolley_problem(person=None):
     """Respond to the trolley problem."""
-    def __call__(self):
-        r = self.collect("trolley_problem")
-        return r['decision']
+    r = collect("trolley_problem", person=person)
+    return r['decision']
 
 
-class intertemporal_choice(Task):
+def intertemporal_choice(SS, LL, delay, person=None):
     """Complete an intertemporal choice problem."""
-    def __call__(self, SS, LL, delay):
-        r = self.collect("intertemporal_choice", SS=SS, LL=LL, delay=delay)
-        return r['choice']
+    r = collect(
+        "intertemporal_choice",
+        SS=SS,
+        LL=LL,
+        delay=delay,
+        person=person
+    )
+    return r['choice']
 
 
-class recaptcha(Task):
+def recaptcha(person=None):
     """Solve a reCaptcha."""
-    def __call__(self):
-        r = self.collect("recaptcha")
-        return r["solved"]
+    r = collect("recaptcha", person=person)
+    return r["solved"]
 
 
-class chess(Task):
+def chess(
+    board="rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+    person=None
+):
     """Take the next move in a game of chess."""
-    starting_board = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
-
-    def __call__(self, board=starting_board):
-        turn_dict = {
-            "b": "black",
-            "w": "white"
-        }
-        turn = turn_dict[board.split(" ")[1]]
-        r = self.collect("chess", board=board, turn=turn)
-        return r["board"]
+    print(board)
+    turn_dict = {
+        "b": "black",
+        "w": "white"
+    }
+    turn = turn_dict[board.split(" ")[1]]
+    r = collect("chess", board=board, turn=turn, person=person)
+    return r["board"]
 
 
-class noun(Task):
+def noun(person=None):
     """Name a noun."""
-    def __call__(self):
-        r = self.collect("noun")
-        return r["word"]
+    r = collect("noun", person=person)
+    return r["word"]
 
 
-class verb(Task):
+def verb(person=None):
     """Name a verb."""
-    def __call__(self):
-        r = self.collect("verb")
-        return r["word"]
+    r = collect("verb", person=person)
+    return r["word"]
 
 
-class adjective(Task):
+def adjective(person=None):
     """Name an adjective."""
-    def __call__(self):
-        r = self.collect("adjective")
-        return r["word"]
+    r = collect("adjective", person=person)
+    return r["word"]
 
 
-class summarize(Task):
+def summarize(text, max_words=None, person=None):
     """Summarize a text."""
-    def __call__(self, text, max_words=None):
-        if not max_words:
-            mself, ax_words = len(text.split(" "))
-        r = self.collect("summarize", text=text, max_words=max_words)
-        return r["summary"]
+    if not max_words:
+        mself, ax_words = len(text.split(" "))
+    r = collect("summarize", text=text, max_words=max_words, person=person)
+    return r["summary"]
 
-class rank_the(Task):
+
+def rank_the(category, srcs, person=None):
     """Rank images according to their resemblance to a category."""
-    def __call__(self, category, srcs):
-        r = self.collect(
-            "rank_the",
-            category=category,
-            srcs=srcs,
-        )
-        return [int(rank) for rank in r["ranks"]]
+    r = collect(
+        "rank_the",
+        category=category,
+        srcs=srcs,
+        person=person,
+    )
+    return [int(rank) for rank in r["ranks"]]
 
 
-class age(Task):
+def age(src, person=None):
     """Estimate the age of a person in an image."""
-    def __call__(self, src):
-        r = self.collect("age", src=src)
-        return int(r["age"])
+    r = collect("age", src=src, person=person)
+    return int(r["age"])
 
 
-class dimorphism(Task):
+def dimorphism(src, person=None):
     """Rate the gender dimorphism of a person in an image."""
-    def __call__(self, src):
-        r = self.collect("dimorphism", src=src)
-        return int(r["dimorphism"])
+    r = collect("dimorphism", src=src, person=person)
+    return int(r["dimorphism"])
 
 
-class attractiveness(Task):
+def attractiveness(src, person=None):
     """Rate the attractiveness of a person in an image."""
-    def __call__(self, src):
-        r = self.collect("attractiveness", src=src)
-        return int(r["attractiveness"])
+    r = collect("attractiveness", src=src, person=person)
+    return int(r["attractiveness"])
 
 
-class resemblance(Task):
+def resemblance(src, target, person=None):
     """Rate an image's resemblace to a target person."""
-    def __call__(self, src, target):
-        r = self.collect("resemblance", src=src, target=target)
-        return int(r["resemblance"])
+    r = collect("resemblance", src=src, target=target, person=person)
+    return int(r["resemblance"])

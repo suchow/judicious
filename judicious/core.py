@@ -132,7 +132,6 @@ def collect(type, **kwargs):
     """Collect result of a task of the given type."""
     task_id = generate_uuid()
 
-
     # Check if the task is in the local cache.
     cache = load_cache()
     if task_id in cache:

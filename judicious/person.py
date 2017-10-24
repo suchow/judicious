@@ -15,5 +15,5 @@ class Person(object):
 
     def __getattr__(self, name):
         def method(*args, **kwargs):
-            return getattr(tasks, name)(args, person=self.id, **kwargs)
+            return getattr(tasks, name)(*args, person=self.id, **kwargs)
         return method
