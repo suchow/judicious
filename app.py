@@ -34,7 +34,6 @@ db = SQLAlchemy(app)
 # Create the todo queue.
 conn = connect(DB_URL)
 pq = PQ(conn)
-todo_queue = pq['tasks']
 
 
 class Task(db.Model):
@@ -64,12 +63,18 @@ class Task(db.Model):
 
     def timeout(self):
         """Placed timed-out tasks back on the queue."""
-        app.logger.info("Timeout on task {}".format(self.id))
+        app.logger.info("Timeout on task {}, requeuing.".format(self.id))
         self.last_started_at = None
         self.last_queued_at = datetime.now()
         db.session.add(self)
         db.session.commit()
-        todo_queue.put({"id": self.id})
+        self.requeue()
+
+    def requeue(self):
+        if self.person_id:
+            pq[str(self.person_id)].put({"id": self.id})
+        else:
+            pq["open"].put({"id": self.id})
 
 
 class Person(db.Model):
@@ -96,6 +101,9 @@ class Context(db.Model):
 
     def __init__(self, id):
         self.id = id
+
+    def __repr__(self):
+        return '<Context %r>' % self.id
 
     id = db.Column(UUID, primary_key=True, nullable=False)
     tasks = db.relationship("Task", backref='context')
@@ -172,16 +180,21 @@ def post_task(id):
         db.session.add(task)
         db.session.commit()
 
-        # Put it on the queue.
-        priority = int(request.values.get("priority"))
+        # Put it on the appropriate queue.
+        if person_id:
+            queue_name = person_id.replace("-", "_")
+            redundancy = 1
+        else:
+            queue_name = "open"
+            redundancy = int(os.environ.get("JUDICIOUS_REDUNDANCY", 1))
 
-        for i in range(int(os.environ.get("JUDICIOUS_REDUNDANCY", 1))):
-            if priority > 0:
+        for i in range(redundancy):
+            if int(request.values.get("priority")) > 0:
                 expected_at = timedelta(seconds=i*20)
             else:
                 expected_at = timedelta(days=random.randint(1, 365*10))
 
-            todo_queue.put({"id": id_string}, expected_at=expected_at)
+            pq[queue_name].put({"id": id_string}, expected_at=expected_at)
 
         return jsonify(
             status="success",
@@ -270,20 +283,68 @@ def get_task_result(id):
 @app.route('/stage/', methods=['GET'])
 def stage():
     """Serve the next task."""
-    next_task = todo_queue.get()
-    if next_task:
-        task = Task.query.filter_by(id=next_task.data['id']).one_or_none()
-        task.last_started_at = datetime.now()
-        db.session.add(task)
-        db.session.commit()
-        return render_template(
-            "tasks/{}.html".format(task.type),
-            id=task.id,
-            parameters=task.parameters,
-            RECAPTCHA_SITE_KEY=os.environ['RECAPTCHA_SITE_KEY']
-        )
+    if session.get('PERSONS'):
+        persons = Person.query.filter(Person.id.in_(session['PERSONS'])).all()
     else:
+        persons = []
+
+    app.logger.info("Persons in session are {}".format(persons))
+
+    task_id = None
+    if not task_id:
+        app.logger.info("Looking for tasks assigned to existing persons...")
+        for person in persons:
+            task_id = pq[person.id.replace("-", "_")].get()
+            if task_id:
+                break
+
+    contexts = [person.context for person in persons]
+    app.logger.info(contexts)
+    if not task_id:
+        app.logger.info("Looking for unclaimed persons.")
+        if persons:
+            person = (
+                Person.query
+                .filter(~Person.context_id.in_(c.id for c in contexts))
+                .filter(Person.claimed_at == None)  # noqa
+                .order_by(Person.created_at.asc())
+                .limit(1).one_or_none()
+            )
+        else:
+            person = (
+                Person.query
+                .filter(Person.claimed_at == None)  # noqa
+                .order_by(Person.created_at.asc())
+                .limit(1).one_or_none()
+            )
+
+        if person:
+            app.logger.info("Person {} has been claimed.".format(person.id))
+            person.claimed_at = datetime.now()
+            db.session.add(person)
+            db.session.commit()
+            task_id = pq[person.id.replace("-", "_")].get()
+            persons.append(person)
+            session["PERSONS"] = [p.id for p in persons]
+
+    if not task_id:
+        app.logger.info("Popping a task off the open queue.")
+        task_id = pq["open"].get()
+
+    if not task_id:
+        app.logger.info("No tasks are available.")
         return render_template("no_tasks.html")
+
+    task = Task.query.filter_by(id=task_id.data['id']).one_or_none()
+    task.last_started_at = datetime.now()
+    db.session.add(task)
+    db.session.commit()
+    return render_template(
+        "tasks/{}.html".format(task.type),
+        id=task.id,
+        parameters=task.parameters,
+        RECAPTCHA_SITE_KEY=os.environ['RECAPTCHA_SITE_KEY']
+    )
 
 
 @app.route('/recaptcha/', methods=['POST'])

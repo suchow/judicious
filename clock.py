@@ -14,7 +14,6 @@ DB_URL_DEFAULT = 'postgresql://postgres@localhost/judicious'
 DB_URL = os.environ.get("DATABASE_URL", DB_URL_DEFAULT)
 conn = connect(DB_URL)
 pq = PQ(conn)
-todo_queue = pq['tasks']
 
 # Set up logging.
 logger = logging.getLogger(__name__)
@@ -41,7 +40,7 @@ recruiter = recruiter_class_()
 
 @sched.scheduled_job('interval', seconds=5)
 def outstanding():
-    logger.info("There are {} outstanding tasks.".format(len(todo_queue)))
+    logger.info("There are {} outstanding tasks.".format(len(pq['open'])))
 
 
 @sched.scheduled_job('interval', seconds=JUDICIOUS_RECRUIT_INTERVAL)
