@@ -13,6 +13,12 @@ def joke(person=None):
     return r['text']
 
 
+def draw(thing, width=200, height=200, person=None):
+    """Draw a thing."""
+    r = collect("draw", thing=thing, width=width, height=height, person=person)
+    return r['drawing']
+
+
 def copyedit(text, person=None):
     """Copyedit some text."""
     r = collect("copyedit", text=text, person=person)

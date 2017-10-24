@@ -1,0 +1,39 @@
+{% extends "task.html" %}
+
+{% block styles %}
+  {{ super() }}
+  <link rel="stylesheet" href="{{ url_for('static', filename='drawingboard.min.css') }}">
+  <style type="text/css">
+    #board {
+      width: {{ parameters.width }}px;
+      height: {{ parameters.height }}px;
+    }
+  </style>
+{% endblock %}
+
+{% block scripts %}
+  {{ super() }}
+  <script src="{{ url_for('static', filename='drawingboard.min.js') }}"></script>
+  <script>
+    $(document).ready(function() {
+      var board = new DrawingBoard.Board('board', {
+        controls: false,
+        webStorage: false,
+        size: 2,
+      });
+      Judicious.result = function () {
+        return {
+          drawing: board.getImg(),
+        };
+      }
+      Judicious.validate = function () {
+        return board.getImg() != board.blankCanvas;
+      }
+    });
+  </script>
+{% endblock %}
+
+{% block task %}
+  <p><strong>Instructions:</strong> Draw {{ parameters.thing }}.</p>
+  <div id="board"></div>
+{% endblock %}
