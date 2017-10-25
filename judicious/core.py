@@ -105,8 +105,9 @@ def load_cache():
     if not os.path.exists(CACHE_DIR):
         os.makedirs(CACHE_DIR)
 
-    with open(CACHE_FILEPATH, 'wb+') as f:  # Initialize w/ empty cache.
-        pickle.dump({}, f, pickle.HIGHEST_PROTOCOL)
+    if not os.path.exists(CACHE_FILEPATH):  # Initialize w/ empty cache.
+        with open(CACHE_FILEPATH, 'wb+') as f:
+            pickle.dump({}, f, pickle.HIGHEST_PROTOCOL)
 
     with open(CACHE_FILEPATH, 'rb') as f:
         return pickle.load(f)
