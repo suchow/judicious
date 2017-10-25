@@ -8,13 +8,11 @@ import multiprocessing as mp
 import os
 import pickle
 import random
-import sys
 import time
 import uuid
 
 import requests
 
-this = sys.modules[__name__]
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=os.environ.get("JUDICIOUS_LOG_LEVEL", "INFO"))
@@ -28,6 +26,14 @@ def generate_uuid():
     return uuid.UUID(int=random.getrandbits(128))
 
 
+_ctx = None
+
+
+def context():
+    global _ctx
+    return _ctx
+
+
 def seed(s=None):
     """Seed the PRNG."""
     if not s:
@@ -39,6 +45,8 @@ def seed(s=None):
         np.random.seed(int(uuid.UUID(s)) % (2**32 - 1))
     except ImportError:
         pass
+    global _ctx
+    _ctx = s
     return s
 
 
