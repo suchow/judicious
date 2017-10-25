@@ -16,37 +16,33 @@ import requests
 
 this = sys.modules[__name__]
 
-
-def generate_uuid():
-    """Generate a UUID from pseudorandom bits."""
-    return str(uuid.UUID(int=random.getrandbits(128)))
-
-
-_ctx = None
-
-
-def context():
-    return this._ctx
-
-
-def seed(s=None):
-    """Seed the PRNG."""
-    if not s:
-        s = generate_uuid()
-    random.seed(s)
-    global _ctx
-    this._ctx = s
-    return s
-
-
-seed()
-
-
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=os.environ.get("JUDICIOUS_LOG_LEVEL", "INFO"))
 
 CACHE_DIR = os.path.join(os.environ["HOME"], ".local", "share", "judicious")
 CACHE_FILEPATH = os.path.join(CACHE_DIR, "cache.pkl")
+
+
+def generate_uuid():
+    """Generate a UUID from pseudorandom bits."""
+    return uuid.UUID(int=random.getrandbits(128))
+
+
+def seed(s=None):
+    """Seed the PRNG."""
+    if not s:
+        s = str(generate_uuid())
+    random.seed(s)
+    logging.info("Seeding with {}".format(s))
+    try:
+        import numpy as np
+        np.random.seed(int(uuid.UUID(s)) % (2**32 - 1))
+    except NameError:
+        pass
+    return s
+
+
+seed()
 
 
 def unpack_seed_apply(fargseed):
@@ -59,7 +55,7 @@ def unpack_seed_apply(fargseed):
 def map(f, args):
     """Reproducible map with a multiprocessing pool."""
     fs = [f for _ in args]
-    seeds = [random.getrandbits(128)+i for i in range(len(args))]
+    seeds = [random.getrandbits(128) for _ in args]
     fargseeds = zip(fs, args, seeds)
     return pool.map(unpack_seed_apply, fargseeds)
 
@@ -81,7 +77,7 @@ def priority(level=1):
 def post_task(task_type, task_id=None, parameters={}):
     """Create a new task."""
     if not task_id:
-        task_id = generate_uuid()
+        task_id = str(generate_uuid())
     person = parameters.pop("person", None)
     return requests.post(
         "{}/tasks/{}".format(base_url(), task_id),
@@ -130,7 +126,7 @@ def post_result(id, result):
 
 def collect(type, **kwargs):
     """Collect result of a task of the given type."""
-    task_id = generate_uuid()
+    task_id = str(generate_uuid())
 
     # Check if the task is in the local cache.
     cache = load_cache()

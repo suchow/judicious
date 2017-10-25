@@ -11,7 +11,6 @@ import os
 from .core import (
     base_url,
     collect,
-    context,
     map,
     priority,
     register,
@@ -54,7 +53,6 @@ __all__ = (
     # Core functions
     "base_url",
     "collect",
-    "context",
     "map",
     "Person",
     "priority",
