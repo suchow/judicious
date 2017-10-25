@@ -37,7 +37,7 @@ def seed(s=None):
     try:
         import numpy as np
         np.random.seed(int(uuid.UUID(s)) % (2**32 - 1))
-    except NameError:
+    except ImportError:
         pass
     return s
 
