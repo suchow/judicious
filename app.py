@@ -1,13 +1,16 @@
 """Imprudent."""
 
 from datetime import datetime, timedelta
+from functools import wraps
 import json
 import os
 import random
 import uuid
 
 from flask import (
+    abort,
     Flask,
+    g,
     jsonify,
     redirect,
     render_template,
@@ -18,6 +21,7 @@ from flask import (
 from flask_sqlalchemy import SQLAlchemy
 from pq import PQ
 from psycopg2 import connect
+from raven.contrib.flask import Sentry
 import requests
 from sqlalchemy.dialects.postgresql import UUID
 
@@ -31,7 +35,9 @@ app.config['SQLALCHEMY_DATABASE_URI'] = DB_URL
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
-# Create the todo queue.
+sentry = Sentry(app)
+
+# Create the queues.
 conn = connect(DB_URL)
 pq = PQ(conn)
 
@@ -108,6 +114,35 @@ class Context(db.Model):
     id = db.Column(UUID, primary_key=True, nullable=False)
     tasks = db.relationship("Task", backref='context')
     persons = db.relationship("Person", backref='context')
+
+
+@app.context_processor
+def inject_sentry_dsn():
+    return dict(SENTRY_DSN_FRONTEND=os.environ.get("SENTRY_DSN_FRONTEND"))
+
+
+@app.errorhandler(500)
+def internal_server_error(error):
+    return render_template(
+        '500.html',
+        event_id=g.sentry_event_id,
+        public_dsn=sentry.client.get_public_dsn('https')
+    ), 500
+
+
+@app.errorhandler(404)
+def page_not_found(error):
+    return render_template('404.html'), 404
+
+
+def require_api_key(view_function):
+    @wraps(view_function)
+    def decorated_function(*args, **kwargs):
+        if request.args.get("key") == os.environ["JUDICIOUS_SECRET_KEY"]:
+            return view_function(*args, **kwargs)
+        else:
+            abort(401)
+    return decorated_function
 
 
 @app.route('/ad/')

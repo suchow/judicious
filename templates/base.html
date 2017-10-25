@@ -25,6 +25,12 @@
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
     <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+    <script src="https://cdn.ravenjs.com/3.19.1/raven.min.js" crossorigin="anonymous"></script>
+    <script>
+      {% if SENTRY_DSN_FRONTEND %}
+        Raven.config('{{ SENTRY_DSN_FRONTEND }}').install();
+      {% endif %}
+    </script>
     <script src="{{ url_for('static', filename='judicious.js') }}"></script>
   {% endblock %}
 </head>
