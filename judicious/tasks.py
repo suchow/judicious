@@ -40,7 +40,7 @@ def select_the(category, src_0, src_1, person=None):
         src_1=src_1,
         person=person,
     )
-    return r['selection']
+    return int(r['selection'])
 
 
 def define(word, person=None):
