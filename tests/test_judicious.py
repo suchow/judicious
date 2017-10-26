@@ -3,10 +3,32 @@
 
 """Tests for `judicious` package."""
 
+import random
+
 import pytest
 
-
 import judicious
+
+
+def test_seeding():
+    r1 = random.random()
+    r2 = random.random()
+    judicious.seed("70d911d5-6d93-3c42-f9a4-53e493a79bff")
+    r3 = random.random()
+    r4 = random.random()
+    judicious.seed("70d911d5-6d93-3c42-f9a4-53e493a79bff")
+    r5 = random.random()
+    r6 = random.random()
+    judicious.seed()
+    r7 = random.random()
+    r8 = random.random()
+
+    assert(r1 != r3)
+    assert(r2 != r4)
+    assert(r3 == r5)
+    assert(r4 == r6)
+    assert(r5 != r7)
+    assert(r6 != r8)
 
 
 @pytest.fixture
