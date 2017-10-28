@@ -8,6 +8,6 @@ coverage==4.4.1
 cryptography==2.1.2
 PyYAML==3.12
 pytest==3.2.3
-pytest-runner==2.12.1
+pytest-runner==3.0
 
  -r requirements.txt
