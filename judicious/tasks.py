@@ -172,4 +172,4 @@ def prosewash(text, error_message, person=None):
     """Validate a purported Proselint error triggered by the text."""
     r = collect(
         "prosewash", text=text, error_message=error_message, person=person)
-    return bool(r["valid"])
+    return bool(r["is_error"])

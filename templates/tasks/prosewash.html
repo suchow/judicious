@@ -14,13 +14,13 @@
   <script>
     $( document ).ready(function() {
       $("#valid").click(function () {
-        Judicious.result = { valid: true };
+        Judicious.result = { is_error: true };
         $("#invalid").fadeTo(100, 0.25);
         $("#valid").fadeTo(100, 1.00);
       });
 
       $("#invalid").click(function () {
-        Judicious.result = { selection: false };
+        Judicious.result = { is_error: false };
         $("#valid").fadeTo(100, 0.25);
         $("#invalid").fadeTo(100, 1.00);
       });
@@ -34,8 +34,10 @@
     Below is a proposed error detected by a copy editor. Do you agree with
     their judgment? Is this, in fact, an error?
   </p>
-  <textarea id="text" >{{ parameters.text|e }}</textarea>
+  <h2>Text</h2>
+  <blockquote id="text">{{ parameters.text|e }}</blockquote>
+  <h2>Error</h2>
   <blockquote>{{ parameters.error_message|e }}</blockquote>
-  <a class="button" id="valid" href="#">Agree: error</a>
+  <a class="button button-outline" id="valid" href="#">Agree: error</a>
   <a class="button button-outline" id="invalid" href="#">Disagree: not an error</a>
 {% endblock %}
