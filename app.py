@@ -18,7 +18,15 @@ from flask import (
     session,
     url_for,
 )
+from flask_mail import Mail
 from flask_sqlalchemy import SQLAlchemy
+from flask_security import (
+    Security,
+    SQLAlchemyUserDatastore,
+    UserMixin,
+    RoleMixin,
+    login_required
+)
 from pq import PQ
 from psycopg2 import connect
 from raven.contrib.flask import Sentry
@@ -29,17 +37,63 @@ app = Flask(__name__)
 
 app.secret_key = os.environ["JUDICIOUS_SECRET_KEY"]
 
-DB_URL_DEFAULT = 'postgresql://postgres@localhost/judicious'
-DB_URL = os.environ.get("DATABASE_URL", DB_URL_DEFAULT)
-app.config['SQLALCHEMY_DATABASE_URI'] = DB_URL
+app.config['SOCIAL_TWITTER'] = {
+    'consumer_key': os.environ.get('TWITTER_API_KEY'),
+    'consumer_secret': os.environ.get('TWITTER_API_SECRET'),
+}
+
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(
+    "DATABASE_URL",
+    'postgresql://postgres@localhost/judicious'
+)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 sentry = Sentry(app)
 
+# After 'Create app'
+app.config['MAIL_SERVER'] = os.environ.get("MAIL_SERVER")
+app.config['MAIL_PORT'] = 465
+app.config['MAIL_USE_SSL'] = True
+app.config['MAIL_USERNAME'] = os.environ.get("MAIL_USERNAME")
+app.config['MAIL_PASSWORD'] = os.environ.get("MAIL_PASSWORD")
+mail = Mail(app)
+
 # Create the queues.
-conn = connect(DB_URL)
+conn = connect(app.config['SQLALCHEMY_DATABASE_URI'])
 pq = PQ(conn)
+
+
+# Define models
+roles_users = db.Table(
+    'roles_users',
+    db.Column('user_id', db.Integer(), db.ForeignKey('user.id')),
+    db.Column('role_id', db.Integer(), db.ForeignKey('role.id'))
+)
+
+
+class Role(db.Model, RoleMixin):
+    id = db.Column(db.Integer(), primary_key=True)
+    name = db.Column(db.String(80), unique=True)
+    description = db.Column(db.String(255))
+
+
+class User(db.Model, UserMixin):
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(255), unique=True)
+    password = db.Column(db.String(255))
+    active = db.Column(db.Boolean())
+    confirmed_at = db.Column(db.DateTime())
+    roles = db.relationship(
+        'Role',
+        secondary=roles_users,
+        backref=db.backref('users', lazy='dynamic')
+    )
+
+
+# Setup Flask-Security
+user_datastore = SQLAlchemyUserDatastore(db, User, Role)
+security = Security(app, user_datastore)
 
 
 class Task(db.Model):
@@ -403,6 +457,15 @@ def recaptcha():
             "solved": r.json()['success'],
         }
     ), 200
+
+
+@app.route('/backstage/', methods=['GET'])
+def backstage():
+    """Back stage."""
+    if session.get('JUDICIOUS_CONSENTED', False) is True:
+        return redirect(url_for('stage', **request.args))
+    else:
+        return render_template('consent.html')
 
 
 if __name__ == '__main__':
