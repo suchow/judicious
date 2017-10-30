@@ -166,3 +166,10 @@ def resemblance(src, target, person=None):
     """Rate an image's resemblace to a target person."""
     r = collect("resemblance", src=src, target=target, person=person)
     return int(r["resemblance"])
+
+
+def prosewash(text, error_message, person=None):
+    """Validate a purported Proselint error triggered by the text."""
+    r = collect(
+        "prosewash", text=text, error_message=error_message, person=person)
+    return bool(r["valid"])
