@@ -6,6 +6,13 @@
     textarea {
       height: 300px;
     }
+    h2 {
+      font-size: 18px;
+      font-style: italic;
+    }
+    .response-interface {
+      padding-bottom: 20px;
+    }
   </style>
 {% endblock %}
 
@@ -31,13 +38,16 @@
 {% block task %}
   <p>
     <strong>Instructions:</strong>
-    Below is a proposed error detected by a copy editor. Do you agree with
-    their judgment? Is this, in fact, an error?
+    A copy editor read the following text and detected an error, described
+    below. Do you agree with their judgment? Is this, in fact, an example of
+    the described error?
   </p>
-  <h2>Text</h2>
+  <h2>Text:</h2>
   <blockquote id="text">{{ parameters.text|e }}</blockquote>
-  <h2>Error</h2>
+  <h2>Detected error:</h2>
   <blockquote>{{ parameters.error_message|e }}</blockquote>
-  <a class="button button-outline" id="valid" href="#">Agree: error</a>
-  <a class="button button-outline" id="invalid" href="#">Disagree: not an error</a>
+  <div class="response-interface">
+    <a class="button button-outline" id="valid" href="#">Agree: error</a>
+    <a class="button button-outline" id="invalid" href="#">Disagree: not an error</a>
+  </div>
 {% endblock %}
