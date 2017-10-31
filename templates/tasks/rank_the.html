@@ -15,7 +15,7 @@
     $(document).ready(function() {
       Judicious.result = { "ranks" : new Array({{ task.parameters.srcs|length }}) };
       var currentRank = 1;
-      {% for src in parameters.srcs %}
+      {% for src in task.parameters.srcs %}
         $("#image-{{ loop.index0 }}").click(function () {
           $("#image-{{ loop.index0 }}").fadeTo(200, 0.25);
           $("#image-{{ loop.index0 }}").unbind();
@@ -43,7 +43,7 @@
   </p>
   <br/>
   <div class="row" id="images">
-    {% for src in parameters.srcs %}
+    {% for src in task.parameters.srcs %}
       <div class="column"><img src="{{ src }}" id="image-{{ loop.index0 }}" /></div>
     {% endfor %}
   </div>
