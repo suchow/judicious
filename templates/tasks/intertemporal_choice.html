@@ -22,12 +22,12 @@
 
 {% block task %}
   <p><strong>Instructions:</strong> Imagine you face a choice about receiving
-    ${{ parameters.SS }} immediately, or ${{ parameters.LL }} in {{ parameters.delay }}
+    ${{ task.parameters.SS }} immediately, or ${{ task.parameters.LL }} in {{ task.parameters.delay }}
     from now. Which option would you choose?</p>
 
   <form action="">
-    <p><input type="radio" name="decision" value="ss">${{ parameters.SS }} immediately.</p>
-    <p><input type="radio" name="decision" value="ll">${{ parameters.LL }} in {{ parameters.delay }} from now.</p>
+    <p><input type="radio" name="decision" value="ss">${{ task.parameters.SS }} immediately.</p>
+    <p><input type="radio" name="decision" value="ll">${{ task.parameters.LL }} in {{ task.parameters.delay }} from now.</p>
   </form>
 
 {% endblock %}

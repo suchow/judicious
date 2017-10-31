@@ -27,11 +27,11 @@
 {% endblock %}
 
 {% block task %}
-  <p><strong>Instructions:</strong> On a scale from 0&ndash;100, how much does the depicted person resemble {{ parameters.target }}?</p>
+  <p><strong>Instructions:</strong> On a scale from 0&ndash;100, how much does the depicted person resemble {{ task.parameters.target }}?</p>
   <form id="survey">
     <div class="row">
       <div class="column column-50">
-        <img class="face" src="{{ parameters.src }}" />
+        <img class="face" src="{{ task.parameters.src }}" />
       </div>
     </div>
     <div class="row">

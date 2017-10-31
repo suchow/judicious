@@ -22,7 +22,7 @@
 
 {% block task %}
   <p>
-    <strong>Instructions:</strong> Define the word <code>{{ parameters.word }}</code> without looking it up in a dictionary.
+    <strong>Instructions:</strong> Define the word <code>{{ task.parameters.word }}</code> without looking it up in a dictionary.
   </p>
   <input id="definition" placeholder="Your definition&hellip;" type="text" autofocus>
 {% endblock %}

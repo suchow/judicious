@@ -379,8 +379,7 @@ def stage():
     db.session.commit()
     return render_template(
         "tasks/{}.html".format(task.type),
-        id=task.id,
-        parameters=task.parameters,
+        task=task,
         RECAPTCHA_SITE_KEY=os.environ['RECAPTCHA_SITE_KEY']
     )
 

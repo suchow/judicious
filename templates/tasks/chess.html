@@ -18,7 +18,7 @@
   <script>
     $(document).ready(function() {
       var board,
-        game = new Chess('{{ parameters.board }}'),
+        game = new Chess('{{ task.parameters.board }}'),
         moved = false;
 
       var onDragStart = function(source, piece, position, orientation) {
@@ -53,8 +53,8 @@
 
       var cfg = {
         draggable: true,
-        position: '{{ parameters.board }}',
-        orientation: '{{ parameters.turn }}',
+        position: '{{ task.parameters.board }}',
+        orientation: '{{ task.parameters.turn }}',
         onDragStart: onDragStart,
         onDrop: onDrop,
         onSnapEnd: onSnapEnd,
@@ -71,6 +71,6 @@
 {% endblock %}
 
 {% block task %}
-  <p><strong>Instructions:</strong> This is a game of chess. Take the next move for the {{ parameters.turn }} side.</p>
+  <p><strong>Instructions:</strong> This is a game of chess. Take the next move for the {{ task.parameters.turn }} side.</p>
   <div id="board"></div>
 {% endblock %}

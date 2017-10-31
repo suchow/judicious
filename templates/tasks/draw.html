@@ -5,8 +5,8 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='drawingboard.min.css') }}">
   <style type="text/css">
     #board {
-      width: {{ parameters.width }}px;
-      height: {{ parameters.height }}px;
+      width: {{ task.parameters.width }}px;
+      height: {{ task.parameters.height }}px;
       padding-bottom: 10px;
     }
   </style>
@@ -35,6 +35,6 @@
 {% endblock %}
 
 {% block task %}
-  <p><strong>Instructions:</strong> Draw {{ parameters.thing }}.</p>
+  <p><strong>Instructions:</strong> Draw {{ task.parameters.thing }}.</p>
   <div id="board"></div>
 {% endblock %}

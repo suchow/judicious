@@ -35,15 +35,15 @@
         };
       }
       Judicious.validate = function () {
-        return (wordCount > 1) && (wordCount <= {{ parameters.max_words }});
+        return (wordCount > 1) && (wordCount <= {{ task.parameters.max_words }});
       }
     });
   </script>
 {% endblock %}
 
 {% block task %}
-  <p><strong>Instructions:</strong> Write a summary of the following text, using at most {{ parameters.max_words }} words.</p>
-  <blockquote>{{ parameters.text|e }}</blockquote>
+  <p><strong>Instructions:</strong> Write a summary of the following text, using at most {{ task.parameters.max_words }} words.</p>
+  <blockquote>{{ task.parameters.text|e }}</blockquote>
   <textarea id="summary" placeholder="Your summary&hellip;"></textarea>
   <p id="word-count">0 words</p>
 {% endblock %}

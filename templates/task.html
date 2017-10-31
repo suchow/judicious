@@ -4,7 +4,7 @@
   {{ super() }}
   <script type="text/javascript" src="{{ url_for('static', filename='task.js') }}"></script>
   <script>
-    Judicious.taskUUID = "{{ id }}";
+    Judicious.taskUUID = "{{ task.id }}";
     Judicious.turkSubmitTo = '{{ request.values.get('turkSubmitTo', '') }}';
   </script>
 {% endblock %}
@@ -24,7 +24,7 @@
       <form>
         <input class="button" value="Submit" id="submit-task" readonly>
         <input class="button button-clear" type="submit" value="Skip" id="skip-task" readonly>
-        <div class="task-id"><p><code>{{ id }}</code></p></div>
+          <pre> Debug:<br/> T/ {{ task.id }}<br/> C/ {{ task.context }}</pre>
       </form>
     {% endif %}
   </div>
