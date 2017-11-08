@@ -18,8 +18,7 @@ pq = PQ(conn)
 # Set up logging.
 logger = logging.getLogger(__name__)
 handler = logging.StreamHandler()
-formatter = logging.Formatter(
-        '%(asctime)s [clock.1]: %(message)s')
+formatter = logging.Formatter('%(asctime)s [clock.1]: %(message)s')
 handler.setFormatter(formatter)
 logger.addHandler(handler)
 logger.setLevel(logging.DEBUG)
@@ -27,12 +26,9 @@ logger.setLevel(logging.DEBUG)
 # Set up scheduler.
 sched = BlockingScheduler()
 
-JUDICIOUS_RECRUIT_INTERVAL = os.environ.get(
-    "JUDICIOUS_RECRUIT_INTERVAL", 10)
+JUDICIOUS_RECRUIT_INTERVAL = os.environ.get("JUDICIOUS_RECRUIT_INTERVAL", 10)
 
-JUDICIOUS_CLEANUP_INTERVAL = os.environ.get(
-    "JUDICIOUS_CLEANUP_INTERVAL", 2)
-
+JUDICIOUS_CLEANUP_INTERVAL = os.environ.get("JUDICIOUS_CLEANUP_INTERVAL", 2)
 
 recruiter_class_ = getattr(recruiters, os.environ["JUDICIOUS_RECRUITER"])
 recruiter = recruiter_class_()
@@ -64,7 +60,8 @@ def cleanup():
         .all()
     for task in unfinished_tasks:
         time_since = datetime.now() - task.last_started_at
-        time_given = timedelta(seconds=int(os.environ['JUDICIOUS_TASK_TIMEOUT']))
+        time_given = timedelta(
+            seconds=int(os.environ['JUDICIOUS_TASK_TIMEOUT']))
         if time_since > time_given:
             task.timeout()
 
