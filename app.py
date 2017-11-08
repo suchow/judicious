@@ -44,6 +44,7 @@ pq = PQ(conn)
 
 
 class Task(db.Model):
+
     """A task to be completed by a judicious participant."""
 
     __tablename__ = "task"
@@ -85,6 +86,7 @@ class Task(db.Model):
 
 
 class Person(db.Model):
+
     """An identity to be claimed by a judicious participant."""
 
     __tablename__ = "person"
@@ -104,6 +106,7 @@ class Person(db.Model):
 
 
 class Context(db.Model):
+
     """A particular run of a script."""
 
     def __init__(self, id):
@@ -136,6 +139,7 @@ def page_not_found(error):
 
 
 def require_api_key(view_function):
+
     @wraps(view_function)
     def decorated_function(*args, **kwargs):
         if request.args.get("key") == os.environ["JUDICIOUS_SECRET_KEY"]:
@@ -207,8 +211,7 @@ def post_task(id):
 
         # Check the person.
         person_id = request.values.get("person")
-        if person_id and not Person.query.filter_by(
-                id=person_id).one_or_none():
+        if person_id and not Person.query.filter_by(id=person_id).one_or_none():
             person = Person(person_id, request.values["context"])
             db.session.add(person)
             db.session.commit()
