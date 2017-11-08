@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 """Main module."""
 
 import json
@@ -12,7 +11,6 @@ import time
 import uuid
 
 import requests
-
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=os.environ.get("JUDICIOUS_LOG_LEVEL", "INFO"))
@@ -69,8 +67,8 @@ def map(f, args):
 
 
 def base_url():
-    return os.environ.get(
-        "JUDICIOUS_SERVER_URL", "http://imprudent.herokuapp.com")
+    return os.environ.get("JUDICIOUS_SERVER_URL",
+                          "http://imprudent.herokuapp.com")
 
 
 def register(url):
@@ -121,9 +119,7 @@ def dump_cache(cache):
 
 def get_task(task_id):
     """Get the result of a task."""
-    return requests.get(
-        "{}/tasks/{}".format(base_url(), task_id),
-    )
+    return requests.get("{}/tasks/{}".format(base_url(), task_id), )
 
 
 def post_result(id, result):

@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 """Top-level package for judicious."""
 
 __author__ = """Jordan W. Suchow"""
@@ -48,7 +47,6 @@ from . import tasks
 from .person import Person
 
 register(os.environ.get("JUDICIOUS_SERVER_URL", "http://127.0.0.1:5000"))
-
 
 __all__ = (
     # Core functions

@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 """Pseudorandom generators for human computation."""
 
 import random
@@ -53,12 +52,7 @@ def compare_numerosity(a, b, person=None):
     """Determine which numerosity is greater."""
     cb = random.random() > 0.5
     r = collect(
-        "compare_numerosity",
-        a=a,
-        b=b,
-        counterbalancer=cb,
-        person=person
-    )
+        "compare_numerosity", a=a, b=b, counterbalancer=cb, person=person)
     return r['selection']
 
 
@@ -77,12 +71,7 @@ def trolley_problem(person=None):
 def intertemporal_choice(SS, LL, delay, person=None):
     """Complete an intertemporal choice problem."""
     r = collect(
-        "intertemporal_choice",
-        SS=SS,
-        LL=LL,
-        delay=delay,
-        person=person
-    )
+        "intertemporal_choice", SS=SS, LL=LL, delay=delay, person=person)
     return r['choice']
 
 
@@ -92,16 +81,11 @@ def recaptcha(person=None):
     return r["solved"]
 
 
-def chess(
-    board="rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
-    person=None
-):
+def chess(board="rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+          person=None):
     """Take the next move in a game of chess."""
     print(board)
-    turn_dict = {
-        "b": "black",
-        "w": "white"
-    }
+    turn_dict = {"b": "black", "w": "white"}
     turn = turn_dict[board.split(" ")[1]]
     r = collect("chess", board=board, turn=turn, person=person)
     return r["board"]

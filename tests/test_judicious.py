@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
 """Tests for `judicious` package."""
 
 import random
@@ -23,12 +22,12 @@ def test_seeding():
     r7 = random.random()
     r8 = random.random()
 
-    assert(r1 != r3)
-    assert(r2 != r4)
-    assert(r3 == r5)
-    assert(r4 == r6)
-    assert(r5 != r7)
-    assert(r6 != r8)
+    assert (r1 != r3)
+    assert (r2 != r4)
+    assert (r3 == r5)
+    assert (r4 == r6)
+    assert (r5 != r7)
+    assert (r6 != r8)
 
 
 @pytest.fixture

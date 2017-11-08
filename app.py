@@ -44,6 +44,7 @@ pq = PQ(conn)
 
 
 class Task(db.Model):
+
     """A task to be completed by a judicious participant."""
 
     __tablename__ = "task"
@@ -85,6 +86,7 @@ class Task(db.Model):
 
 
 class Person(db.Model):
+
     """An identity to be claimed by a judicious participant."""
 
     __tablename__ = "person"
@@ -104,6 +106,7 @@ class Person(db.Model):
 
 
 class Context(db.Model):
+
     """A particular run of a script."""
 
     def __init__(self, id):
@@ -127,8 +130,7 @@ def internal_server_error(error):
     return render_template(
         '500.html',
         event_id=g.sentry_event_id,
-        public_dsn=sentry.client.get_public_dsn('https')
-    ), 500
+        public_dsn=sentry.client.get_public_dsn('https')), 500
 
 
 @app.errorhandler(404)
@@ -137,12 +139,14 @@ def page_not_found(error):
 
 
 def require_api_key(view_function):
+
     @wraps(view_function)
     def decorated_function(*args, **kwargs):
         if request.args.get("key") == os.environ["JUDICIOUS_SECRET_KEY"]:
             return view_function(*args, **kwargs)
         else:
             abort(401)
+
     return decorated_function
 
 
@@ -226,19 +230,16 @@ def post_task(id):
 
         for i in range(redundancy):
             if int(request.values.get("priority")) > 0:
-                expected_at = timedelta(seconds=i*20)
+                expected_at = timedelta(seconds=i * 20)
             else:
-                expected_at = timedelta(days=random.randint(1, 365*10))
+                expected_at = timedelta(days=random.randint(1, 365 * 10))
 
             pq[queue_name].put({"id": id_string}, expected_at=expected_at)
 
         return jsonify(
-            status="success",
-            message="Task posted.",
-            data={
+            status="success", message="Task posted.", data={
                 "id": id_string,
-            }
-        ), 200
+            }), 200
 
     else:
         app.logger.info("Task with id {} already exists".format(id))
@@ -248,8 +249,7 @@ def post_task(id):
             data={
                 "id": id_string,
                 "type": type,
-            }
-        ), 409
+            }), 409
 
 
 @app.route('/tasks/<uuid:id>', methods=['PATCH'])
@@ -264,20 +264,16 @@ def patch_task(id):
             message="A result has already been added.",
             data={
                 "id": id,
-            }
-        ), 409
+            }), 409
     else:
         task.result = result
         task.finished_at = datetime.now()
         db.session.add(task)
         db.session.commit()
         return jsonify(
-            status="success",
-            message="Result added.",
-            data={
+            status="success", message="Result added.", data={
                 "id": id,
-            }
-        ), 200
+            }), 200
 
 
 @app.route('/tasks/<uuid:id>', methods=['GET'])
@@ -290,16 +286,14 @@ def get_task_result(id):
             message="No task with id {} found.".format(id),
             data={
                 "id": id,
-            }
-        ), 404
+            }), 404
     elif not task.result:
         return jsonify(
             status="success",
             message="Task is not yet complete.",
             data={
                 "id": id,
-            }
-        ), 202
+            }), 202
     else:
         return jsonify(
             status="success",
@@ -312,8 +306,7 @@ def get_task_result(id):
                 "last_started_at": task.last_started_at,
                 "last_queued_at": task.last_queued_at,
                 "finished_at": task.finished_at,
-            }
-        ), 200
+            }), 200
 
 
 @app.route('/stage/', methods=['GET'])
@@ -341,19 +334,14 @@ def stage():
         app.logger.info("Looking for unclaimed persons.")
         if persons:
             person = (
-                Person.query
-                .filter(~Person.context_id.in_(c.id for c in contexts))
-                .filter(Person.claimed_at == None)  # noqa
-                .order_by(Person.created_at.asc())
-                .limit(1).one_or_none()
-            )
+                Person.query.filter(
+                    ~Person.context_id.in_(c.id for c in contexts)).filter(
+                        Person.claimed_at == None)  # noqa
+                .order_by(Person.created_at.asc()).limit(1).one_or_none())
         else:
             person = (
-                Person.query
-                .filter(Person.claimed_at == None)  # noqa
-                .order_by(Person.created_at.asc())
-                .limit(1).one_or_none()
-            )
+                Person.query.filter(Person.claimed_at == None)  # noqa
+                .order_by(Person.created_at.asc()).limit(1).one_or_none())
 
         if person:
             app.logger.info("Person {} has been claimed.".format(person.id))
@@ -381,8 +369,7 @@ def stage():
     return render_template(
         "tasks/{}.html".format(task.type),
         task=task,
-        RECAPTCHA_SITE_KEY=os.environ['RECAPTCHA_SITE_KEY']
-    )
+        RECAPTCHA_SITE_KEY=os.environ['RECAPTCHA_SITE_KEY'])
 
 
 @app.route('/recaptcha/', methods=['POST'])
@@ -394,15 +381,13 @@ def recaptcha():
         data={
             'secret': os.environ['RECAPTCHA_SECRET_KEY'],
             'response': request.values["response"],
-        }
-    )
+        })
     return jsonify(
         status="success",
         message="Recaptcha passed.",
         data={
             "solved": r.json()['success'],
-        }
-    ), 200
+        }), 200
 
 
 if __name__ == '__main__':
