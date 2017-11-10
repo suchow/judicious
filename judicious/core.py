@@ -57,7 +57,7 @@ def unpack_seed_apply(fargseed):
     """Unpack, seed the PRNG, and apply the function."""
     (f, args, seed) = fargseed
     random.seed(seed)
-    return f(args)
+    return f(*args)
 
 
 def map(f, args):
