@@ -166,3 +166,9 @@ def resemblance(src, target, person=None):
     """Rate an image's resemblace to a target person."""
     r = collect("resemblance", src=src, target=target, person=person)
     return int(r["resemblance"])
+
+
+def reproduce(text, delay=10, person=None):
+    """Read some text and then reproduce it verbatim."""
+    r = collect("reproduce", text=text, delay=delay, person=person)
+    return r["reproduction"]

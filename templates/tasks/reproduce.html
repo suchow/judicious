@@ -1,0 +1,63 @@
+{% extends "task.html" %}
+{% import 'loader.html' as loader %}
+
+{% block styles %}
+  {{ super() }}
+  <style type="text/css">
+    textarea {
+      height: 150px;
+    }
+  </style>
+  {{ loader.styles(color="#cccccc") }}
+{% endblock %}
+
+{% block scripts %}
+  {{ super() }}
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $("#response").hide();
+      $("#wait").hide();
+      var wordCount = 0;
+      $("#finished-reading").click(function () {
+        $("#text").hide();
+        $("#submit-or-skip").hide();
+        $("#wait").show();
+        setTimeout(function () {
+          $("#wait").hide();
+          $("#response").show();
+          $("#submit-or-skip").show();
+        }, {{ task.parameters.delay * 1000 }})
+      });
+      Judicious.result = function () {
+        return {
+          reproduction: $("#reproduction").val().trim()
+        }
+      }
+      $("#reproduction").on('change keyup paste', function () {
+        text = $("#reproduction").val().trim();
+        wordCount = text.split(" ").length;
+      });
+      Judicious.validate = function () {
+        return wordCount > 0;
+      }
+    });
+  </script>
+{% endblock %}
+
+{% block task %}
+  <div id="text">
+    <p><strong>Instructions:</strong> Read the following text carefully. Afterwards, you will be asked questions about it:</p>
+    <blockquote>{{ task.parameters.text|e }}</blockquote>
+    <a class="button button-outline" id="finished-reading" href="#">Done reading</a>
+    <hr/>
+  </div>
+  <div id="wait">
+    {{ loader.html() }}
+    <center><p>Please wait for {{ task.parameters.delay }} seconds&hellip;</p></center>
+  </div>
+  <div id="response">
+    <p><strong>Instructions:</strong> Now reproduce the text word for word, to the best of your ability.</p>
+    <textarea id="reproduction" placeholder="Your reproduction&hellip;"></textarea>
+    <hr/>
+  </div>
+{% endblock %}
