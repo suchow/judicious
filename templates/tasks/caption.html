@@ -1,0 +1,38 @@
+{% extends "task.html" %}
+
+{% block styles %}
+  {{ super() }}
+  <style type="text/css">
+    #image {
+      width: 400px;
+    }
+    #caption {
+      margin-top: 10px;
+      margin-bottom: 40px;
+    }
+  </style>
+{% endblock %}
+
+{% block scripts %}
+  {{ super() }}
+  <script type="text/javascript">
+    $(document).ready(function() {
+      Judicious.result = function () {
+        return {
+          caption: $("#caption").val().toLowerCase()
+        };
+      }
+      Judicious.validate = function () {
+        return $("#caption").val().length > 0;
+      }
+    });
+  </script>
+{% endblock %}
+
+{% block task %}
+  <p>
+    <strong>Instructions:</strong> Write a caption for the following cartoon:
+  </p>
+  <img id="image" src="{{ task.parameters.src }}" />
+  <input id="caption" placeholder="Your caption&hellip;" type="text" autofocus>
+{% endblock %}

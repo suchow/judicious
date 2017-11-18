@@ -31,6 +31,12 @@ def label(src, person=None):
     return r['label']
 
 
+def caption(src, person=None):
+    """Write a caption for a cartoon."""
+    r = collect("caption", src=src, person=person)
+    return r['caption']
+
+
 def select_the(category, src_0, src_1, person=None):
     """Select the image belonging to the category."""
     r = collect(
