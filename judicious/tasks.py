@@ -172,3 +172,9 @@ def reproduce(text, delay=10, person=None):
     """Read some text and then reproduce it verbatim."""
     r = collect("reproduce", text=text, delay=delay, person=person)
     return r["reproduction"]
+
+
+def spellcheck(text, person=None):
+    """Spellcheck some text."""
+    r = collect("spellcheck", text=text, person=person)
+    return r['text']
