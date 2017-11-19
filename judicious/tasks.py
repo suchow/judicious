@@ -31,6 +31,26 @@ def label(src, person=None):
     return r['label']
 
 
+def identify_letter(letter=None, alphabet=None, lightness=0.80, person=None):
+    """Identify a letter in noise."""
+    import string
+
+    if not alphabet:
+        alphabet = list(string.ascii_lowercase)
+
+    if not letter:
+        letter = random.choice(alphabet)
+
+    r = collect(
+        "identify_letter",
+        letter=letter,
+        alphabet=alphabet,
+        lightness=lightness,
+        person=person
+    )
+    return (r['letter'], r['letter'] == letter)
+
+
 def caption(src, person=None):
     """Write a caption for a cartoon."""
     r = collect("caption", src=src, person=person)

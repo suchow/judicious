@@ -1,0 +1,67 @@
+{% extends "task.html" %}
+
+{% block styles %}
+  {{ super() }}
+  <style type="text/css">
+    select {
+      width: 100px;
+    }
+  </style>
+{% endblock %}
+
+{% block scripts %}
+  {{ super() }}
+  <script type="text/javascript">
+    $(document).ready(function() {
+      function rgb2hex(r, g, b) {
+        return "#" + ((1<<24) + (r<<16) + (g<<8) + b).toString(16).slice(1);
+      }
+    	var canvas = document.getElementById('letter'),
+    		ctx = canvas.getContext('2d'),
+    		x,y,r,
+    		opacity = 0.75;
+  		canvas.width = 100;
+  		canvas.height = 100;
+      ctx.font = "72px Helvetica";
+      r = Math.round(255 * {{ task.parameters.lightness }});
+      console.log(r);
+      ctx.fillStyle = rgb2hex(r, r, r);
+      console.log(rgb2hex(r, r, r));
+      ctx.textAlign = "center";
+      ctx.fillText("{{ task.parameters.letter }}", 50, 75);
+  		for (x = 0; x < canvas.width; x++){
+  			for (y = 0; y < canvas.height; y++){
+  				r = Math.floor(Math.random() * 255);
+  				ctx.fillStyle = 'rgba(' + r + ',' + r + ',' + r + ',' + opacity + ')';
+  				ctx.fillRect(x, y, 1, 1);
+  			}
+  		}
+      Judicious.result = function() {
+        var data = {};
+        $("#response").serializeArray().map(
+          function(x) {
+            data[x.name] = x.value;
+          }
+        )
+        return data;
+      }
+      Judicious.validate = function(result) {
+        return result.letter !== "";
+      }
+    });
+  </script>
+{% endblock %}
+
+{% block task %}
+  <p><strong>Instructions:</strong> Identify the following letter.</p>
+  <canvas id='letter'>Your browser does not support HTML5 Canvas.</canvas>
+  <br/>
+  <form id="response">
+    <select name="letter" id="letter" required>
+      <option value=""></option>
+      {% for letter in task.parameters.alphabet %}
+      <option value="{{ letter }}">{{ letter }}</option>
+      {% endfor %}
+    </select>
+  </form>
+{% endblock %}
