@@ -1,0 +1,39 @@
+{% extends "task.html" %}
+
+{% block styles %}
+  {{ super() }}
+  <style type="text/css">
+    iframe {
+      width: 100%;
+      height: 400px;
+    }
+    #response {
+      margin-top: 10px;
+      margin-bottom: 40px;
+    }
+  </style>
+{% endblock %}
+
+{% block scripts %}
+  {{ super() }}
+  <script type="text/javascript">
+    $(document).ready(function() {
+      Judicious.result = function () {
+        return {
+          response: $("#response").val().toLowerCase()
+        };
+      }
+      Judicious.validate = function () {
+        return $("#response").val().length > 0;
+      }
+    });
+  </script>
+{% endblock %}
+
+{% block task %}
+  <p>
+    <strong>Instructions:</strong> {{ task.parameters.prompt }}
+  </p>
+  <iframe src="{{ task.parameters.url }}"></iframe>
+  <input id="response" placeholder="Your response&hellip;" type="text" autofocus>
+{% endblock %}

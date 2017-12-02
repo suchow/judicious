@@ -204,3 +204,8 @@ def spellcheck(text, person=None):
     """Spellcheck some text."""
     r = collect("spellcheck", text=text, person=person)
     return r['text']
+
+
+def iframe(url, prompt, person=None):
+    r = collect("iframe", url=url, prompt=prompt, person=person)
+    return r["response"]
