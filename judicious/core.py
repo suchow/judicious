@@ -148,7 +148,7 @@ def collect(type, **kwargs):
         r = get_task(task_id)
 
         if r.status_code == 200:
-            result = json.loads(r.json()['data']['result'])
+            result = r.json()['data']['result']
             logging.info("Result found for {}".format(task_id))
             logging.info(result)
 
