@@ -57,7 +57,7 @@ class Task(db.Model):
     context_id = db.Column(UUID, db.ForeignKey('context.id'), nullable=False)
     last_started_at = db.Column(db.DateTime)
     finished_at = db.Column(db.DateTime)
-    result = db.Column(db.String(2**16))
+    result = db.Column(db.JSON)
 
     def __init__(self, id, context_id, type, parameters=None):
         self.id = id
@@ -267,7 +267,7 @@ def patch_task(id):
             }
         ), 409
     else:
-        task.result = result
+        task.result = json.loads(result)
         task.finished_at = datetime.now()
         db.session.add(task)
         db.session.commit()
