@@ -1,0 +1,47 @@
+{% extends "task.html" %}
+
+{% block styles %}
+  {{ super() }}
+  <style type="text/css">
+    #javatari {
+      padding-bottom: 20px;
+    }
+  </style>
+{% endblock %}
+
+{% block scripts %}
+  {{ super() }}
+  <script src="{{ url_for('static', filename='javatari.js') }}"></script>
+  <script type="text/javascript">
+    $(document).ready(function() {
+      var checkpoints = [];
+      setInterval(
+        function () {
+          checkpoints.push(Javatari.room.console.eval("saveState")());
+      }, 1000);
+      Judicious.result = function () {
+        return {
+          checkpoints: checkpoints,
+          controls: controlHistory,
+        };
+      }
+      Judicious.validate = function () {
+        return true;
+      }
+    });
+  </script>
+  <script src="{{ url_for('static', filename='javatari.js') }}"></script>
+  <script type="text/javascript">
+    Javatari.CARTRIDGE_URL = "{{ url_for('static', filename='roms/'+task.parameters.rom+'.bin') }}";
+    Javatari.CARTRIDGE_CHANGE_DISABLED = true;
+    Javatari.CARTRIDGE_SHOW_RECENT = false;
+    Javatari.SCREEN_CONSOLE_PANEL_DISABLED = true;
+  </script>
+{% endblock %}
+
+{% block task %}
+  <p><strong>Instructions:</strong> Play the following Atari game.</p>
+  <div id="javatari" style="text-align: center; margin: 20px auto 0;">
+    <div id="javatari-screen" style="box-shadow: 2px 2px 10px rgba(0, 0, 0, .7);"></div>
+</div>
+{% endblock %}

@@ -209,3 +209,8 @@ def spellcheck(text, person=None):
 def iframe(url, prompt, person=None):
     r = collect("iframe", url=url, prompt=prompt, person=person)
     return r["response"]
+
+
+def atari(rom):
+    r = collect("atari", rom=rom)
+    return (r["checkpoints"], r["controls"])
