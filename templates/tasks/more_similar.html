@@ -1,0 +1,42 @@
+{% extends "task.html" %}
+
+{% block styles %}
+  {{ super() }}
+  <style type="text/css">
+    #words {
+      padding-bottom: 20px;
+    }
+  </style>
+{% endblock %}
+
+{% block scripts %}
+  {{ super() }}
+  <script>
+    $(document).ready(function() {
+      $("#word-1").click(function () {
+        Judicious.result = {selection: '{{ task.parameters.word1 }}'};
+          $("#word-2").fadeTo(400, 0.25);
+          $("#word-1").fadeTo(400, 1.00);
+      });
+      $("#word-2").click(function () {
+        Judicious.result = {selection: '{{ task.parameters.word2 }}'};
+        $("#word-1").fadeTo(400, 0.25);
+        $("#word-2").fadeTo(400, 1.00);
+      });
+    });
+  </script>
+{% endblock %}
+
+{% block task %}
+  <p>
+    <strong>Instructions:</strong>
+    Which of the following is more similar to <code>{{ task.parameters.target }}</code>?
+    <br/>Click to make a selection.
+  </p>
+  <br/>
+  <div class="row" id="words">
+    <div class="column"><button class="button button-outline" id="word-1">{{ task.parameters.word1 }}</button></div>
+    <div class="column"><button class="button button-outline" id="word-2">{{ task.parameters.word2 }}</button></div>
+  </div>
+  <hr/>
+{% endblock %}

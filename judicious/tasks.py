@@ -170,6 +170,18 @@ def rank_the(category, srcs, person=None):
     return [int(rank) for rank in r["ranks"]]
 
 
+def more_similar(target, word1, word2, person=None):
+    """Which word is more similar to the target?"""
+    r = collect(
+        "more_similar",
+        target=target,
+        word1=word1,
+        word2=word2,
+        person=person
+    )
+    return r["selection"]
+
+
 def age(src, person=None):
     """Estimate the age of a person in an image."""
     r = collect("age", src=src, person=person)
