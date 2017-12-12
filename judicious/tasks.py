@@ -226,3 +226,9 @@ def iframe(url, prompt, person=None):
 def atari(rom):
     r = collect("atari", rom=rom)
     return (r["checkpoints"], r["controls"])
+
+
+def mouselab(trial, person=None):
+    """A Mouselab trial."""
+    r = collect("mouselab", trial=trial, person=person)
+    return r

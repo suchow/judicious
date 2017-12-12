@@ -1,0 +1,21 @@
+{% extends "task.html" %}
+
+{% block scripts %}
+  {{ super() }}
+  <script>
+  <!--
+  You can get a JSON representation of the trial using the following
+  template variable:
+  {{ task.parameters.trial|tojson }}
+ -->
+    Judicious.result = function () {
+      return {
+        data: -1,
+      };
+    }
+  </script>
+{% endblock %}
+
+{% block task %}
+  <!-- Put the task HTML here. -->
+{% endblock %}
