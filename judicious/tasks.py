@@ -226,3 +226,9 @@ def iframe(url, prompt, person=None):
 def atari(rom):
     r = collect("atari", rom=rom)
     return (r["checkpoints"], r["controls"])
+
+
+def redact_illicit(scenario, person=None):
+    """Redact illicit information from a scenario."""
+    r = collect("redact_illicit", scenario=scenario, person=person)
+    return r['scenario']

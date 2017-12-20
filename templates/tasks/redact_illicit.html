@@ -1,0 +1,36 @@
+{% extends "task.html" %}
+
+{% block styles %}
+  {{ super() }}
+  <style type="text/css">
+    textarea {
+      height: 300px;
+    }
+  </style>
+{% endblock %}
+
+{% block scripts %}
+  {{ super() }}
+  <script>
+    $(document).ready(function() {
+      Judicious.result = function () {
+        return {
+          scenario: $("#scenario").val()
+        };
+      }
+    });
+  </script>
+{% endblock %}
+
+{% block task %}
+  <p>
+    <strong>Instructions:</strong>
+    The following paragraph contains a scenario with illicit, unlawful, or
+    obscene elements. Your job is to rewrite the scenario so that these elements
+    are removed, but maintaining the essential difficulty, dilemma, or challenge
+    that the scenario poses. For example, if a scenario considered hiding a bomb
+    in a subway station, you might rewrite the situation so that it was about
+    hiding a soccer ball in a subway station.
+  </p>
+  <textarea id="scenario" >{{ task.parameters.scenario|e }}</textarea>
+{% endblock %}
