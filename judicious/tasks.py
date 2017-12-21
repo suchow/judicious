@@ -232,3 +232,9 @@ def redact_illicit(scenario, person=None):
     """Redact illicit information from a scenario."""
     r = collect("redact_illicit", scenario=scenario, person=person)
     return r['scenario']
+
+
+def build_tower(prompt, person=None):
+    """Build a tower that meets the requirements of the prompt."""
+    r = collect("build_tower", prompt=prompt, person=person)
+    return r['tower']
