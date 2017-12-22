@@ -7,6 +7,7 @@ import os
 import random
 import uuid
 
+
 from flask import (
     abort,
     Flask,
@@ -18,14 +19,23 @@ from flask import (
     session,
     url_for,
 )
+from flask_sockets import Sockets
 from flask_sqlalchemy import SQLAlchemy
+import gevent
 from pq import PQ
 from psycopg2 import connect
 from raven.contrib.flask import Sentry
+import redis
 import requests
 from sqlalchemy.dialects.postgresql import UUID
 
 app = Flask(__name__)
+
+sockets = Sockets(app)
+
+REDIS_URL = os.environ['REDIS_URL']
+REDIS_CHAN = 'chat'
+redis = redis.from_url(REDIS_URL)
 
 app.secret_key = os.environ["JUDICIOUS_SECRET_KEY"]
 
@@ -403,6 +413,70 @@ def recaptcha():
             "solved": r.json()['success'],
         }
     ), 200
+
+
+class ChatBackend(object):
+    """Interface for registering and updating WebSocket clients."""
+
+    def __init__(self):
+        self.clients = list()
+        self.pubsub = redis.pubsub()
+        self.pubsub.subscribe(REDIS_CHAN)
+
+    def __iter_data(self):
+        for message in self.pubsub.listen():
+            data = message.get('data')
+            if message['type'] == 'message':
+                app.logger.info(u'Sending message: {}'.format(data))
+                yield json.dumps(data.decode("utf-8"))
+
+    def register(self, client):
+        """Register a WebSocket connection for Redis updates."""
+        self.clients.append(client)
+
+    def send(self, client, data):
+        """Send data to the registered client. Discard invalid connections."""
+        try:
+            client.send(data)
+        except Exception:
+            self.clients.remove(client)
+
+    def run(self):
+        """Listen for new messages in Redis, and send them to clients."""
+        for data in self.__iter_data():
+            for client in self.clients:
+                gevent.spawn(self.send, client, data)
+
+    def start(self):
+        """Maintain Redis subscription in the background."""
+        gevent.spawn(self.run)
+
+
+chats = ChatBackend()
+chats.start()
+
+
+@sockets.route('/submit')
+def inbox(ws):
+    """Receives incoming chat messages, inserts them into Redis."""
+    while not ws.closed:
+        # Sleep to prevent constant context switches.
+        gevent.sleep(0.1)
+        message = ws.receive()
+
+        if message:
+            app.logger.info(u'Inserting message: {}'.format(message))
+            redis.publish(REDIS_CHAN, message)
+
+
+@sockets.route('/receive')
+def outbox(ws):
+    """Sends outgoing chat messages, via `ChatBackend`."""
+    chats.register(ws)
+
+    while not ws.closed:
+        # Context switch while `ChatBackend.start` runs in the background.
+        gevent.sleep(0.1)
 
 
 if __name__ == '__main__':

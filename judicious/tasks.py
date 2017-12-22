@@ -3,8 +3,9 @@
 """Pseudorandom generators for human computation."""
 
 import random
+import uuid
 
-from .core import collect
+from .core import collect, map
 
 
 def joke(person=None):
@@ -218,6 +219,30 @@ def spellcheck(text, person=None):
     return r['text']
 
 
+
+
+def channel(prompt, channel=None):
+    """Visit a channel."""
+    if not channel:
+        channel = str(uuid.uuid4())
+    from faker import Factory
+    fake = Factory.create("en_US")
+    profile = fake.simple_profile()
+    r = collect(
+        "channel",
+        prompt=prompt,
+        pseudonym=profile['name'],
+        channel=channel
+    )
+    return r["transcript"]
+
+
+def chat(prompt, N=3):
+    ch = str(uuid.uuid4())
+    transcripts = map(channel, [(prompt, ch) for _ in range(N)])
+    return {
+        "transcript": sorted([i for sub in transcripts for i in sub]),
+    }
 def iframe(url, prompt, person=None):
     r = collect("iframe", url=url, prompt=prompt, person=person)
     return r["response"]

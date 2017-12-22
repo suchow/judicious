@@ -1,0 +1,111 @@
+{% extends "task.html" %}
+
+{% block styles %}
+  {{ super() }}
+  <style type="text/css">
+    #chatlog {
+      width: 100%;
+      height: 300px;
+      border: 1px solid #dddddd;
+      overflow: scroll;
+      margin-bottom: 3px;
+    }
+    .handle {
+      padding-top: 3px;
+      font-weight: bold;
+      padding-right: 8px;
+      color: #333333;
+    }
+    #input-text {
+      margin-bottom: 20px;
+    }
+    .message {
+      padding-left: 7px;
+      padding-top: 3px;
+      padding-bottom: 3px;
+      border-bottom: 1px solid #eeeeee;
+    }
+  </style>
+{% endblock %}
+
+{% block scripts %}
+  {{ super() }}
+  <script type="text/javascript" src="{{ url_for('static', filename='reconnecting-websocket.min.js') }}"></script>
+  <script>
+    $(document).ready(function() {
+      // Support TLS-specific URLs, when appropriate.
+      if (window.location.protocol == "https:") {
+        var ws_scheme = "wss://";
+      } else {
+        var ws_scheme = "ws://"
+      };
+
+      var inbox = new ReconnectingWebSocket(ws_scheme + location.host + "/receive");
+      var outbox = new ReconnectingWebSocket(ws_scheme + location.host + "/submit");
+
+      var transcript = [];
+
+      inbox.onmessage = function(message) {
+        var data = JSON.parse(JSON.parse(message.data));
+        if (data.handle === "{{ task.parameters.pseudonym }}") {
+          var you = " (you)";
+        } else {
+          var you = "";
+        }
+        $("#chatlog").append("<div class='message'><span class='handle'>" + data.handle + you + "</span> " + data.text + "</div>");
+        $("#chatlog").stop().animate({
+          scrollTop: $('#chatlog')[0].scrollHeight
+        }, 800);
+      };
+
+      inbox.onclose = function(){
+        this.inbox = new WebSocket(inbox.url);
+      };
+
+      outbox.onclose = function(){
+        this.outbox = new WebSocket(outbox.url);
+      };
+
+      function sendMessage() {
+        var handle = "{{ task.parameters.pseudonym }}";
+        var text   = $("#input-text")[0].value;
+        outbox.send(JSON.stringify({ handle: handle, text: text }));
+        $("#input-text")[0].value = "";
+        transcript.push([performance.now(), text]);
+      }
+
+      $("#send").click(function(event) {
+        event.preventDefault();
+        sendMessage();
+      });
+
+      $("input").keypress(function(event) {
+        if (event.which == 13) {
+          event.preventDefault();
+          sendMessage();
+        }
+      });
+
+      Judicious.result = function () {
+        return {
+          transcript: transcript
+        };
+      }
+    });
+  </script>
+{% endblock %}
+
+{% block task %}
+  <div class="container">
+    <p><strong>Instructions:</strong> {{ task.parameters.prompt }}</p>
+    <div class="row">
+      <div id="chatlog">
+      </div>
+    </div>
+    <div class="row">
+      <input id="input-text" type="text" class="form-control column column-50" aria-label="Your next chat message" placeholder="Enter chat text here!" autofocus />
+      <button id="send" class="button button-clear column column-25">Send</button>
+    </div>
+  </div>
+
+{% endblock %}
