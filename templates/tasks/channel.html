@@ -50,6 +50,9 @@
 
       inbox.onmessage = function(message) {
         var data = JSON.parse(JSON.parse(message.data));
+        if (data.channel !== "{{ task.parameters.channel }}") {
+          return;
+        }
         if (data.handle === "{{ task.parameters.pseudonym }}") {
           var you = " (you)";
         } else {
@@ -72,7 +75,11 @@
       function sendMessage() {
         var handle = "{{ task.parameters.pseudonym }}";
         var text   = $("#input-text")[0].value;
-        outbox.send(JSON.stringify({ handle: handle, text: text }));
+        outbox.send(JSON.stringify({
+          handle: handle,
+          text: text,
+          channel: "{{ task.parameters.channel }}"
+        }));
         $("#input-text")[0].value = "";
         transcript.push([performance.now(), text]);
       }
