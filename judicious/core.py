@@ -69,6 +69,10 @@ def map(f, args):
 
 
 def base_url():
+    with open(".JUDICIOUS_SERVER_URL", "r") as f:
+        url = f.read()
+        if url:
+            return url
     return os.environ.get(
         "JUDICIOUS_SERVER_URL", "http://imprudent.herokuapp.com")
 
@@ -76,6 +80,8 @@ def base_url():
 def register(url):
     """Set the base URL of the decision server."""
     os.environ["JUDICIOUS_SERVER_URL"] = url
+    with open(".JUDICIOUS_SERVER_URL", "w") as f:
+        f.write(url)
 
 
 def priority(level=1):
