@@ -456,6 +456,11 @@ chats = ChatBackend()
 chats.start()
 
 
+@app.route('/')
+def hello():
+    return render_template('index.html')
+
+
 @sockets.route('/submit')
 def inbox(ws):
     """Receives incoming chat messages, inserts them into Redis."""
