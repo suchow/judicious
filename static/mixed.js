@@ -59,28 +59,33 @@ Example.mixed = function() {
     var runner = Runner.create();
     Runner.run(runner, engine);
 
-    var friction = 1.00;
+    var friction = 2.00;
 
-    // add bodies
-    var stack = Composites.stack(0, 300, 2, 5, 0, 0, function(x, y) {
-        var sides = 4;
-        var chamfer = null;
-        switch (Math.round(Common.random(0, 1))) {
-        case 0:
-            if (Common.random() < 0.50) {
-                return Bodies.rectangle(
-                  x, y,
-                  Common.random(25, 50), Common.random(25, 50), { chamfer: chamfer, friction: friction }
-                );
-            } else {
-                return Bodies.rectangle(x, y, Common.random(80, 120), Common.random(25, 30), { chamfer: chamfer, friction: friction });
-            }
-        case 1:
-            return Bodies.polygon(x, y, sides, Common.random(25, 50), { chamfer: chamfer, friction: friction });
-        }
-    });
-
-    World.add(world, stack);
+    // // add bodies
+    // var stack = Composites.stack(0, 300, 2, 5, 0, 0, function(x, y) {
+    //     var sides = 4;
+    //     var chamfer = null;
+    //     switch (Math.round(Common.random(0, 1))) {
+    //     case 0:
+    //       return Bodies.rectangle(x, y, 100, 25, { chamfer: chamfer, friction: friction });
+    //     case 1:
+    //     return Bodies.rectangle(x, y, 45, 45, { chamfer: chamfer, friction: friction });
+    //     }
+    // });
+    chamfer = null;
+    x = 600;
+    y = 400;
+    options = { chamfer: chamfer, friction: friction };
+    World.add(world, [
+      Bodies.rectangle(Common.random(0, x), Common.random(0, y), 200, 50, options),
+      Bodies.rectangle(Common.random(0, x), Common.random(0, y), 100, 100, options),
+      Bodies.rectangle(Common.random(0, x), Common.random(0, y), 50, 50, options),
+      Bodies.rectangle(Common.random(0, x), Common.random(0, y), 50, 100, options),
+      Bodies.rectangle(Common.random(0, x), Common.random(0, y), 100, 50, options),
+      Bodies.rectangle(Common.random(0, x), Common.random(0, y), 200, 50, options),
+      Bodies.rectangle(Common.random(0, x), Common.random(0, y), 200, 50, options),
+      Bodies.rectangle(Common.random(0, x), Common.random(0, y), 200, 50, options),
+    ]);
 
     World.add(world, [
         // walls
@@ -95,7 +100,7 @@ Example.mixed = function() {
         mouseConstraint = MouseConstraint.create(engine, {
             mouse: mouse,
             constraint: {
-                stiffness: 0.8,
+                stiffness: 1.0,
                 render: {
                     visible: false
                 }
