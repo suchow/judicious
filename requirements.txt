@@ -1,7 +1,7 @@
 APScheduler==3.5.1
 boto3==1.5.12
 Faker==0.8.8
-Flask==0.12.2
+Flask==1.0.1
 Flask-Sockets==0.2.1
 Flask-SQLAlchemy==2.3.2
 gevent==1.2.2
