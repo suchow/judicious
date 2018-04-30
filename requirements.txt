@@ -7,7 +7,7 @@ Flask-SQLAlchemy==2.3.2
 gevent==1.2.2
 gevent-websocket==0.10.1
 greenlet==0.4.12
-gunicorn==19.7.1
+gunicorn==19.8.1
 pq==1.5
 psycopg2==2.7.3.2
 raven[flask]==6.4.0
