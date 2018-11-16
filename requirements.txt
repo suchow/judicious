@@ -11,5 +11,5 @@ gunicorn==19.8.1
 pq==1.5
 psycopg2==2.7.3.2
 raven[flask]==6.9.0
-redis==2.10.6
+redis==3.0.1
 requests==2.19.1
