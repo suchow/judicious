@@ -7,7 +7,7 @@ env:
   - HOME=/home/travis
 install:
   - pip install -U tox-travis
-  - gem install jekyll -v 2.4.0
+  - gem install jekyll
   - gem install s3_website
 before_script:
   - createdb judicious
