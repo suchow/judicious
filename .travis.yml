@@ -20,19 +20,18 @@ script:
 after_success:
   - cd docs; s3_website push; cd ..
 deploy:
-  matrix:
-    - provider: heroku
-      on:
-        python: 3.6
-      api_key:
-        secure: C7DpTNVjUHlzDdf5NviTkI3SDiBTwpZE3kPttehLad/MTAKVLvy71LjsPhU5oP/3yJC+eHIRkQWxoGxDCUyP8oxWo4Dsgjt91ohVhHzXo/RG5Lohi1C19t/KzzH51VeCocbh2VfRZf7B2aMpspGcpaF0HDQg+ONeHmPmMuy3K2pTs9dRnMczIhzItHki4GBmS4VMSKH0Xtikgu+MP00/0+dKHJTqU07SU1oQjapL1wh44Sr7dXEh3NHkH6/AWwZhZuoxnX9A0mKhsntvNyjYEDyb/QsMMrJybWK5DI2BYgXIYpGBFyZaQXw2htcrIhBLLIqlDcmTm9dcw1g07v+vtjrGsGE86Hzs0Pu8rBUTtRXO5862Og+z7Ic8jeWaFdhovNJsq5U4PuAUvQ6wuzacfNS/HeQADEsPAopH/iQtHcoY8+q/Y98pjGYsGS4ZdHVNq6f2Hs+sfNfqspOysefKE6VywbnjnbRhRmqL4Qg17aqlaRBShVpoDkoOqZW8W+Zcv+OMexhDjfdfcbwUvRayvKTivO/gNHBdO82Yq0FKnaQlRFjxFE7eg/N050Tp06JR4izFR1rJjmzDw6WdJdCMrWmkZl1Fhug1IqAru+JTnoohBMYv5E+vQZb6R55ASlHuOufB60rvTmeKfEeWO381jpdgx55w4V4RoCnVE6KLM1s=
-      app: imprudent
-    - provider: pypi
-      user: suchow
-      on:
-        python: 3.6
-        repo: suchow/judicious
-        tags: true
-      distributions: sdist bdist_wheel
-      password:
-        secure: U53L/lZTXu+9Ag+yzLyHZVj14lxmsBXsT5cJFtJZqrtLgxkBS2iHpFlCJ1x1kowfgJySR+91tbSsJ4akJAzjLLG56F9vQqtEEYsNeFfwnZTwdGYSPKZ8WsnQprCUtMwOlFY1V+oPrTFOtTAim77y000ClscSWxEO4/Q7o10KYSfEhuLdnUkEO/7gzFIo0YC0ACAHpirRnaIWLFGuXxnUk2zyf1k/zmNWm74pQwvNWDothbtXCP8wP3zaR+Ah6z0XqpLvqX1djW+sJFovat9E8RuvTQSe+111n+DEC2ODoSpFfC68MR429cpzIlx02ZePX7Ul0U0/Sbo1XNY+/pvBCmJ9Pl0P9g1zL6J0/lD1yIrppimN+Fi1r3oShmOMDora0QH/yyKKNhIVe2iTTUVgxw/l/X47QFCgUTRvHyMi4c3ZA1mOPF+i7wwB93KihtlMKZYT9fU097KY80EIkr27CS/mEUhmvlBCx2ATaCWs1ev/igjDwIHKURQT2+gHVCecQMG+qnhzTWIgQN+/UfZJX42kqAMNTI53KrIJNJH9JjTzbt8rgXX+WkFW8UcWNxf2DVYxn67cfUpq9GX17uGTj87E7Qp546iF57/HyK+465Sn7hcf8LRWt+HQJA1+riJ1FCku+g4bTUYEd1shKTW1qH5P+pcB5BbngARuUP0wC0A=
+  - provider: heroku
+    on:
+      python: 3.6
+    api_key:
+      secure: C7DpTNVjUHlzDdf5NviTkI3SDiBTwpZE3kPttehLad/MTAKVLvy71LjsPhU5oP/3yJC+eHIRkQWxoGxDCUyP8oxWo4Dsgjt91ohVhHzXo/RG5Lohi1C19t/KzzH51VeCocbh2VfRZf7B2aMpspGcpaF0HDQg+ONeHmPmMuy3K2pTs9dRnMczIhzItHki4GBmS4VMSKH0Xtikgu+MP00/0+dKHJTqU07SU1oQjapL1wh44Sr7dXEh3NHkH6/AWwZhZuoxnX9A0mKhsntvNyjYEDyb/QsMMrJybWK5DI2BYgXIYpGBFyZaQXw2htcrIhBLLIqlDcmTm9dcw1g07v+vtjrGsGE86Hzs0Pu8rBUTtRXO5862Og+z7Ic8jeWaFdhovNJsq5U4PuAUvQ6wuzacfNS/HeQADEsPAopH/iQtHcoY8+q/Y98pjGYsGS4ZdHVNq6f2Hs+sfNfqspOysefKE6VywbnjnbRhRmqL4Qg17aqlaRBShVpoDkoOqZW8W+Zcv+OMexhDjfdfcbwUvRayvKTivO/gNHBdO82Yq0FKnaQlRFjxFE7eg/N050Tp06JR4izFR1rJjmzDw6WdJdCMrWmkZl1Fhug1IqAru+JTnoohBMYv5E+vQZb6R55ASlHuOufB60rvTmeKfEeWO381jpdgx55w4V4RoCnVE6KLM1s=
+    app: imprudent
+  - provider: pypi
+    user: suchow
+    on:
+      python: 3.6
+      repo: suchow/judicious
+      tags: true
+    distributions: sdist bdist_wheel
+    password:
+      secure: U53L/lZTXu+9Ag+yzLyHZVj14lxmsBXsT5cJFtJZqrtLgxkBS2iHpFlCJ1x1kowfgJySR+91tbSsJ4akJAzjLLG56F9vQqtEEYsNeFfwnZTwdGYSPKZ8WsnQprCUtMwOlFY1V+oPrTFOtTAim77y000ClscSWxEO4/Q7o10KYSfEhuLdnUkEO/7gzFIo0YC0ACAHpirRnaIWLFGuXxnUk2zyf1k/zmNWm74pQwvNWDothbtXCP8wP3zaR+Ah6z0XqpLvqX1djW+sJFovat9E8RuvTQSe+111n+DEC2ODoSpFfC68MR429cpzIlx02ZePX7Ul0U0/Sbo1XNY+/pvBCmJ9Pl0P9g1zL6J0/lD1yIrppimN+Fi1r3oShmOMDora0QH/yyKKNhIVe2iTTUVgxw/l/X47QFCgUTRvHyMi4c3ZA1mOPF+i7wwB93KihtlMKZYT9fU097KY80EIkr27CS/mEUhmvlBCx2ATaCWs1ev/igjDwIHKURQT2+gHVCecQMG+qnhzTWIgQN+/UfZJX42kqAMNTI53KrIJNJH9JjTzbt8rgXX+WkFW8UcWNxf2DVYxn67cfUpq9GX17uGTj87E7Qp546iF57/HyK+465Sn7hcf8LRWt+HQJA1+riJ1FCku+g4bTUYEd1shKTW1qH5P+pcB5BbngARuUP0wC0A=
