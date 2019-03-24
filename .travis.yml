@@ -8,6 +8,7 @@ env:
 install:
   - pip install -U tox-travis
   - gem install jekyll
+  - gem install jekyll-gist
   - gem install s3_website
 before_script:
   - createdb judicious
