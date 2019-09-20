@@ -15,5 +15,8 @@ class Person(object):
 
     def __getattr__(self, name):
         def method(*args, **kwargs):
-            return getattr(tasks, name)(*args, person=self.id, **kwargs)
+            try:
+                return getattr(tasks, name)(*args, person=self.id, **kwargs)
+            except:
+                return ''
         return method
