@@ -61,3 +61,4 @@ target/
 
 # environment variables
 .env
+judicious/bin/*
