@@ -120,7 +120,7 @@ def base_url():
         if url:
             return url
     return os.environ.get(
-        "JUDICIOUS_SERVER_URL", "http://imprudent.herokuapp.com")
+        "JUDICIOUS_SERVER_URL", "https://imprudent.herokuapp.com")
 
 
 def register(url):
