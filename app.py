@@ -156,6 +156,11 @@ def require_api_key(view_function):
     return decorated_function
 
 
+@app.before_request
+def make_session_permanent():
+    session.permanent = True
+
+
 @app.route('/ad/')
 def ad():
     """Index route."""
