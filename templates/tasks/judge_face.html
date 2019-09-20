@@ -1,0 +1,87 @@
+{% extends "task.html" %}
+
+{% block styles %}
+  <style type="text/css">
+    .face {
+      width: 100%;
+    }
+    .slider {
+      -webkit-appearance: none;
+      width: 100%;
+      height: 15px;
+      border-radius: 5px;
+      background: #d3d3d3;
+      outline: none;
+      opacity: 1;
+      -webkit-transition: 0.2s;
+      transition: opacity 0.2s;
+      font-size: 0px;
+      /*Needed to prevent FireFox from diplaying weird grey line. */
+    }
+
+    .slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 25px;
+      height: 25px;
+      border-radius: 50%;
+      background: #2c3e50;
+      cursor: pointer;
+    }
+
+    .slider::-moz-range-thumb {
+      width: 25px;
+      height: 25px;
+      border-radius: 50%;
+      background: #2c3e50;
+      cursor: pointer;
+    }
+
+    .slider.not-clicked::-webkit-slider-thumb {
+      opacity: 0;
+      cursor: none;
+    }
+
+    .slider.not-clicked::-moz-range-thumb {
+      opacity: 0;
+      cursor: none;
+    }
+  </style>
+  {{ super() }}
+{% endblock %}
+
+{% block scripts %}
+  {{ super() }}
+  <script>
+    $(document).ready(function() {
+      start = performance.now()
+      Judicious.result = function () {
+        return {
+          face: {{ task.parameters.face }},
+          attribute: '{{ task.parameters.attribute }}',
+          rating: parseFloat($("#taskSlider")[0].value).toFixed(4),
+          rt: (performance.now() - start).toFixed(4),
+        };
+      }
+      $("#taskSlider").click(function () {
+          $("#taskSlider").removeClass("not-clicked");
+          $("#taskSlider").removeClass("invis");
+      });
+      // Judicious.validate = function () {
+      //   return $("#label").val().length > 0;
+      // }
+    });
+  </script>
+{% endblock %}
+
+{% block task %}
+  <form id="survey">
+    <img class="face" src="http://cocosci.princeton.edu/jpeterson/__hosted_stimuli__/stylegan_face_ratings_exp1/{{ task.parameters.face }}.jpg" />
+    <h2><center>How {{ task.parameters.attribute }} is this face?</center></h2>
+    <input type="range" id="taskSlider" class="slider text-center my-3 not-clicked" value="0" min="0" max="100"
+    step="any">
+    <p id="leftLabel" class="float-left">Extremely not {{ task.parameters.attribute }}</p>
+    <p id="rightLabel" class="float-right">Extremely {{ task.parameters.attribute }}</p>
+  </form>
+  <br/>
+{% endblock %}

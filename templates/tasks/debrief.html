@@ -1,0 +1,144 @@
+{% extends "task.html" %}
+
+{% block scripts %}
+  {{ super() }}
+  <script>
+    $(document).ready(function() {
+      Judicious.result = function () {
+        return {
+          done: true,
+        };
+      }
+    });
+  </script>
+{% endblock %}
+
+{% block task %}
+<!-- DEBRIEFING SURVEY -->
+   <div id="debriefingContainer" class="container hidden">
+       <form id="debriefingForm" name="debriefingForm" onsubmit="return false">
+           <h1 class="my-5">Debriefing Questions</h1>
+           <p class="my-3">
+               Please answer all of the questions below to the best of your ability.
+               If you don't know the answer to a question, please be honest and
+               give your best guess.
+           </p>
+
+           <div class="form-group">
+               <label for="whatTested">
+                   In a few words, what did you think we were testing?
+               </label>
+               <textarea required id="whatTested" name="whatTested" class="form-control response" rows="3"></textarea>
+           </div>
+
+           <div class="form-group">
+               <label for="strategies">
+                   Did you use any particular strategies, or is there anything else you can tell us about how you
+                   did the
+                   task? Please answer in one or two sentences.
+               </label>
+               <textarea required id="strategies" name="strategies" class="form-control response" rows="3"></textarea>
+           </div>
+
+           <div class="form-group">
+               <label for="perceivedPerformance">
+                   How well do you think you did on the task? Please answer by entering a number on a
+                   scale from 1 to 7, where 1 = "very poor" and 7 = "perfect".
+               </label>
+               <select required id="perceivedPerformance" name="perceivedPerformance" class="form-control response">
+                   <option value="NA"></option>
+                   <option value="1">1 ("very poor")</option>
+                   <option value="2">2</option>
+                   <option value="3">3</option>
+                   <option value="4">4</option>
+                   <option value="5">5</option>
+                   <option value="6">6</option>
+                   <option value="7">7 ("perfect")</option>
+               </select>
+           </div>
+
+           <div class="form-group">
+               <label for="interruption">
+                   Did you interrupt your completion of the
+                   survey in any way (e.g. by switching to other
+                   windows or tabs on your computer, or by
+                   refreshing the task page)?
+                   (Your work will still be accepted even if you
+                   answer "Yes" here. Please be honest! Thanks!)
+               </label>
+               <select required class="form-control response" id="interruption" name="interruption">
+                   <option value="NA"></option>
+                   <option>Yes, I interrupted the task.</option>
+                   <option>No, I did not interrupt the task.</option>
+               </select>
+           </div>
+
+           <div class="form-group">
+               <label for="issues">
+                   Was any part of the procedure unclear?
+                   Did you have any problems completing the task?
+                   (Your work will be accepted regardless of your answer.
+                   Please be honest! Thanks!)
+               </label>
+               <textarea class="form-control response" id="issues" name="issues" rows="3"></textarea>
+           </div>
+
+           <div class="form-group">
+               <label for="comments">
+                   Do you have any other comments you would like to add?
+                   Feel free to tell us whatever you
+                   thought about the task, or any problems you might have encountered (that you didn't already mention
+                   above).
+               </label>
+               <textarea class="form-control response" id="comments" name="comments" rows="3"></textarea>
+           </div>
+
+           <h1 class="mt-5 mb-3">Demographics</h1>
+           <div class="form-group">
+               <label for="workerId">mTurk Worker ID</label>
+               <input required class="form-control response" id="workerId" name="workerId" type="text">
+           </div>
+
+           <div class="form-group">
+               <label for="age">Age</label>
+               <input required class="form-control response" id="age" name="age" type="number" min="18" max="120">
+           </div>
+
+           <div class="form-group">
+               <label for="gender">Gender</label>
+               <select required class="form-control selectpicker response" id="gender" name="gender">
+                   <option value="NA"></option>
+                   <option>Female</option>
+                   <option>Male</option>
+                   <option>Non-binary</option>
+                   <option>Other</option>
+                   <option>Prefer not to say</option>
+               </select>
+           </div>
+
+           <!-- Race: multiselect -->
+           <div class="form-group">
+               <label for="race">
+                   Race (you may select more than one option using the checkboxes, or search by typing)
+               </label>
+               <select multiple="multiple" class="form-control response" id="race" name="race">
+                   <option>Black/African American</option>
+                   <option>East Asian</option>
+                   <option>East Indian</option>
+                   <option>Middle Eastern</option>
+                   <option>Native Hawaiian or Other Pacific Islander</option>
+                   <option>White</option>
+                   <option>Other</option>
+                   <option>Prefer not to say</option>
+               </select>
+           </div>
+
+           <div class="form-group">
+               <label for="raceText">If the above options do not adequately describe your racial/ethnic identity,
+                   please feel free to do so in your own words below.
+               </label>
+               <input class="form-control response" id="raceText" name="raceText" type="text">
+           </div>
+       </form>
+   </div>
+{% endblock %}

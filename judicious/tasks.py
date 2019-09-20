@@ -8,6 +8,28 @@ import uuid
 from .core import collect, map
 
 
+
+def judge_face(face, attribute, person=None):
+    r = collect("judge_face", face=face, attribute=attribute, person=person)
+    return r
+
+def instruct_judge_faces(person=None):
+    """Give instructions for rating faces."""
+    collect("instruct_judge_faces", person=person)
+
+
+def attrition(person=None):
+    """Affirm the anti-attrition statement."""
+    r = collect("attrition", person=person)
+    return r['attrition']
+
+
+def debrief(person=None):
+    """Complete a debriefing survey."""
+    r = collect("debrief", person=person)
+    return r['done']
+
+
 def joke(person=None):
     """Tell a joke."""
     r = collect("joke", person=person)
