@@ -2,6 +2,7 @@
 
 """Main module."""
 
+from concurrent.futures import TimeoutError
 import json
 import logging
 import multiprocessing as mp
@@ -11,6 +12,7 @@ import random
 import time
 import uuid
 
+import pebble
 import requests
 
 
@@ -57,7 +59,10 @@ def unpack_seed_apply(fargseed):
     """Unpack, seed the PRNG, and apply the function."""
     (f, args, seed) = fargseed
     random.seed(seed)
-    return f(*args)
+    if not args:
+        return f()
+    else:
+        return f(*args)
 
 
 def map(f, args):
@@ -66,6 +71,47 @@ def map(f, args):
     seeds = [random.getrandbits(128) for _ in args]
     fargseeds = zip(fs, args, seeds)
     return pool.map(unpack_seed_apply, fargseeds)
+
+
+def map2(f, args, timeout=None):
+    """Reproducible map with Pebble multiprocessing tool.
+
+    Return all results that finish before timeout, None otherwise."""
+    fs = [f for _ in args]
+    seeds = [random.getrandbits(128) for _ in args]
+    fargseeds = zip(fs, args, seeds)
+    pool = pebble.ProcessPool()
+    future = pool.map(unpack_seed_apply, fargseeds, timeout=timeout)
+    iterator = future.result()
+    results = []
+    while True:
+        try:
+            result = next(iterator)
+            results.append(result)
+        except StopIteration:
+            break
+        except TimeoutError as error:
+            print("function took longer than %d seconds" % error.args[1])
+            results.append(None)
+        except pebble.ProcessExpired as error:
+            print("%s. Exit code: %d" % (error, error.exitcode))
+
+    return results
+
+
+def map3(f, args, timeout=None):
+    """Reproducible map with Pebble multiprocessing tool.
+
+    Restart any slots that time out, always returning a non-None value."""
+    results = [None for _ in range(len(args))]
+    while None in results:
+        todo_idxs = [i for i, x in enumerate(results) if x is None]
+        todo_args = [args[i] for i in todo_idxs]
+        partial_results = map2(f, todo_args, timeout=timeout)
+        for i, idx in enumerate(todo_idxs):
+            if partial_results[i] is not None:
+                results[idx] = partial_results[i]
+    return results
 
 
 def base_url():
