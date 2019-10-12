@@ -1,0 +1,17 @@
+{% extends "task.html" %}
+
+{% block scripts %}
+  {{ super() }}
+  <script>
+    $(document).ready(function() {
+      result = {
+        complete: true,
+      }
+      Judicious.postResult(Judicious.taskUUID, result, function(){})
+    });
+  </script>
+{% endblock %}
+
+{% block task %}
+<p>You're done! Your completion code is <code>{{ task.id }}</code></p>
+{% endblock %}

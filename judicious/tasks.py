@@ -30,6 +30,12 @@ def debrief(person=None):
     return r['done']
 
 
+def complete(person=None):
+    """Tell the participant that they are all done."""
+    r = collect("complete", person=person)
+    return r['complete']
+
+
 def joke(person=None):
     """Tell a joke."""
     r = collect("joke", person=person)
