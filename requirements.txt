@@ -12,5 +12,5 @@ Pebble==4.3.10
 pq==1.6.1
 psycopg2==2.7.7
 raven[flask]==6.10.0
-redis==3.2.1
+redis==3.3.11
 requests==2.21.0
