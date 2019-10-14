@@ -81,7 +81,7 @@ def map2(f, args, timeout=None):
     seeds = [random.getrandbits(128) for _ in args]
     fargseeds = zip(fs, args, seeds)
     pool = pebble.ProcessPool()
-    future = pool.map(unpack_seed_apply, fargseeds, timeout=timeout)
+    future = pool.map(unpack_seed_apply, fargseeds)
     iterator = future.result()
     results = []
     while True:
@@ -90,16 +90,13 @@ def map2(f, args, timeout=None):
             results.append(result)
         except StopIteration:
             break
-        except TimeoutError as error:
-            print("function took longer than %d seconds" % error.args[1])
-            results.append(None)
         except pebble.ProcessExpired as error:
             print("%s. Exit code: %d" % (error, error.exitcode))
 
     return results
 
 
-def map3(f, args, timeout=None):
+def map3(f, args):
     """Reproducible map with Pebble multiprocessing tool.
 
     Restart any slots that time out, always returning a non-None value."""
@@ -107,7 +104,7 @@ def map3(f, args, timeout=None):
     while None in results:
         todo_idxs = [i for i, x in enumerate(results) if x is None]
         todo_args = [args[i] for i in todo_idxs]
-        partial_results = map2(f, todo_args, timeout=timeout)
+        partial_results = map2(f, todo_args)
         for i, idx in enumerate(todo_idxs):
             if partial_results[i] is not None:
                 results[idx] = partial_results[i]

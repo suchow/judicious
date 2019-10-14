@@ -8,59 +8,59 @@ import uuid
 from .core import collect, map
 
 
-
-def judge_face(face, attribute, person=None):
-    r = collect("judge_face", face=face, attribute=attribute, person=person)
+def judge_face(face, attribute, **kwargs):
+    r = collect("judge_face", face=face, attribute=attribute, **kwargs)
     return r
 
-def instruct_judge_faces(person=None):
+
+def instruct_judge_faces(**kwargs):
     """Give instructions for rating faces."""
-    collect("instruct_judge_faces", person=person)
+    collect("instruct_judge_faces", **kwargs)
 
 
-def attrition(person=None):
+def attrition(**kwargs):
     """Affirm the anti-attrition statement."""
-    r = collect("attrition", person=person)
+    r = collect("attrition", **kwargs)
     return r['attrition']
 
 
-def debrief(person=None):
+def debrief(**kwargs):
     """Complete a debriefing survey."""
-    r = collect("debrief", person=person)
+    r = collect("debrief", **kwargs)
     return r['done']
 
 
-def complete(person=None):
+def complete(**kwargs):
     """Tell the participant that they are all done."""
-    r = collect("complete", person=person)
+    r = collect("complete", **kwargs)
     return r['complete']
 
 
-def joke(person=None):
+def joke(**kwargs):
     """Tell a joke."""
-    r = collect("joke", person=person)
+    r = collect("joke", **kwargs)
     return r['text']
 
 
-def draw(thing, width=200, height=200, person=None):
+def draw(thing, width=200, height=200, **kwargs):
     """Draw a thing."""
-    r = collect("draw", thing=thing, width=width, height=height, person=person)
+    r = collect("draw", thing=thing, width=width, height=height, **kwargs)
     return r['drawing']
 
 
-def copyedit(text, person=None):
+def copyedit(text, **kwargs):
     """Copyedit some text."""
-    r = collect("copyedit", text=text, person=person)
+    r = collect("copyedit", text=text, **kwargs)
     return r['text']
 
 
-def label(src, person=None):
+def label(src, **kwargs):
     """Label an image."""
-    r = collect("label", src=src, person=person)
+    r = collect("label", src=src, **kwargs)
     return r['label']
 
 
-def identify_letter(letter=None, alphabet=None, lightness=0.80, person=None):
+def identify_letter(letter=None, alphabet=None, lightness=0.80, **kwargs):
     """Identify a letter in noise."""
     import string
 
@@ -75,36 +75,36 @@ def identify_letter(letter=None, alphabet=None, lightness=0.80, person=None):
         letter=letter,
         alphabet=alphabet,
         lightness=lightness,
-        person=person
+        **kwargs,
     )
     return (r['letter'], r['letter'] == letter)
 
 
-def caption(src, person=None):
+def caption(src, **kwargs):
     """Write a caption for a cartoon."""
-    r = collect("caption", src=src, person=person)
+    r = collect("caption", src=src, **kwargs)
     return r['caption']
 
 
-def select_the(category, src_0, src_1, person=None):
+def select_the(category, src_0, src_1, **kwargs):
     """Select the image belonging to the category."""
     r = collect(
         "select_the",
         category=category,
         src_0=src_0,
         src_1=src_1,
-        person=person,
+        **kwargs,
     )
     return int(r['selection'])
 
 
-def define(word, person=None):
+def define(word, **kwargs):
     """Define the word."""
-    r = collect("define", word=word, person=person)
+    r = collect("define", word=word, **kwargs)
     return r['definition']
 
 
-def compare_numerosity(a, b, person=None):
+def compare_numerosity(a, b, **kwargs):
     """Determine which numerosity is greater."""
     cb = random.random() > 0.5
     r = collect(
@@ -112,44 +112,44 @@ def compare_numerosity(a, b, person=None):
         a=a,
         b=b,
         counterbalancer=cb,
-        person=person
+        **kwargs,
     )
     return r['selection']
 
 
-def agree(prompt, person=None):
+def agree(prompt, **kwargs):
     """Rate agreement with a prompt."""
-    r = collect("agree", prompt=prompt, person=person)
+    r = collect("agree", prompt=prompt, **kwargs)
     return r['agreement']
 
 
-def trolley_problem(person=None):
+def trolley_problem(**kwargs):
     """Respond to the trolley problem."""
-    r = collect("trolley_problem", person=person)
+    r = collect("trolley_problem", **kwargs)
     return r['decision']
 
 
-def intertemporal_choice(SS, LL, delay, person=None):
+def intertemporal_choice(SS, LL, delay, **kwargs):
     """Complete an intertemporal choice problem."""
     r = collect(
         "intertemporal_choice",
         SS=SS,
         LL=LL,
         delay=delay,
-        person=person
+        **kwargs,
     )
     return r['choice']
 
 
-def recaptcha(person=None):
+def recaptcha(**kwargs):
     """Solve a reCaptcha."""
-    r = collect("recaptcha", person=person)
+    r = collect("recaptcha", **kwargs)
     return r["solved"]
 
 
 def chess(
     board="rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
-    person=None
+    **kwargs
 ):
     """Take the next move in a game of chess."""
     print(board)
@@ -158,95 +158,93 @@ def chess(
         "w": "white"
     }
     turn = turn_dict[board.split(" ")[1]]
-    r = collect("chess", board=board, turn=turn, person=person)
+    r = collect("chess", board=board, turn=turn, **kwargs)
     return r["board"]
 
 
-def noun(person=None):
+def noun(**kwargs):
     """Name a noun."""
-    r = collect("noun", person=person)
+    r = collect("noun", **kwargs)
     return r["word"]
 
 
-def verb(person=None):
+def verb(**kwargs):
     """Name a verb."""
-    r = collect("verb", person=person)
+    r = collect("verb", **kwargs)
     return r["word"]
 
 
-def adjective(person=None):
+def adjective(**kwargs):
     """Name an adjective."""
-    r = collect("adjective", person=person)
+    r = collect("adjective", **kwargs)
     return r["word"]
 
 
-def summarize(text, max_words=None, person=None):
+def summarize(text, max_words=None, **kwargs):
     """Summarize a text."""
     if not max_words:
         mself, ax_words = len(text.split(" "))
-    r = collect("summarize", text=text, max_words=max_words, person=person)
+    r = collect("summarize", text=text, max_words=max_words, **kwargs)
     return r["summary"]
 
 
-def rank_the(category, srcs, person=None):
+def rank_the(category, srcs, **kwargs):
     """Rank images according to their resemblance to a category."""
     r = collect(
         "rank_the",
         category=category,
         srcs=srcs,
-        person=person,
+        **kwargs,
     )
     return [int(rank) for rank in r["ranks"]]
 
 
-def more_similar(target, word1, word2, person=None):
+def more_similar(target, word1, word2, **kwargs):
     """Which word is more similar to the target?"""
     r = collect(
         "more_similar",
         target=target,
         word1=word1,
         word2=word2,
-        person=person
+        **kwargs
     )
     return r["selection"]
 
 
-def age(src, person=None):
+def age(src, **kwargs):
     """Estimate the age of a person in an image."""
-    r = collect("age", src=src, person=person)
+    r = collect("age", src=src, **kwargs)
     return int(r["age"])
 
 
-def dimorphism(src, person=None):
+def dimorphism(src, **kwargs):
     """Rate the gender dimorphism of a person in an image."""
-    r = collect("dimorphism", src=src, person=person)
+    r = collect("dimorphism", src=src, **kwargs)
     return int(r["dimorphism"])
 
 
-def attractiveness(src, person=None):
+def attractiveness(src, **kwargs):
     """Rate the attractiveness of a person in an image."""
-    r = collect("attractiveness", src=src, person=person)
+    r = collect("attractiveness", src=src, **kwargs)
     return int(r["attractiveness"])
 
 
-def resemblance(src, target, person=None):
+def resemblance(src, target, **kwargs):
     """Rate an image's resemblace to a target person."""
-    r = collect("resemblance", src=src, target=target, person=person)
+    r = collect("resemblance", src=src, target=target, **kwargs)
     return int(r["resemblance"])
 
 
-def reproduce(text, delay=10, person=None):
+def reproduce(text, delay=10, **kwargs):
     """Read some text and then reproduce it verbatim."""
-    r = collect("reproduce", text=text, delay=delay, person=person)
+    r = collect("reproduce", text=text, delay=delay, **kwargs)
     return r["reproduction"]
 
 
-def spellcheck(text, person=None):
+def spellcheck(text, **kwargs):
     """Spellcheck some text."""
-    r = collect("spellcheck", text=text, person=person)
+    r = collect("spellcheck", text=text, **kwargs)
     return r['text']
-
-
 
 
 def channel(prompt, channel=None):
@@ -271,8 +269,10 @@ def chat(prompt, N=3):
     return {
         "transcript": sorted([i for sub in transcripts for i in sub]),
     }
-def iframe(url, prompt, person=None):
-    r = collect("iframe", url=url, prompt=prompt, person=person)
+
+
+def iframe(url, prompt, **kwargs):
+    r = collect("iframe", url=url, prompt=prompt, **kwargs)
     return r["response"]
 
 
@@ -281,13 +281,13 @@ def atari(rom):
     return (r["checkpoints"], r["controls"])
 
 
-def redact_illicit(scenario, person=None):
+def redact_illicit(scenario, **kwargs):
     """Redact illicit information from a scenario."""
-    r = collect("redact_illicit", scenario=scenario, person=person)
+    r = collect("redact_illicit", scenario=scenario, **kwargs)
     return r['scenario']
 
 
-def build_tower(prompt, person=None):
+def build_tower(prompt, **kwargs):
     """Build a tower that meets the requirements of the prompt."""
-    r = collect("build_tower", prompt=prompt, person=person)
+    r = collect("build_tower", prompt=prompt, **kwargs)
     return r['tower']
