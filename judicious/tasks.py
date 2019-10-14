@@ -65,7 +65,7 @@ def attrition(**kwargs):
 def debrief(**kwargs):
     """Complete a debriefing survey."""
     r = collect("debrief", **kwargs)
-    return r['done']
+    return r
 
 
 def complete(**kwargs):
