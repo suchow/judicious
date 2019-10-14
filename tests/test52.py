@@ -1,6 +1,6 @@
 import judicious
 
-judicious.seed("cc722bf6-e319-cf63-a671-cbae64bfdb0f")
+judicious.seed("cc722bf6-e319-cf63-a671-cbae64dfdb0f")
 
 # 1 (complete): 3799aa89-ccae-c268-d0e8-cc4e9ddddee4
 # 2 (timeout) : 4d30601d-dfe3-ee53-8594-7fc0aa8e68ec
@@ -21,5 +21,5 @@ def experiment():
         person.complete()
         return [j1, j2, j3, j4]
 
-results = judicious.map3(experiment, [None for _ in range(2)])
+results = judicious.map3(experiment, [None for _ in range(100)])
 print(results)

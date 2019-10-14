@@ -186,7 +186,7 @@ def get_person(person_id):
 
 def elapsed_time(person_id):
     """Get the time elapsed since a Person was claimed."""
-    r = get_person()
+    r = get_person(person_id)
     if r.status_code == 200:
         claimed_at = r.json()['data']['claimed_at']
         server_now = r.json()['data']['now']
