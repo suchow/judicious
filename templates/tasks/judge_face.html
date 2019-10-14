@@ -2,12 +2,32 @@
 
 {% block styles %}
   <style type="text/css">
-    .face {
-      width: 100%;
+    body {
+      padding-top: 0px !important;
+      padding-bottom: 0px !important;
     }
+
+    .center-screen {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      min-height: 100vh;
+      padding: 0;
+    }
+
+    .face {
+      display: block;
+      margin: 0 auto;
+      width: 300px;
+    }
+
     .slider {
       -webkit-appearance: none;
-      width: 100%;
+      display: block;
+      margin: 0 auto;
+      width: 600px;
       height: 15px;
       border-radius: 5px;
       background: #d3d3d3;
@@ -46,6 +66,26 @@
       opacity: 0;
       cursor: none;
     }
+
+    .container {
+      max-width: none !important;
+      width: 700px !important;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      min-height: 100vh;
+      padding: 0;
+    }
+
+    #leftLabel, #rightLabel {
+      margin-bottom: 0;
+    }
+
+    #survey {
+      width: 700px;
+    }
   </style>
   {{ super() }}
 {% endblock %}
@@ -53,8 +93,17 @@
 {% block scripts %}
   {{ super() }}
   <script>
+    window.onload = function(){
+      window.scrollTo(0,0);
+      content.scrollTo(0,0);
+    }
+
     $(document).ready(function() {
-      start = performance.now()
+      // Make task unskippable
+      $("#skip-task").remove();
+
+      let start = performance.now();
+
       Judicious.result = function () {
         return {
           face: {{ task.parameters.face }},
@@ -63,13 +112,19 @@
           rt: (performance.now() - start).toFixed(4),
         };
       }
-      $("#taskSlider").click(function () {
-          $("#taskSlider").removeClass("not-clicked");
-          $("#taskSlider").removeClass("invis");
-      });
-      // Judicious.validate = function () {
-      //   return $("#label").val().length > 0;
-      // }
+
+      $("#taskSlider").on("input", function() {
+        $("#taskSlider").removeClass("not-clicked");
+        $("#taskSlider").removeClass("invis");
+      })
+
+      Judicious.validate = function () {
+        const valid = !$("#taskSlider").hasClass("not-clicked");
+        if (!valid) {
+          alert("Please make your selection by clicking/dragging on the grey slider.");
+        }
+        return valid;
+      }
     });
   </script>
 {% endblock %}

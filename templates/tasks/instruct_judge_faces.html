@@ -4,9 +4,12 @@
   {{ super() }}
   <script>
     $(document).ready(function() {
+      // Make task unskippable
+      $("#skip-task").remove();
+
       Judicious.result = function () {
         return {
-          submitted: true;
+          submitted: true,
         };
       }
     });
@@ -16,5 +19,7 @@
 {% block task %}
   <p>As a part of this study, you will see a series of faces. The images below are there to give you an idea of how varied these faces can be. You will be asked to rate each face in terms of how dominant they appear to be. (You can make your response using a slider that appears below the image.) We are interested in your immediate, gut reaction to the images. There are no right or wrong responses.</p>
   <p>Please press the "Submit" button when you are ready to begin.</p>
-  <img src="https://stefanu.tlabexperiments.com/faces/face-trait-survey/src/images/many_faces.jpg" width=450 />
+  <div class="container text-center" style="margin-bottom: 2.0rem;">
+    <img src="{{ url_for('static', filename='example_faces.jpg') }}" width=450 style=" display: block; margin: 0 auto;"/>
+  </div>
 {% endblock %}
