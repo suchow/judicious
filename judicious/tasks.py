@@ -40,9 +40,9 @@ def consent(
         body=body,
         prompt=prompt,
         agree=agree,
-        disagree=disagree
+        disagree=disagree,
+        **kwargs,
     )
-    print(r)
     return r["consent"]
 
 
