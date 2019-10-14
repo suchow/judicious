@@ -189,12 +189,38 @@ def assent():
     return redirect(url_for('stage', **request.args))
 
 
-@app.route('/persons/<uuid:id>', methods=['POST'])
+@app.route('/persons/<person_id>', methods=['POST'])
 def post_person(person_id):
     """Add a new person."""
     person = Person(person_id)
     db.session.add(person)
     db.session.commit()
+
+
+@app.route('/persons/<person_id>', methods=['GET'])
+def get_person(person_id):
+    """Get a person."""
+    person = Person.query.filter_by(id=person_id).one_or_none()
+    if person:
+        return jsonify(
+            status="success",
+            message="Person retrieved",
+            data={
+                "id": person.id,
+                "context_id": person.context_id,
+                "created_at": person.created_at,
+                "claimed_at": person.claimed_at,
+                "now": datetime.now(),
+            }
+        ), 200
+    else:
+        return jsonify(
+            status="success",
+            message="No person with id {} found.".format(person_id),
+            data={
+                "id": person_id,
+            }
+        ), 404
 
 
 @app.route('/tasks', methods=['POST'], defaults={'id': str(uuid.uuid4())})
