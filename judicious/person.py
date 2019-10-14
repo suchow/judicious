@@ -1,3 +1,4 @@
+import concurrent.futures
 import random
 import uuid
 
@@ -20,3 +21,9 @@ class Person(object):
             except:
                 return ''
         return method
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, type, value, traceback):
+        return type in (concurrent.futures.TimeoutError, TimeoutError)
