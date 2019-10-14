@@ -2,32 +2,37 @@
 
 {% block styles %}
   {{ super() }}
-  <style type="text/css">
-  input[type='radio'] {
-    margin-right: 7px;
-  }
-  </style>
 {% endblock %}
 
 {% block scripts %}
   {{ super() }}
   <script type="text/javascript">
     $(document).ready(function() {
-      Judicious.result = function () {
-        return {decision: $('input[name=decision]:radio:checked').val()};
-      }
+      $("#submit-task").hide();
+      $("#skip-task").hide()
+      Judicious.result = { consent: true };
+      $("#no-consent").click(function () {
+        result = {
+          consent: false,
+        }
+        Judicious.postResult(Judicious.taskUUID, result, function(){})
+        window.location.href = "http://google.com/"
+      });
+      $("#print-consent").click(function() {
+        window.print();
+      });
     });
   </script>
 {% endblock %}
 
 {% block task %}
-  <p><strong>Instructions:</strong> Imagine you face a choice about receiving
-    ${{ task.parameters.SS }} immediately, or ${{ task.parameters.LL }} in {{ task.parameters.delay }}
-    from now. Which option would you choose?</p>
-
-  <form action="">
-    <p><input type="radio" name="decision" value="ss">${{ task.parameters.SS }} immediately.</p>
-    <p><input type="radio" name="decision" value="ll">${{ task.parameters.LL }} in {{ task.parameters.delay }} from now.</p>
-  </form>
-
+  <h2>{{ task.parameters.title }}</h2>
+  <blockquote>
+    {{ task.parameters.body|safe }}
+  </blockquote>
+  <button type="button" id="print-consent" class="button button-outline">Print a copy of this</button>
+  <hr/>
+  <h4>{{ task.parameters.prompt }}</h4>
+  <button type="button" id="consent" class="button submit-task">{{ task.parameters.agree }}</button>
+  <button type="button" id="no-consent" class="button">{{ task.parameters.disagree }}</button>
 {% endblock %}

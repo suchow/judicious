@@ -2,10 +2,48 @@
 
 """Pseudorandom generators for human computation."""
 
+import os
 import random
 import uuid
 
 from .core import collect, map
+
+
+def consent(
+    title=None,
+    body=None,
+    prompt=None,
+    agree=None,
+    disagree=None,
+    **kwargs
+):
+    if not title:
+        title = "Consent to participate in research"
+    if not body:
+        print(os.getcwd())
+        consent_path = os.path.join(
+            os.path.dirname(os.path.abspath(__file__)),
+            "consent_body.html"
+        )
+        with open(consent_path, "r") as f:
+            body = f.read()
+    if not prompt:
+        prompt = "Do you understand and agree to participate?"
+    if not agree:
+        agree = "I agree"
+    if not disagree:
+        disagree = "No thanks (Exit)"
+
+    r = collect(
+        "consent",
+        title=title,
+        body=body,
+        prompt=prompt,
+        agree=agree,
+        disagree=disagree
+    )
+    print(r)
+    return r["consent"]
 
 
 def judge_face(face, attribute, **kwargs):
