@@ -14,6 +14,7 @@ judicious.seed("cc722bf6-e319-cf63-a671-cbae64dfdb0f")
 
 def experiment():
     with judicious.Person(lifetime=60) as person:
+        consent = person.consent()
         j1 = person.joke()
         j2 = person.joke()
         j3 = person.joke()
