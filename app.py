@@ -226,16 +226,19 @@ def get_person(person_id):
 @app.route('/tasks', methods=['POST'], defaults={'id': str(uuid.uuid4())})
 @app.route('/tasks/<uuid:id>', methods=['POST'])
 def post_task(id):
-    """Add a new task to the queue."""
+    """Add a new task to the queue.
 
-    # Create the context.
-    if not Context.query.filter_by(id=request.values["context"]).one_or_none():
-        context = Context(request.values["context"])
-        db.session.add(context)
-        db.session.commit()
-
+    TODO: Respect distinction between POST and PUT.
+    """
     id_string = str(id)
     if not Task.query.filter_by(id=id_string).one_or_none():
+
+        # Create the context.
+        if not Context.query.filter_by(id=request.values["context"]).one_or_none():
+            context = Context(request.values["context"])
+            db.session.add(context)
+            db.session.commit()
+
         # Create the task.
         app.logger.info("Creating task with id {}".format(id_string))
         task = Task(
