@@ -189,6 +189,31 @@ def assent():
     return redirect(url_for('stage', **request.args))
 
 
+@app.route('/contexts/<context_id>', methods=['PUT'])
+def put_context(context_id):
+    """Add a new context."""
+    if not Context.query.filter_by(id=context_id).one_or_none():
+        context = Context(context_id)
+        db.session.add(context)
+        db.session.commit()
+        return jsonify(
+            status="success",
+            message="Context created.",
+            data={
+                "id": context_id,
+            }
+        ), 200
+    else:
+        app.logger.info("Context with id {} already exists".format(context_id))
+        return jsonify(
+            status="success",
+            message="Already exists.",
+            data={
+                "id": context_id,
+            }
+        ), 409
+
+
 @app.route('/persons/<person_id>', methods=['POST'])
 def post_person(person_id):
     """Add a new person."""
@@ -232,12 +257,6 @@ def post_task(id):
     """
     id_string = str(id)
     if not Task.query.filter_by(id=id_string).one_or_none():
-
-        # Create the context.
-        if not Context.query.filter_by(id=request.values["context"]).one_or_none():
-            context = Context(request.values["context"])
-            db.session.add(context)
-            db.session.commit()
 
         # Create the task.
         app.logger.info("Creating task with id {}".format(id_string))

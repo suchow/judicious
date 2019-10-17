@@ -30,6 +30,15 @@ def generate_uuid():
     return uuid.UUID(int=random.getrandbits(128))
 
 
+def base_url():
+    with open(".JUDICIOUS_SERVER_URL", "r") as f:
+        url = f.read()
+        if url:
+            return url
+    return os.environ.get(
+        "JUDICIOUS_SERVER_URL", "https://imprudent.herokuapp.com")
+
+
 _ctx = None
 
 
@@ -38,8 +47,15 @@ def context():
     return _ctx
 
 
+def put_context(id):
+    """Post the context, whose id is the PRNG seed."""
+    return requests.put(
+        "{}/contexts/{}".format(base_url(), id),
+    )
+
+
 def seed(s=None):
-    """Seed the PRNG."""
+    """Seed the PRNG and post the context."""
     if not s:
         s = str(generate_uuid())
     random.seed(s)
@@ -51,6 +67,9 @@ def seed(s=None):
         pass
     global _ctx
     _ctx = s
+
+    put_context(s)
+
     return s
 
 
@@ -112,15 +131,6 @@ def map3(f, args):
             if partial_results[i] is not None:
                 results[idx] = partial_results[i]
     return results
-
-
-def base_url():
-    with open(".JUDICIOUS_SERVER_URL", "r") as f:
-        url = f.read()
-        if url:
-            return url
-    return os.environ.get(
-        "JUDICIOUS_SERVER_URL", "https://imprudent.herokuapp.com")
 
 
 def register(url):
