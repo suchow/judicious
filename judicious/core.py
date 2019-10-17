@@ -49,6 +49,7 @@ def context():
 
 def put_context(id):
     """Post the context, whose id is the PRNG seed."""
+    logging.info("PUTTING the context to URL {}".format(base_url()))
     return requests.put(
         "{}/contexts/{}".format(base_url(), id),
     )
@@ -131,13 +132,6 @@ def map3(f, args):
             if partial_results[i] is not None:
                 results[idx] = partial_results[i]
     return results
-
-
-def register(url):
-    """Set the base URL of the decision server."""
-    os.environ["JUDICIOUS_SERVER_URL"] = url
-    with open(".JUDICIOUS_SERVER_URL", "w") as f:
-        f.write(url)
 
 
 def priority(level=1):
