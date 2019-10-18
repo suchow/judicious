@@ -11,8 +11,6 @@ import os
 
 with open(".JUDICIOUS_SERVER_URL", "w") as f:
     url = os.environ.get("JUDICIOUS_SERVER_URL", "http://127.0.0.1:5000")
-    print(url)
-    raise Exception
     f.write(url)
 
 
