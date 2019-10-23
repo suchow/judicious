@@ -1,23 +1,36 @@
 {% extends "task.html" %}
 
 {% block scripts %}
-  {{ super() }}
-  <script>
+{{ super() }}
+<script>
     Judicious.result = function () {
-      return {
-        attrition: $("#attrition").val()
-      };
+        return {
+            attrition: $("#attrition").val(),
+        };
     }
     Judicious.validate = function () {
-      text = $("#attrition").val()
-      return text == "I will answer open-ended questions."
+        const text = $("#attrition").val();
+        console.log("text: ", text);
+        console.log("trimmed: ", text.trim());
+        const valid = text.trim() === "I will answer open-ended questions.";
+        console.log("valid: ", valid);
+        if (!valid) {
+            alert("Please enter the text exactly as written, including the period.");
+        }
+        return valid;
     }
-  </script>
+
+</script>
 {% endblock %}
 
 {% block task %}
-<p>This is an anonymous survey consisting of multiple questions. A few questions are open-ended questions where you need to type a few sentences or a short paragraph or two. Many MTurk workers do not like answering open-ended questions and tend to quit a survey once they see such questions. <b>If a sizable number of people quit a survey halfway, the data quality of that survey would be compromised. However, our research depends on good quality data.</b> Thus, please make sure you do not mind open-ended questions before taking this survey.</p>
+<p>This is an anonymous survey consisting of multiple questions. A few questions are open-ended questions where you need
+    to type a few sentences or a short paragraph or two. Many MTurk workers do not like answering open-ended questions
+    and tend to quit a survey once they see such questions. <b>If a sizable number of people quit a survey halfway, the
+        data quality of that survey would be compromised. However, our research depends on good quality data.</b> Thus,
+    please make sure you do not mind open-ended questions before taking this survey.</p>
 
-<p>Please type the following sentence into the box below exactly as written if you still want to take the survey: <em>I will answer open-ended questions.</em></p>
+<p>Please type the following sentence into the box below exactly as written if you still want to take the survey: <em>I
+        will answer open-ended questions.</em></p>
 <textarea id="attrition"></textarea>
 {% endblock %}

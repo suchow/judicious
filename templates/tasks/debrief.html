@@ -74,17 +74,18 @@
 </style>
 <script>
     $(document).ready(function () {
+        $(window).scrollTop(0);
         // Make task unskippable
         $("#skip-task").remove();
 
         function getFormData(formId) {
-          const inputs = $(`${formId} :input`);
-          let formData = {};
-          for (const input of inputs) {
-            if (input.name === "") continue;
-            formData[input.name] = $(input).val();
-          }
-          return formData;
+            const inputs = $(`${formId} :input`);
+            let formData = {};
+            for (const input of inputs) {
+                if (input.name === "") continue;
+                formData[input.name] = $(input).val();
+            }
+            return formData;
         }
 
         Judicious.result = function () {
@@ -94,9 +95,6 @@
         Judicious.validate = function () {
             return $("#debriefingForm").valid();
         }
-        // $("#race").bsMultiSelect({
-        //     useCss: true,
-        // });
     });
 
 </script>
