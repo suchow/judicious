@@ -2,13 +2,14 @@ from random import shuffle, sample, random
 from copy import deepcopy
 from dotenv import load_dotenv
 import os
-import judicious
-
+# os.environ["JUDICIOUS_SERVER_URL"] = "https://imprudent.herokuapp.com"
 load_dotenv()
+import judicious
 
 # Target the server you want
 # remote: https://imprudent.herokuapp.com
 # os.environ["JUDICIOUS_SERVER_URL"] = "localhost:5000"
+
 
 # judicious.seed("c65a01e7-079e-4e91-8a1b-cac8c5f719d9")
 # judicious.seed("46b14020-5ec6-4e05-8bb7-ceb1202f3559")
