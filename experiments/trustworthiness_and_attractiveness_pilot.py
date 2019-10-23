@@ -10,7 +10,9 @@ load_dotenv()
 # remote: https://imprudent.herokuapp.com
 # os.environ["JUDICIOUS_SERVER_URL"] = "localhost:5000"
 
-judicious.seed("c65a01e7-079e-4e91-8a1b-cac8c5f719d9")
+# judicious.seed("c65a01e7-079e-4e91-8a1b-cac8c5f719d9")
+# judicious.seed("46b14020-5ec6-4e05-8bb7-ceb1202f3559")
+judicious.seed("fd8a2ed1-bb91-4d59-b805-c94dace586ee")
 
 
 def trial_sequences(n_stimuli, n_ratings, n_trials, n_retests, shuffle_sequences=False):
@@ -67,7 +69,7 @@ attributes = ["trustworthy", "attractive"]
 faces_and_attributes = []
 for attribute in attributes:
     sequences = trial_sequences(
-        n_stimuli=1, n_ratings=1, n_trials=1, n_retests=1, shuffle_sequences=False
+        n_stimuli=1000, n_ratings=30, n_trials=100, n_retests=20, shuffle_sequences=False
     )
     faces_and_attributes.extend([(sequence, attribute) for sequence in sequences])
 
