@@ -32,7 +32,9 @@
     {% else %}
       <form>
         <input class="button submit-task" value="Submit" id="submit-task" readonly>
-        <input class="button button-clear" type="submit" value="Skip" id="skip-task" readonly>
+        {% if not task.person_id %}
+          <input class="button button-clear" type="submit" value="Skip" id="skip-task" readonly>
+        {% endif %}
         <div class="debug">
         {% if config['JUDICIOUS_LOG_LEVEL'] == "debug" %}
           <pre> Debug:<br/> C/ {{ task.context_id }}<br/> T/ {{ task.id }}<br/> P/ {{ task.parameters }}</pre>
