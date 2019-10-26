@@ -131,7 +131,7 @@
 
 {% block task %}
   <form id="survey">
-    <img class="face" src="http://cocosci.princeton.edu/jpeterson/__hosted_stimuli__/stylegan_face_ratings_exp1/{{ task.parameters.face }}.jpg" />
+    <img class="face" src="https://facesforexperiments.s3.amazonaws.com/experiment1/{{ task.parameters.face }}.jpg" />
     <h2><center>How {{ task.parameters.attribute }} is this face?</center></h2>
     <input type="range" id="taskSlider" class="slider text-center my-3 not-clicked" value="0" min="0" max="100"
     step="any">
