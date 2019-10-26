@@ -20,7 +20,6 @@ def consent(
     if not title:
         title = "Consent to participate in research"
     if not body:
-        print(os.getcwd())
         consent_path = os.path.join(
             os.path.dirname(os.path.abspath(__file__)),
             "consent_body.html"
