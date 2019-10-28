@@ -57,8 +57,8 @@ def judge_faces(faces, attribute):
         r_attrition = person.attrition()
         r_instruct = person.instruct_judge_faces(attribute=attribute)
         results = []
-        for face in faces:
-            r = person.judge_face(face, attribute)
+        for trial_index, face in enumerate(faces):
+            r = person.judge_face(face, attribute, trial_index)
             results.append(r)
         r_debrief = person.debrief()
         results.append(r_debrief)
