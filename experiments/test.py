@@ -26,12 +26,11 @@ def trial_sequences(
             for i in range(0, n_stimuli, n_trials):
                 faces = stimuli_perm[i : i + n_trials]
                 retests = sample(faces, n_retests)
-                shuffle(retests)
-                faces += retests
-
+                shuffle(retests)                
                 non_repeats = [False for s in range(len(faces))]
                 seq_repeats = [True for s in range(len(retests))]
                 repeats = non_repeats + seq_repeats
+                faces += retests
 
                 trial_indexes = [s for s in range(len(faces))]
                 attributes = [attribute for s in range(len(faces))]
@@ -44,5 +43,5 @@ def trial_sequences(
     return sequences
 
 
-sequences = trial_sequences(n_stimuli=1000, n_ratings=30, n_trials=100, n_retests=20)
+sequences = trial_sequences(n_stimuli=1000, n_ratings=30, n_trials=50, n_retests=10)
 print(sequences)
