@@ -118,8 +118,8 @@ def judge_faces(faces, attributes, repeats, trial_indexes):
 
 attributes = ["trustworthy", "attractive"]
 sequences = trial_sequences(
-    # n_stimuli=1000, n_ratings=30, n_trials=100, n_retests=20, attributes=attributes,
-    n_stimuli=1000, n_ratings=30, n_trials=5, n_retests=2, attributes=attributes,
+    n_stimuli=1000, n_ratings=30, n_trials=50, n_retests=10, attributes=attributes,
+    # n_stimuli=1000, n_ratings=30, n_trials=5, n_retests=2, attributes=attributes,
 )
 
 
