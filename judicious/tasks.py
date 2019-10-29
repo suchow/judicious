@@ -46,8 +46,15 @@ def consent(
     return r["consent"]
 
 
-def judge_face(face, attribute, trial_index, **kwargs):
-    r = collect("judge_face", face=face, attribute=attribute, trial_index=trial_index, **kwargs)
+def judge_face(face, attribute, repeat, trial_index, **kwargs):
+   r = collect(
+        "judge_face",
+        face=face,
+        attribute=attribute,
+        repeat=repeat,
+        trial_index=trial_index,
+        **kwargs,
+    )
     return r
 
 
