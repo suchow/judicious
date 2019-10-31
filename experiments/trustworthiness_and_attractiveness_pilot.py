@@ -93,6 +93,7 @@ def trial_sequences(
 
 def judge_faces(faces, attributes, repeats, trial_indexes):
     """Run through an experiment on judging faces."""
+    # return True
     with judicious.Person(lifetime=60 * 60) as person:        
         print(f"faces = {faces}")
         print(f"attributes = {attributes}")
@@ -123,8 +124,11 @@ sequences = trial_sequences(
 )
 
 
+num_subjects = len(sequences["faces"])
+print(f"num_subjects = {num_subjects}")
+assert len(sequences["faces"]) == len(sequences["attributes"]) == len(sequences["repeats"]) == len(sequences["trial_indexes"])
 fart = []
-fart.extend((sequences["faces"][i], sequences["attributes"][i], sequences["repeats"][i], sequences["trial_indexes"][i]) for i in range(len(sequences)))
+fart.extend((sequences["faces"][i], sequences["attributes"][i], sequences["repeats"][i], sequences["trial_indexes"][i]) for i in range(num_subjects))
 print(fart)
 results = judicious.map3(judge_faces, fart)
 print(results)
