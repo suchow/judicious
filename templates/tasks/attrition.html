@@ -9,8 +9,12 @@
       };
     }
     Judicious.validate = function () {
-      text = $("#attrition").val()
-      return text == "I will answer open-ended questions."
+      const text = $("#attrition").val();
+      const valid = text.trim() === "I will answer open-ended questions.";
+      if (!valid) {
+          alert("Please enter the text exactly as written, including the period.");
+      }
+      return valid;
     }
   </script>
 {% endblock %}
