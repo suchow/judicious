@@ -112,7 +112,7 @@ def identify_letter(letter=None, alphabet=None, lightness=0.80, **kwargs):
         letter=letter,
         alphabet=alphabet,
         lightness=lightness,
-        **kwargs,
+        **kwargs
     )
     return (r['letter'], r['letter'] == letter)
 
@@ -130,7 +130,7 @@ def select_the(category, src_0, src_1, **kwargs):
         category=category,
         src_0=src_0,
         src_1=src_1,
-        **kwargs,
+        **kwargs
     )
     return int(r['selection'])
 
@@ -149,7 +149,7 @@ def compare_numerosity(a, b, **kwargs):
         a=a,
         b=b,
         counterbalancer=cb,
-        **kwargs,
+        **kwargs
     )
     return r['selection']
 
@@ -173,7 +173,7 @@ def intertemporal_choice(SS, LL, delay, **kwargs):
         SS=SS,
         LL=LL,
         delay=delay,
-        **kwargs,
+        **kwargs
     )
     return r['choice']
 
@@ -231,7 +231,7 @@ def rank_the(category, srcs, **kwargs):
         "rank_the",
         category=category,
         srcs=srcs,
-        **kwargs,
+        **kwargs
     )
     return [int(rank) for rank in r["ranks"]]
 
