@@ -110,8 +110,6 @@
           attribute: '{{ task.parameters.attribute }}',
           rating: parseFloat($("#taskSlider")[0].value).toFixed(4),
           rt: (performance.now() - start).toFixed(4),
-          repeat: '{{ task.parameters.repeat }}',
-          trial_index: {{ task.parameters.trial_index }},
         };
       }
 

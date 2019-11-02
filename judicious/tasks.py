@@ -51,8 +51,6 @@ def judge_face(face, attribute, repeat, trial_index, **kwargs):
         "judge_face",
         face=face,
         attribute=attribute,
-        repeat=repeat,
-        trial_index=trial_index,
         **kwargs
     )
     return r

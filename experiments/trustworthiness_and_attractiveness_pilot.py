@@ -108,8 +108,8 @@ def judge_faces(faces, attributes, repeats, trial_indexes):
         r_instruct = person.instruct_judge_faces(attribute=instruction_attribute)
         results = []
         for face, attribute, repeat, trial_index in zipped:            
-            r = person.judge_face(face=face, attribute=attribute, repeat=repeat, trial_index=trial_index)
-            results.append(r)
+            r = person.judge_face(face=face, attribute=attribute)
+            results.append((trial_index, repeat, r))
         r_debrief = person.debrief()
         results.append(r_debrief)
         r_complete = person.complete()
