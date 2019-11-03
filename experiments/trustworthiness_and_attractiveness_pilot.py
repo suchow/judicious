@@ -94,11 +94,7 @@ def trial_sequences(
 def judge_faces(faces, attributes, repeats, trial_indexes):
     """Run through an experiment on judging faces."""
     # return True
-    with judicious.Person(lifetime=60 * 60) as person:        
-        print(f"faces = {faces}")
-        print(f"attributes = {attributes}")
-        print(f"repeats = {repeats}")
-        print(f"trial_indexes = {trial_indexes}")
+    with judicious.Person(lifetime=60 * 60) as person:
         zipped = zip(faces, attributes, repeats, trial_indexes)
         r_consent = person.consent()
         if not r_consent:
@@ -107,7 +103,7 @@ def judge_faces(faces, attributes, repeats, trial_indexes):
         instruction_attribute = list(set(attributes))[0]
         r_instruct = person.instruct_judge_faces(attribute=instruction_attribute)
         results = []
-        for face, attribute, repeat, trial_index in zipped:            
+        for face, attribute, repeat, trial_index in zipped:       
             r = person.judge_face(face=face, attribute=attribute)
             results.append((trial_index, repeat, r))
         r_debrief = person.debrief()
