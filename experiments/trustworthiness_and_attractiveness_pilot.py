@@ -125,10 +125,8 @@ sequences = trial_sequences(
 
 
 num_subjects = len(sequences["faces"])
-print(f"num_subjects = {num_subjects}")
 assert len(sequences["faces"]) == len(sequences["attributes"]) == len(sequences["repeats"]) == len(sequences["trial_indexes"])
 fart = []
 fart.extend((sequences["faces"][i], sequences["attributes"][i], sequences["repeats"][i], sequences["trial_indexes"][i]) for i in range(num_subjects))
-print(fart)
 results = judicious.map3(judge_faces, fart)
 print(results)
