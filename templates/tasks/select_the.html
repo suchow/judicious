@@ -13,15 +13,15 @@
   {{ super() }}
   <script>
     $(document).ready(function() {
-      $("#image-0").click(function () {
+      $("#selection-left").click(function () {
         Judicious.result = {selection: "0"};
-          $("#image-1").fadeTo(400, 0.25);
-          $("#image-0").fadeTo(400, 1.00);
+          $("#selection-right").fadeTo(400, 0.25);
+          $("#selection-left").fadeTo(400, 1.00);
       });
-      $("#image-1").click(function () {
+      $("#selection-right").click(function () {
         Judicious.result = {selection: "1"};
-        $("#image-0").fadeTo(400, 0.25);
-        $("#image-1").fadeTo(400, 1.00);
+        $("#selection-left").fadeTo(400, 0.25);
+        $("#selection-right").fadeTo(400, 1.00);
       });
     });
   </script>
@@ -33,7 +33,15 @@
   </p>
   <br/>
   <div class="row" id="images">
-    <div class="column"><img src="{{ task.parameters.src_0 }}" id="image-0" class="unselected" /></div>
-    <div class="column"><img src="{{ task.parameters.src_1 }}" id="image-1" class="unselected" /></div>
+    <div id="left" class="column">
+      {% block selection_left %}
+      <img src="{{ task.parameters.src_0 }}" id="selection-left" class="unselected" />
+      {% endblock %}
+    </div>
+    <div id="right" class="column">
+      {% block selection_right %}
+      <img src="{{ task.parameters.src_1 }}" id="selection-right" class="unselected" />
+      {% endblock %}
+    </div>
   </div>
 {% endblock %}

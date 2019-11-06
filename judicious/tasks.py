@@ -135,6 +135,18 @@ def select_the(category, src_0, src_1, **kwargs):
     return int(r['selection'])
 
 
+def select_the_stick_animal(category, animal_0, animal_1, **kwargs):
+    """Select the stick figure that matches the category."""
+    r = collect(
+        "select_the_stick_animal",
+        category=category,
+        animal_0=animal_0,
+        animal_1=animal_1,
+        **kwargs
+    )
+    return int(r['selection'])
+
+
 def define(word, **kwargs):
     """Define the word."""
     r = collect("define", word=word, **kwargs)
