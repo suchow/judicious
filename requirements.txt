@@ -8,7 +8,7 @@ gevent==1.4.0
 gevent-websocket==0.10.1
 greenlet==0.4.15
 gunicorn==19.9.0
-Pebble==4.3.10
+Pebble==4.5.0
 pq==1.6.1
 psycopg2==2.7.7
 python-dateutil==2.8.1
