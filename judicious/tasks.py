@@ -340,3 +340,10 @@ def build_tower(prompt, **kwargs):
     """Build a tower that meets the requirements of the prompt."""
     r = collect("build_tower", prompt=prompt, **kwargs)
     return r['tower']
+
+
+def risky_choice(PA1, A1, A2, PB1, B1, B2, **kwargs):
+    """Choose between two risky alternatives."""
+    r = collect("risky_choice", PA1=PA1, A1=A1, A2=A2, PB1=PB1, B1=B1, B2=B2)
+    print(r)
+    return r['choice']

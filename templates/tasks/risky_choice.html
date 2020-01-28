@@ -1,0 +1,110 @@
+{% extends "task.html" %} {% block styles %} {{ super() }}
+<style type="text/css">
+  td {
+    border-bottom: none;
+  }
+  .left {
+    padding-left: 15px;
+  }
+</style>
+{% endblock %} {% block scripts %} {{ super() }}
+<script type="text/javascript">
+  console.log("test");
+  $(document).ready(function() {
+    workerId = '{{ request.values.get('turkSubmitTo', '') }}';
+    Judicious.result = function() {
+      return { choice: $("input[name=decision]:radio:checked").val() };
+    };
+    Judicious.validate = function() {
+      return !(typeof Judicious.result.choice === "undefined");
+    };
+    $("#A").click(function() {
+      Judicious.result = { choice: "A", workerId: workerId };
+      $(this).attr("class", "button");
+      $(this).css("background-color", "#606C76");
+      $("#B").addClass("button-outline");
+      $("#B").css("background-color", "#FFFFFF");
+      $(".left").css("background-color", "#EEEEEE");
+      $(".right").css("background-color", "#FFFFFF");
+    });
+    $("#B").click(function() {
+      Judicious.result = { choice: "B", workerId: workerId };
+      $(this).attr("class", "button");
+      $(this).css("background-color", "#606C76");
+      $("#A").addClass("button-outline");
+      $("#A").css("background-color", "#FFFFFF");
+      $(".right").css("background-color", "#EEEEEE");
+      $(".left").css("background-color", "#FFFFFF");
+    });
+    $(".left").hover(
+      function() {
+        $(".left").css("background-color", "#EEEEEE");
+      },
+      function() {
+        $(".left").css("background-color", "#FFFFFF");
+      }
+    );
+    $(".right").hover(
+      function() {
+        $(".right").css("background-color", "#EEEEEE");
+      },
+      function() {
+        $(".right").css("background-color", "#FFFFFF");
+      }
+    );
+  });
+</script>
+{% endblock %} {% block task %}
+<p>
+  <strong>Instructions:</strong> Please select one of the following options:
+</p>
+<table>
+  <thead>
+    <tr>
+      <th class="left">A</th>
+      <th class="right">B</th>
+    </tr>
+  </thead>
+  <tr>
+    <td class="left">
+      {{ task.parameters.A1|round(2) }} with probability {{
+      task.parameters.PA1|round(2) }}
+    </td>
+    <td class="right">
+      {{ task.parameters.B1|round(2) }} with probability {{
+      task.parameters.PB1|round(2) }}
+    </td>
+  </tr>
+  <tr>
+    <td class="left">
+      {{ task.parameters.A2|round(2) }} with probability {{
+      (1-task.parameters.PA1)|round(2) }}
+    </td>
+    <td class="right">
+      {{ task.parameters.B2|round(2) }} with probability {{
+      (1-task.parameters.PB1)|round(2) }}
+    </td>
+  </tr>
+  <tr>
+    <td class="left">
+      <input
+        id="A"
+        type="button"
+        name="A"
+        value="A"
+        class="button button-outline"
+      />
+    </td>
+    <td class="right">
+      <input
+        id="B"
+        type="button"
+        name="B"
+        value="B"
+        class="button button-outline"
+      />
+    </td>
+  </tr>
+</table>
+
+{% endblock %}
