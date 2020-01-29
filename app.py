@@ -168,7 +168,7 @@ def ad():
     if assignmentId == "ASSIGNMENT_ID_NOT_AVAILABLE":
         return render_template('ad_mturk.html')
     elif assignmentId:
-        return redirect(url_for('consent', _scheme='https', **request.args))
+        return redirect(url_for('consent', _scheme='https', _external=True, **request.args))
     else:
         return render_template('index.html')
 
@@ -181,6 +181,7 @@ def consent():
             url_for(
                 'stage',
                 _scheme='https',
+                _external=True,
                 **request.args))
     else:
         return render_template('consent.html')
@@ -190,7 +191,7 @@ def consent():
 def assent():
     """Assent to participanting in the experiment."""
     session['JUDICIOUS_CONSENTED'] = True
-    return redirect(url_for('stage', _scheme='https', **request.args))
+    return redirect(url_for('stage', _scheme='https', _external=True, **request.args))
 
 
 @app.route('/contexts/<context_id>', methods=['PUT'])
