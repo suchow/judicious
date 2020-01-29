@@ -177,7 +177,11 @@ def ad():
 def consent():
     """Render the consent form."""
     if session.get('JUDICIOUS_CONSENTED', False) is True:
-        return redirect(url_for('stage', **request.args))
+        return redirect(
+            url_for(
+                'stage',
+                _scheme='https',
+                **request.args))
     else:
         return render_template('consent.html')
 
