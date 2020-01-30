@@ -11,6 +11,7 @@
 <script type="text/javascript">
   $(document).ready(function() {
     workerId = '{{ request.values.get('workerId', '') }}';
+    console.log(workerId);
     Judicious.result = function() {
       return { choice: $("input[name=decision]:radio:checked").val() };
     };
