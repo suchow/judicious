@@ -9,9 +9,8 @@
 </style>
 {% endblock %} {% block scripts %} {{ super() }}
 <script type="text/javascript">
-  console.log("test");
   $(document).ready(function() {
-    workerId = '{{ request.values.get('turkSubmitTo', '') }}';
+    workerId = '{{ request.values.get('workerId', '') }}';
     Judicious.result = function() {
       return { choice: $("input[name=decision]:radio:checked").val() };
     };

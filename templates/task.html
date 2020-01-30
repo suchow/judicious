@@ -27,7 +27,7 @@
       <form name='mturk_form' method='post' id='mturk_form' action='{{ request.values['turkSubmitTo'] }}/mturk/externalSubmit'>
         <input type='hidden' value='{{ request.values['assignmentId'] }}' name='assignmentId' id='assignmentId'/>
         <input type='hidden' value='bar' name='foo' id='foo-bar'/>
-        <a class="button" id="submit-task">Submit</a>
+        <input class="button" type="submit" value="Submit">
       </form>
     {% else %}
       <form>
