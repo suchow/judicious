@@ -56,7 +56,12 @@
 </script>
 {% endblock %} {% block task %}
 <p>
-  <strong>Instructions:</strong> Please select one of the following options:
+  <strong>Instructions:</strong> In this game, you will select one of the two
+  gambles below. Each gamble has two possible outcomes, which are listed along
+  with the probability that each outcome would occur if you were to choose that gamble.
+</p>
+<p>
+  Which of the following two gambles would you prefer to take? Please select one of the following:
 </p>
 <table>
   <thead>
@@ -67,21 +72,21 @@
   </thead>
   <tr>
     <td class="left">
-      {{ task.parameters.A1|round(2) }} with probability {{
+      ${{ task.parameters.A1|round(2) }} with probability {{
       task.parameters.PA1|round(2) }}
     </td>
     <td class="right">
-      {{ task.parameters.B1|round(2) }} with probability {{
+      ${{ task.parameters.B1|round(2) }} with probability {{
       task.parameters.PB1|round(2) }}
     </td>
   </tr>
   <tr>
     <td class="left">
-      {{ task.parameters.A2|round(2) }} with probability {{
+      ${{ task.parameters.A2|round(2) }} with probability {{
       (1-task.parameters.PA1)|round(2) }}
     </td>
     <td class="right">
-      {{ task.parameters.B2|round(2) }} with probability {{
+      ${{ task.parameters.B2|round(2) }} with probability {{
       (1-task.parameters.PB1)|round(2) }}
     </td>
   </tr>
