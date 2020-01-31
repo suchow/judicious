@@ -14,6 +14,8 @@ from hurd.utils import load_choices13k, float2str
 
 import judicious
 
+# judicious.seed("af842bad-f2d8-ee0f-6e52-a47296c1cb0e")
+judicious.seed("f5be38d7-36eb-c209-6631-e437efffc0f0")
 
 def unshuffle(l, order):
     """ unshuffles list given shuffled index """
@@ -78,17 +80,23 @@ class Human():
     def fit(self, dataset=None, targets=None):
         pass
 
-    def predict(self, D=None):
-        d = list(D)[0].as_dict()
-        PA1 = d['A']['probs'][0]
-        A1 = d['A']['outcomes'][0]
-        A2 = d['A']['outcomes'][1]
-        PB1 = d['B']['probs'][0]
-        B1 = d['B']['outcomes'][0]
-        B2 = d['B']['outcomes'][1]
-        d = judicious.risky_choice(PA1, A1, A2, PB1, B1, B2)
-        p = 1.0 * (d == 'A')
-        return [[p, 1-p]]
+    def predict(self, Ds=None):
+        problems = []
+        for D in Ds:
+            d = list(D)[0].as_dict()
+            PA1 = d['A']['probs'][0]
+            A1 = d['A']['outcomes'][0]
+            A2 = d['A']['outcomes'][1]
+            PB1 = d['B']['probs'][0]
+            B1 = d['B']['outcomes'][0]
+            B2 = d['B']['outcomes'][1]
+            problems.append((PA1, A1, A2, PB1, B1, B2))
+
+        print(problems)
+        rs = judicious.map(judicious.risky_choice, problems)
+        ps = [1.0 * (r == 'A') for r in rs]
+        ps2 = [[[p, 1-p]] for p in ps]
+        return ps2
 
 
 human_or_proxy = Human()
@@ -111,7 +119,7 @@ model_to_break = ExpectedValueModel()
 params = {"pA1": 0.5, "A1": 1, "A2": 1, "pB1": 0.5, "B1": 1, "B2": 1}
 
 n_gradient_updates = 20  # how many gradient updates
-n_perturbations = 6  # how many perturbations to use to estimate gradient
+n_perturbations = 10  # how many perturbations to use to estimate gradient
 # size of the param state perturbations, for each param type
 noise_level_probs = 0.03
 noise_level_outcomes = 0.4
@@ -120,7 +128,7 @@ lr = 1.0  # for gradient ascent; fixed for now
 # number of subject ratings or predictions for each perturbation
 # when a proxy model is used, this value has no effect since
 # predictions are deterministic
-n_choices_per_state = 3
+n_choices_per_state = 15
 
 for grad_i in range(n_gradient_updates):
 
@@ -167,9 +175,7 @@ for grad_i in range(n_gradient_updates):
     ]
 
     # get all predictions from the human / human proxy
-    proxy_preds = [
-        human_or_proxy.predict(params2dataset(ps))[0][0] for ps in perturbed_states
-    ]
+    proxy_preds = human_or_proxy.predict([params2dataset(ps) for ps in perturbed_states])
 
     # if using real people, average per-subject results
     # the same is done for the model for consistency in the script
