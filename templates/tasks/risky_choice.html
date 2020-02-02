@@ -57,11 +57,14 @@
 {% endblock %} {% block task %}
 <p>
   <strong>Instructions:</strong> In this game, you will select one of the two
-  gambles below: column A or column B. Each gamble has two possible outcomes, which are listed along
-  with the probability that each outcome would occur if you were to choose that gamble.
+  gambles below: column A or column B. Each gamble has two possible outcomes,
+  which are listed along with the probability that each outcome would occur
+  if you were to choose that gamble. Please note that the outcomes of some
+  gambles could include either winning or losing (hypothetical) money.
 </p>
 <p>
-  Which of the following two gambles would you prefer to take? Please select one of the following options and then click the green "Submit" button:
+  Which of the following two gambles would you prefer to take? Select
+  an option and then click the green "Submit" button:
 </p>
 <table>
   <thead>
@@ -72,22 +75,58 @@
   </thead>
   <tr>
     <td class="left">
-      ${{ task.parameters.A1|round(2) }} with probability {{
-      task.parameters.PA1|round(2) }}
+      {% if task.parameters.A1 > 0 %}
+        Gain ${{ task.parameters.A1|round(2) }} with probability {{ '{0:.3f}'.format(task.parameters.PA1).rstrip('0').rstrip('.') }}
+      {% endif %}
+
+      {% if task.parameters.A1 == 0 %}
+        Get nothing with probability {{ '{0:.3f}'.format(task.parameters.PA1).rstrip('0').rstrip('.') }}
+      {% endif %}
+
+      {% if task.parameters.A1 < 0 %}
+        Lose ${{ task.parameters.A1|round(2)|abs }} with probability {{ '{0:.3f}'.format(task.parameters.PA1).rstrip('0').rstrip('.') }}
+      {% endif %}
     </td>
     <td class="right">
-      ${{ task.parameters.B1|round(2) }} with probability {{
-      task.parameters.PB1|round(2) }}
+      {% if task.parameters.B1 > 0 %}
+        Gain ${{ task.parameters.B1|round(2) }} with probability {{ '{0:.3f}'.format(task.parameters.PB1).rstrip('0').rstrip('.') }}
+      {% endif %}
+
+      {% if task.parameters.B1 == 0.0 %}
+        Get nothing with probability {{ '{0:.3f}'.format(task.parameters.PB1).rstrip('0').rstrip('.') }}
+      {% endif %}
+
+      {% if task.parameters.B1 < 0 %}
+        Lose ${{ task.parameters.B1|round(2)|abs }} with probability {{ '{0:.3f}'.format(task.parameters.PB1).rstrip('0').rstrip('.') }}
+      {% endif %}
     </td>
   </tr>
   <tr>
     <td class="left">
-      ${{ task.parameters.A2|round(2) }} with probability {{
-      (1-task.parameters.PA1)|round(2) }}
+      {% if task.parameters.A2 > 0 %}
+        Gain ${{ task.parameters.A2|round(2) }} with probability {{ '{0:.3f}'.format(1-task.parameters.PA1).rstrip('0').rstrip('.') }}
+      {% endif %}
+
+      {% if task.parameters.A2 == 0.0 %}
+        Get nothing with probability {{ '{0:.3f}'.format(1-task.parameters.PA1).rstrip('0').rstrip('.') }}
+      {% endif %}
+
+      {% if task.parameters.A2 < 0 %}
+        Lose ${{ task.parameters.A2|round(2)|abs }} with probability {{ '{0:.3f}'.format(1-task.parameters.PA1).rstrip('0').rstrip('.') }}
+      {% endif %}
     </td>
     <td class="right">
-      ${{ task.parameters.B2|round(2) }} with probability {{
-      (1-task.parameters.PB1)|round(2) }}
+      {% if task.parameters.B2 > 0 %}
+        Gain ${{ task.parameters.B2|round(2) }} with probability {{ '{0:.3f}'.format(1-task.parameters.PB1).rstrip('0').rstrip('.') }}
+      {% endif %}
+
+      {% if task.parameters.B2 == 0.0 %}
+        Get nothing with probability {{ '{0:.3f}'.format(1-task.parameters.PB1).rstrip('0').rstrip('.') }}
+      {% endif %}
+
+      {% if task.parameters.B2 < 0 %}
+        Lose ${{ task.parameters.B2|round(2)|abs }} with probability {{ '{0:.3f}'.format(1-task.parameters.PB1).rstrip('0').rstrip('.') }}
+      {% endif %}
     </td>
   </tr>
   <tr>
