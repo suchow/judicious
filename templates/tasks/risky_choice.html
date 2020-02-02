@@ -75,57 +75,61 @@
   </thead>
   <tr>
     <td class="left">
-      {% if task.parameters.A1 > 0 %}
-        Gain ${{ task.parameters.A1|round(2) }} with probability {{ '{0:.3f}'.format(task.parameters.PA1).rstrip('0').rstrip('.') }}
-      {% endif %}
-
-      {% if task.parameters.A1 == 0 %}
-        Get nothing with probability {{ '{0:.3f}'.format(task.parameters.PA1).rstrip('0').rstrip('.') }}
-      {% endif %}
-
-      {% if task.parameters.A1 < 0 %}
-        Lose ${{ task.parameters.A1|round(2)|abs }} with probability {{ '{0:.3f}'.format(task.parameters.PA1).rstrip('0').rstrip('.') }}
+      {% set P = '{0:.3f}'.format(task.parameters.PA1).rstrip('0').rstrip('.') %}
+      {% if task.parameters.A1 > 100 %}
+        Gain ${{ '%d'|format(task.parameters.A1) }} with probability {{ P }}
+      {% elif task.parameters.A1 > 0 %}
+        Gain ${{ '%0.2f'|format(task.parameters.A1) }} with probability {{ P }}
+      {% elif task.parameters.A1 == 0 %}
+        Get nothing with probability {{ P }}
+      {% elif task.parameters.A1 < 100 %}
+        Lose ${{ '%d'|format(task.parameters.A1|abs) }} with probability {{ P }}
+      {% elif task.parameters.A1 < 0 %}
+        Lose ${{ '%0.2f'|format(task.parameters.A1|abs) }} with probability {{ P }}
       {% endif %}
     </td>
     <td class="right">
-      {% if task.parameters.B1 > 0 %}
-        Gain ${{ task.parameters.B1|round(2) }} with probability {{ '{0:.3f}'.format(task.parameters.PB1).rstrip('0').rstrip('.') }}
-      {% endif %}
-
-      {% if task.parameters.B1 == 0.0 %}
-        Get nothing with probability {{ '{0:.3f}'.format(task.parameters.PB1).rstrip('0').rstrip('.') }}
-      {% endif %}
-
-      {% if task.parameters.B1 < 0 %}
-        Lose ${{ task.parameters.B1|round(2)|abs }} with probability {{ '{0:.3f}'.format(task.parameters.PB1).rstrip('0').rstrip('.') }}
+      {% set P = '{0:.3f}'.format(task.parameters.PB1).rstrip('0').rstrip('.') %}
+      {% if task.parameters.B1 > 100 %}
+        Gain ${{ '%d'|format(task.parameters.B1) }} with probability {{ P }}
+      {% elif task.parameters.B1 > 0 %}
+        Gain ${{ '%0.2f'|format(task.parameters.B1) }} with probability {{ P }}
+      {% elif task.parameters.B1 == 0 %}
+        Get nothing with probability {{ P }}
+      {% elif task.parameters.B1 < 100 %}
+        Lose ${{ '%d'|format(task.parameters.B1|abs) }} with probability {{ P }}
+      {% elif task.parameters.B1 < 0 %}
+        Lose ${{ '%0.2f'|format(task.parameters.B1|abs) }} with probability {{ P }}
       {% endif %}
     </td>
   </tr>
   <tr>
     <td class="left">
-      {% if task.parameters.A2 > 0 %}
-        Gain ${{ task.parameters.A2|round(2) }} with probability {{ '{0:.3f}'.format(1-task.parameters.PA1).rstrip('0').rstrip('.') }}
-      {% endif %}
-
-      {% if task.parameters.A2 == 0.0 %}
-        Get nothing with probability {{ '{0:.3f}'.format(1-task.parameters.PA1).rstrip('0').rstrip('.') }}
-      {% endif %}
-
-      {% if task.parameters.A2 < 0 %}
-        Lose ${{ task.parameters.A2|round(2)|abs }} with probability {{ '{0:.3f}'.format(1-task.parameters.PA1).rstrip('0').rstrip('.') }}
+      {% set P = '{0:.3f}'.format(1-task.parameters.PA1).rstrip('0').rstrip('.') %}
+      {% if task.parameters.A2 > 100 %}
+        Gain ${{ '%d'|format(task.parameters.A2) }} with probability {{ P }}
+      {% elif task.parameters.A2 > 0 %}
+        Gain ${{ '%0.2f'|format(task.parameters.A2) }} with probability {{ P }}
+      {% elif task.parameters.A2 == 0 %}
+        Get nothing with probability {{ P }}
+      {% elif task.parameters.A2 < 100 %}
+        Lose ${{ '%d'|format(task.parameters.A2|abs) }} with probability {{ P }}
+      {% elif task.parameters.A2 < 0 %}
+        Lose ${{ '%0.2f'|format(task.parameters.A2|abs) }} with probability {{ P }}
       {% endif %}
     </td>
     <td class="right">
-      {% if task.parameters.B2 > 0 %}
-        Gain ${{ task.parameters.B2|round(2) }} with probability {{ '{0:.3f}'.format(1-task.parameters.PB1).rstrip('0').rstrip('.') }}
-      {% endif %}
-
-      {% if task.parameters.B2 == 0.0 %}
-        Get nothing with probability {{ '{0:.3f}'.format(1-task.parameters.PB1).rstrip('0').rstrip('.') }}
-      {% endif %}
-
-      {% if task.parameters.B2 < 0 %}
-        Lose ${{ task.parameters.B2|round(2)|abs }} with probability {{ '{0:.3f}'.format(1-task.parameters.PB1).rstrip('0').rstrip('.') }}
+      {% set P = '{0:.3f}'.format(1-task.parameters.PB1).rstrip('0').rstrip('.') %}
+      {% if task.parameters.B2 > 100 %}
+        Gain ${{ '%d'|format(task.parameters.B2) }} with probability {{ P }}
+      {% elif task.parameters.B2 > 0 %}
+        Gain ${{ '%0.2f'|format(task.parameters.B2) }} with probability {{ P }}
+      {% elif task.parameters.B2 == 0 %}
+        Get nothing with probability {{ P }}
+      {% elif task.parameters.B2 < 100 %}
+        Lose ${{ '%d'|format(task.parameters.B2|abs) }} with probability {{ P }}
+      {% elif task.parameters.B2 < 0 %}
+        Lose ${{ '%0.2f'|format(task.parameters.B2|abs) }} with probability {{ P }}
       {% endif %}
     </td>
   </tr>
