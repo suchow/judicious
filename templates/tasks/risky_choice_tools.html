@@ -57,19 +57,7 @@
 {% endblock %} {% block task %}
 <p>
   <strong>Instructions:</strong> Suppose that you are trying to blast rock using
-  explosives. Which of the following tools would you prefer to use?
-
-A. An explosive that destroys 3,000 cubic meters of rock 100% of the time.
-B. An explosive that destroys 13 rocks 80% of the time and 0 rocks 20% of the time.
-
-  In this game, you will select one of the two
-  gambles below: column A or column B. Each gamble has two possible outcomes,
-  which are listed along with the probability that each outcome would occur
-  if you were to choose that gamble. Please note that the outcomes of some
-  gambles could include either winning or losing (hypothetical) money.
-</p>
-<p>
-  Which of the following two gambles would you prefer to take? Select
+  explosives. Which of the following tools would you prefer to use? Select
   an option and then click the green "Submit" button:
 </p>
 <table>
@@ -83,9 +71,9 @@ B. An explosive that destroys 13 rocks 80% of the time and 0 rocks 20% of the ti
     <td class="left">
       {% set P = '{0:.3f}'.format(task.parameters.PA1).rstrip('0').rstrip('.') %}
       {% if task.parameters.A1 > 100 %}
-        Blasts {{ '%d'|format(task.parameters.A1) }} m<sup>3</sup> of rock with probability {{ P }}
+        Blasts {{ '%d'|format(task.parameters.A1) }} cubic feet of rock with probability {{ P }}
       {% elif task.parameters.A1 > 0 %}
-        Blasts {{ '%0.2f'|format(task.parameters.A1) }} m<sup>3</sup> of rock with probability {{ P }}
+        Blasts {{ '%0.2f'|format(task.parameters.A1) }} cubic feet of rock with probability {{ P }}
       {% elif task.parameters.A1 == 0 %}
         Fails to blast any rock with probability {{ P }}
       {% endif %}
@@ -93,9 +81,9 @@ B. An explosive that destroys 13 rocks 80% of the time and 0 rocks 20% of the ti
     <td class="right">
       {% set P = '{0:.3f}'.format(task.parameters.PB1).rstrip('0').rstrip('.') %}
       {% if task.parameters.B1 > 100 %}
-        Blasts {{ '%d'|format(task.parameters.B1) }} m<sup>3</sup> of rock with probability {{ P }}
+        Blasts {{ '%d'|format(task.parameters.B1) }} cubic feet of rock with probability {{ P }}
       {% elif task.parameters.B1 > 0 %}
-        Blasts {{ '%0.2f'|format(task.parameters.B1) }} m<sup>3</sup> of rock with probability {{ P }}
+        Blasts {{ '%0.2f'|format(task.parameters.B1) }} cubic feet of rock with probability {{ P }}
       {% elif task.parameters.B1 == 0 %}
         Fails to blast any rock with probability {{ P }}
       {% endif %}
@@ -105,9 +93,9 @@ B. An explosive that destroys 13 rocks 80% of the time and 0 rocks 20% of the ti
     <td class="left">
       {% set P = '{0:.3f}'.format(1-task.parameters.PA1).rstrip('0').rstrip('.') %}
       {% if task.parameters.A2 > 100 %}
-        Blasts {{ '%d'|format(task.parameters.A2) }} m<sup>3</sup> of rock with probability {{ P }}
+        Blasts {{ '%d'|format(task.parameters.A2) }} cubic feet of rock with probability {{ P }}
       {% elif task.parameters.A2 > 0 %}
-        Blasts {{ '%0.2f'|format(task.parameters.A2) }} m<sup>3</sup> of rock with probability {{ P }}
+        Blasts {{ '%0.2f'|format(task.parameters.A2) }} cubic feet of rock with probability {{ P }}
       {% elif task.parameters.A2 == 0 %}
         Fails to blast any rock with probability {{ P }}
       {% endif %}
@@ -115,9 +103,9 @@ B. An explosive that destroys 13 rocks 80% of the time and 0 rocks 20% of the ti
     <td class="right">
       {% set P = '{0:.3f}'.format(1-task.parameters.PB1).rstrip('0').rstrip('.') %}
       {% if task.parameters.B2 > 100 %}
-        Blasts {{ '%d'|format(task.parameters.B2) }} m<sup>3</sup> of rock with probability {{ P }}
+        Blasts {{ '%d'|format(task.parameters.B2) }} cubic feet of rock with probability {{ P }}
       {% elif task.parameters.B2 > 0 %}
-        Blasts {{ '%0.2f'|format(task.parameters.B2) }} m<sup>3</sup> of rock with probability {{ P }}
+        Blasts {{ '%0.2f'|format(task.parameters.B2) }} cubic feet of rock with probability {{ P }}
       {% elif task.parameters.B2 == 0 %}
         Fails to blast any rock with probability {{ P }}
       {% endif %}
