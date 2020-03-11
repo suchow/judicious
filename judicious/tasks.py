@@ -347,3 +347,10 @@ def risky_choice(PA1, A1, A2, PB1, B1, B2, **kwargs):
     r = collect("risky_choice", PA1=PA1, A1=A1, A2=A2, PB1=PB1, B1=B1, B2=B2)
     print(r)
     return r['choice']
+
+
+def risky_choice_tools(PA1, A1, A2, PB1, B1, B2, **kwargs):
+    """Choose between two risky alternatives in the context of tool use."""
+    r = collect("risky_choice_tools", PA1=PA1, A1=A1, A2=A2, PB1=PB1, B1=B1, B2=B2)
+    print(r)
+    return r['choice']

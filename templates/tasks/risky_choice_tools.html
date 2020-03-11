@@ -1,0 +1,148 @@
+{% extends "task.html" %} {% block styles %} {{ super() }}
+<style type="text/css">
+  td {
+    border-bottom: none;
+  }
+  .left {
+    padding-left: 15px;
+  }
+</style>
+{% endblock %} {% block scripts %} {{ super() }}
+<script type="text/javascript">
+  $(document).ready(function() {
+    workerId = '{{ request.values.get('workerId', '') }}';
+    console.log(workerId);
+    Judicious.result = function() {
+      return { choice: $("input[name=decision]:radio:checked").val() };
+    };
+    Judicious.validate = function() {
+      return !(typeof Judicious.result.choice === "undefined");
+    };
+    $("#A").click(function() {
+      Judicious.result = { choice: "A", workerId: workerId };
+      $(this).attr("class", "button");
+      $(this).css("background-color", "#606C76");
+      $("#B").addClass("button-outline");
+      $("#B").css("background-color", "#FFFFFF");
+      $(".left").css("background-color", "#EEEEEE");
+      $(".right").css("background-color", "#FFFFFF");
+    });
+    $("#B").click(function() {
+      Judicious.result = { choice: "B", workerId: workerId };
+      $(this).attr("class", "button");
+      $(this).css("background-color", "#606C76");
+      $("#A").addClass("button-outline");
+      $("#A").css("background-color", "#FFFFFF");
+      $(".right").css("background-color", "#EEEEEE");
+      $(".left").css("background-color", "#FFFFFF");
+    });
+    $(".left").hover(
+      function() {
+        $(".left").css("background-color", "#EEEEEE");
+      },
+      function() {
+        $(".left").css("background-color", "#FFFFFF");
+      }
+    );
+    $(".right").hover(
+      function() {
+        $(".right").css("background-color", "#EEEEEE");
+      },
+      function() {
+        $(".right").css("background-color", "#FFFFFF");
+      }
+    );
+  });
+</script>
+{% endblock %} {% block task %}
+<p>
+  <strong>Instructions:</strong> Suppose that you are trying to blast rock using
+  explosives. Which of the following tools would you prefer to use?
+
+A. An explosive that destroys 3,000 cubic meters of rock 100% of the time.
+B. An explosive that destroys 13 rocks 80% of the time and 0 rocks 20% of the time.
+
+  In this game, you will select one of the two
+  gambles below: column A or column B. Each gamble has two possible outcomes,
+  which are listed along with the probability that each outcome would occur
+  if you were to choose that gamble. Please note that the outcomes of some
+  gambles could include either winning or losing (hypothetical) money.
+</p>
+<p>
+  Which of the following two gambles would you prefer to take? Select
+  an option and then click the green "Submit" button:
+</p>
+<table>
+  <thead>
+    <tr>
+      <th class="left">A</th>
+      <th class="right">B</th>
+    </tr>
+  </thead>
+  <tr>
+    <td class="left">
+      {% set P = '{0:.3f}'.format(task.parameters.PA1).rstrip('0').rstrip('.') %}
+      {% if task.parameters.A1 > 100 %}
+        Blasts {{ '%d'|format(task.parameters.A1) }} m<sup>3</sup> of rock with probability {{ P }}
+      {% elif task.parameters.A1 > 0 %}
+        Blasts {{ '%0.2f'|format(task.parameters.A1) }} m<sup>3</sup> of rock with probability {{ P }}
+      {% elif task.parameters.A1 == 0 %}
+        Fails to blast any rock with probability {{ P }}
+      {% endif %}
+    </td>
+    <td class="right">
+      {% set P = '{0:.3f}'.format(task.parameters.PB1).rstrip('0').rstrip('.') %}
+      {% if task.parameters.B1 > 100 %}
+        Blasts {{ '%d'|format(task.parameters.B1) }} m<sup>3</sup> of rock with probability {{ P }}
+      {% elif task.parameters.B1 > 0 %}
+        Blasts {{ '%0.2f'|format(task.parameters.B1) }} m<sup>3</sup> of rock with probability {{ P }}
+      {% elif task.parameters.B1 == 0 %}
+        Fails to blast any rock with probability {{ P }}
+      {% endif %}
+    </td>
+  </tr>
+  <tr>
+    <td class="left">
+      {% set P = '{0:.3f}'.format(1-task.parameters.PA1).rstrip('0').rstrip('.') %}
+      {% if task.parameters.A2 > 100 %}
+        Blasts {{ '%d'|format(task.parameters.A2) }} m<sup>3</sup> of rock with probability {{ P }}
+      {% elif task.parameters.A2 > 0 %}
+        Blasts {{ '%0.2f'|format(task.parameters.A2) }} m<sup>3</sup> of rock with probability {{ P }}
+      {% elif task.parameters.A2 == 0 %}
+        Fails to blast any rock with probability {{ P }}
+      {% endif %}
+    </td>
+    <td class="right">
+      {% set P = '{0:.3f}'.format(1-task.parameters.PB1).rstrip('0').rstrip('.') %}
+      {% if task.parameters.B2 > 100 %}
+        Blasts {{ '%d'|format(task.parameters.B2) }} m<sup>3</sup> of rock with probability {{ P }}
+      {% elif task.parameters.B2 > 0 %}
+        Blasts {{ '%0.2f'|format(task.parameters.B2) }} m<sup>3</sup> of rock with probability {{ P }}
+      {% elif task.parameters.B2 == 0 %}
+        Fails to blast any rock with probability {{ P }}
+      {% endif %}
+    </td>
+  </tr>
+  <tr>
+    <td class="left">
+      <input
+        id="A"
+        type="button"
+        name="A"
+        value="A"
+        class="button button-outline"
+      />
+    </td>
+    <td class="right">
+      <input
+        id="B"
+        type="button"
+        name="B"
+        value="B"
+        class="button button-outline"
+      />
+    </td>
+  </tr>
+</table>
+
+{% endblock %}
