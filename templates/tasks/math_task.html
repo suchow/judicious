@@ -1,0 +1,82 @@
+{% extends "task.html" %}
+{% block styles %}  {{ super() }}
+  <style type="text/css">
+    #math_task {
+      position: absolute;
+      height: 50px;
+      width: 70px;
+      down: 500px;
+      left: 430px;
+    }
+    #images {
+      padding-bottom: 140px;
+    }
+    @media only screen and (min-width: 601px) {
+      .container {
+        width: 100%;
+      }
+    }
+    @media only screen and (min-width: 993px) {
+      .container {
+        width: 100%;
+    .container {
+      margin: 0 auto;
+      max-width: 1280px;
+      width: 100%;
+    }
+      }
+  </style>
+{% endblock %}
+
+
+{% block scripts %}
+  {{ super() }}
+  <script>
+    $(document).ready(function() {
+      Judicious.result = function () {
+        return {
+          mathsolution: $("#math_task").val(),
+        };
+      }
+      Judicious.validate = function () {
+        var math_task = parseInt($("#math_task").val());
+        return (math_task < 99);
+      }
+    });
+
+
+
+  </script>
+
+  <script type="text/javascript">
+  $(document).ready(function () {
+  $("form").bind("keypress", function (e) {
+  if (e.keyCode == 13) {
+  return false;
+  }
+  });
+  });
+  </script>
+{% endblock %}
+
+
+
+{% block task %}
+
+  <p align= "center" style =  "font-size:160%;width:800px;">
+    <strong>Instruction:</strong > What is the answer of the multipication?
+  </p>
+
+  <div class="row" id="images">
+    <div class="column"><img src="{{ task.parameters.math_input }}" id="number1" style="width:100px;height:100px; position:absolute; left: 130px; down:300px;"/></div>
+    <div class="column"><img src="https://necdetgurkangfmt.s3.us-east-2.amazonaws.com/numbers/Unknown.png" id="sign" style= "width:100px;height:100px; position:absolute; left: 250px; down:300px;"/></div>
+    <div class="column"><img src="{{ task.parameters.math_input2 }}" id="number2" style="width:100px;height:100px;position:absolute; left: 350px; down:300px;"/></div>
+    <div class="column"><img src="https://necdetgurkangfmt.s3.us-east-2.amazonaws.com/numbers/equally-a4-1200x1697.jpg" id="sign" style= "width:100px;height:100px; position:absolute; left: 440px; down:300px;"/></div>
+  </div>
+  <form id="math_sol" style="position:absolute; left: 130px; top:90px;">
+    <div class="response">
+      <input name="math_task" id="math_task" type="number" autofocus>
+    </div>
+  </form>
+
+{% endblock %}
