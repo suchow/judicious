@@ -1,0 +1,141 @@
+{% extends "task.html" %}
+
+{% block styles %}  {{ super() }}
+  <style type="text/css">
+    button{
+      tex-align: "center";
+      background-color:gray;
+    }
+    .color-box {
+      width:47px;
+      text-align: center;
+      line-width: 65px;
+    }
+    button:hover{background-color:#BEBEBE;}
+    button:focus{background-color:#BEBEBE;}
+    .container {
+      margin: 0 auto;
+      max-width: 1280px;
+      width: 100%;
+    }
+    @media only screen and (min-width: 601px) {
+      .container {
+        width: 100%;
+      }
+    }
+    @media only screen and (min-width: 993px) {
+      .container {
+        width: 100%;
+      }
+    }
+    #images {
+      height: 400px;
+      width: 700px;
+    }
+    #response {
+      height: 100px;
+      width: 100px;
+      align= "center"
+    }
+    /* #undo {
+      height: 100px;
+      width: 120px;
+      align="center"
+    } */
+
+    #feedback1 {
+      font-weight:900;
+      font-size:140%
+    }
+    #feedback2 {
+      font-weight:900;
+      font-size:140%
+    }
+    /* #emoji1 {
+      height: 100px;
+      width: 100px;
+    }
+    #emoji2 {
+      height: 100px;
+      width: 100px;
+    } */
+  </style>
+{% endblock %}
+
+{% block scripts %}
+  {{ super() }}
+  <script>
+    $(document).ready(function() {
+      console.log("document ready")
+      $("#y").click(function () {
+        console.log("Yes")
+        var sameOrNot = document.getElementById("images").getElementsByClassName("column")[0].firstElementChild.src.includes("same");
+        console.log(sameOrNot)
+        if (sameOrNot) {
+          Judicious.result = { match: "Correct" };
+        } else {
+          Judicious.result = { match: "Incorrect" };
+        }
+        console.log(sameOrNot);
+        if (sameOrNot) {
+          $("#feedback1").show();
+          $("#emoji1").show();
+        } else {
+          $("#feedback2").show();
+          $("#emoji2").show();
+        }
+        $("#response").hide();
+        answer = true;
+      });
+      $("#n").click(function () {
+        console.log("No")
+        console.log(sameOrNot)
+        var sameOrNot = document.getElementById("images").getElementsByClassName("column")[0].firstElementChild.src.includes("same");
+        if (sameOrNot) {
+          Judicious.result = { match: "Incorrect" };
+        } else {
+          Judicious.result = { match: "Correct" };
+        }
+        var sameOrNot = document.getElementById("images").getElementsByClassName("column")[0].firstElementChild.src.includes("same");
+        console.log(sameOrNot);
+        if (sameOrNot) {
+          $("#feedback2").show();
+          $("#emoji2").show();
+        } else {
+          $("#feedback1").show();
+          $("#emoji1").show();
+        }
+        $("#response").hide();
+        answer = true;
+      });
+      Judicious.validate = function () {
+        return answer;
+      };
+
+    });
+  </script>
+{% endblock %}
+
+{% block task %}
+
+  <p align= "center" style =  "font-size:160%;width:800px;">
+    <strong>Instructions:</strong > Do these two images depict the same individual?
+  </p>
+  <br/>
+  <div class="row" id="response">
+    <div class="column2"><button class="color-box" id="y">YES</button></div>
+    <div class="column2"><button class="color-box" id="n" style="position:absolute; right:875px; down:300px;">NO</button></div>
+  </div>
+
+  <div class="row" id="feedback1" style="display: none;">
+    <p> Correct &#x2713; &#128512;</p>
+  </div>
+  <div class="row" id="feedback2" style="display: none;">
+      <p> Incorrect &#x2715; &#128542;</p>
+  </div>
+
+  <div class="row" id="images">
+    <div class="column"><img src="{{ task.parameters.face_A_src }}" id="face-A" style="width:350px;height:350px;"/></div>
+    <div class="column"><img src="{{ task.parameters.face_B_src }}" id="face-B"style="width:350px;height:350px;" /></div>
+  </div>
+{% endblock %}
