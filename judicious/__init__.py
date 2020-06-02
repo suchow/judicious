@@ -69,7 +69,7 @@ from .tasks import (
     verb,
     match_faces_no_feedback,
     match_faces_feedback,
-    math_task
+    multiply
 )
 
 from . import tasks
