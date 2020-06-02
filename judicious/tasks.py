@@ -359,7 +359,7 @@ def match_faces_feedback(faceA, faceB, **kwargs):
     r = collect("match_faces_feedback", face_A_src=faceA, face_B_src=faceB, **kwargs)
     return r['match']
 
-def no_feedback_faces(faceA, faceB, **kwargs):
+def match_faces_no_feedback(faceA, faceB, **kwargs):
     """Determine whether two faces are the same person."""
     r = collect("no_feedback_faces", face_A_src=faceA, face_B_src=faceB, **kwargs)
     return r['match']
