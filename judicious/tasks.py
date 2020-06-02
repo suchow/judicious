@@ -361,7 +361,7 @@ def match_faces_feedback(faceA, faceB, **kwargs):
 
 def match_faces_no_feedback(faceA, faceB, **kwargs):
     """Determine whether two faces are the same person."""
-    r = collect("match_faces_not_feedback", face_A_src=faceA, face_B_src=faceB, **kwargs)
+    r = collect("match_faces_no_feedback", face_A_src=faceA, face_B_src=faceB, **kwargs)
     return r['match']
 
 def multiply(number1, number2, **kwargs):
