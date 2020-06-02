@@ -14,7 +14,7 @@ def merge(list1, list2):
 def get_numbers():
     df3 = pd.read_csv('https://glassgow.s3.amazonaws.com/csv/numbers.csv')
     df4 = df3[['number1', 'number2']]
-    df5 = df4.sample(n=4)
+    df5 = df4.sample(n=7)
     numberlist1 = []
     numberlist2 = []
     for index, row in df5.iterrows():
@@ -28,7 +28,7 @@ def get_numbers():
 def get_faces():
     df1_face = pd.read_csv('https://glassgow.s3.amazonaws.com/csv/face_url.csv')
     df2_face = df1_face[['face1','face2']]
-    df3_face = df2_face.sample(n=4)
+    df3_face = df2_face.sample(n=40)
     face1_list = []
     face2_list = []
     face_list = []
@@ -58,7 +58,7 @@ def face_training(number):
     else:
         return None
     df_face1 = df_face[['face1','face2']]
-    df2_face = df_face1.sample(n=4)
+    df2_face = df_face1.sample(n=40)
     train_face_list1 = []
     train_face_list2 = []
     for index, row in df2_face.iterrows():
@@ -83,17 +83,17 @@ def pre_post_gfmt(a,b):
         for i in pre_post_faces:
             face1 = i[0]
             face2 = i[1]
-            p = person.no_feedback_faces(face1,face2)
+            p = person.match_faces_no_feedback(face1,face2)
             pre_results.append(p)
         for i in math_numbers:
             number1 = i[0]
             number2 = i[1]
-            m = person.math_task(number1,number2)
+            m = person.multipy(number1,number2)
         if number==8:
             for i in math_numbers:
                 number1 = i[0]
                 number2 = i[1]
-                u = person.math_task(number1,number2)
+                u = person.multipy(number1,number2)
         else:
             for i in training_face_set:
                 face1 = i[0]
@@ -103,11 +103,11 @@ def pre_post_gfmt(a,b):
         for i in math_numbers:
             number1 = i[0]
             number2 = i[1]
-            c = person.math_task(number1,number2)
+            c = person.multipy(number1,number2)
         for i in pre_post_faces:
             face1= i[0]
             face2 = i[1]
-            d = person.no_feedback_faces(face1,face2)
+            d = person.match_faces_no_feedback(face1,face2)
             post_results.append(d)
 
 
