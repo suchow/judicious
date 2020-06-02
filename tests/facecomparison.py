@@ -88,12 +88,12 @@ def pre_post_gfmt(a,b):
         for i in math_numbers:
             number1 = i[0]
             number2 = i[1]
-            m = person.multipy(number1,number2)
+            m = person.multiply(number1,number2)
         if number==8:
             for i in math_numbers:
                 number1 = i[0]
                 number2 = i[1]
-                u = person.multipy(number1,number2)
+                u = person.multiply(number1,number2)
         else:
             for i in training_face_set:
                 face1 = i[0]
@@ -103,7 +103,7 @@ def pre_post_gfmt(a,b):
         for i in math_numbers:
             number1 = i[0]
             number2 = i[1]
-            c = person.multipy(number1,number2)
+            c = person.multiply(number1,number2)
         for i in pre_post_faces:
             face1= i[0]
             face2 = i[1]
