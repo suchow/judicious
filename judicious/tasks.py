@@ -364,7 +364,7 @@ def match_faces_no_feedback(faceA, faceB, **kwargs):
     r = collect("no_feedback_faces", face_A_src=faceA, face_B_src=faceB, **kwargs)
     return r['match']
 
-def math_task(number1, number2, **kwargs):
+def multiply(number1, number2, **kwargs):
     """Simple multipication"""
-    r = collect("math_task", math_input=number1, math_input2=number2, **kwargs)
+    r = collect("multiply", math_input=number1, math_input2=number2, **kwargs)
     return int(r['math_answer'])
