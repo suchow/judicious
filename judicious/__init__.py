@@ -133,7 +133,7 @@ __all__ = (
     "summarize",
     "trolley_problem",
     "verb",
-    "no_feedback_faces",
+    "match_face_no_feedback",
     "match_faces_feedback",
-    "math_task"
+    "multiply"
 )
