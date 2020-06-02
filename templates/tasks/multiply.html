@@ -1,7 +1,7 @@
 {% extends "task.html" %}
 {% block styles %}  {{ super() }}
   <style type="text/css">
-    #math_task {
+    #multiply {
       position: absolute;
       height: 50px;
       width: 70px;
@@ -35,12 +35,12 @@
     $(document).ready(function() {
       Judicious.result = function () {
         return {
-          mathsolution: $("#math_task").val(),
+          mathsolution: $("#multiply").val(),
         };
       }
       Judicious.validate = function () {
-        var math_task = parseInt($("#math_task").val());
-        return (math_task < 99);
+        var multiply = parseInt($("#multiply").val());
+        return (multiply < 99);
       }
     });
 
@@ -75,7 +75,7 @@
   </div>
   <form id="math_sol" style="position:absolute; left: 130px; top:90px;">
     <div class="response">
-      <input name="math_task" id="math_task" type="number" autofocus>
+      <input name="multiply" id="multiply" type="number" autofocus>
     </div>
   </form>
 
