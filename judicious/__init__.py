@@ -67,6 +67,9 @@ from .tasks import (
     summarize,
     trolley_problem,
     verb,
+    multiply,
+    match_faces_feedback,
+    match_faces_no_feedback,
 )
 
 from . import tasks
@@ -130,4 +133,7 @@ __all__ = (
     "summarize",
     "trolley_problem",
     "verb",
+    "multiply",
+    "match_faces_feedback",
+    "match_faces_no_feedback",
 )
