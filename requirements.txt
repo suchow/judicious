@@ -6,7 +6,7 @@ Flask-Sockets==0.2.1
 Flask-SQLAlchemy==2.4.0
 gevent==1.4.0
 gevent-websocket==0.10.1
-greenlet==0.4.15
+greenlet==1.0.0
 gunicorn==19.9.0
 Pebble==4.3.10
 pq==1.6.1
