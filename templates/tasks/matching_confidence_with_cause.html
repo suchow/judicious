@@ -1,0 +1,124 @@
+{% extends "task.html" %}
+
+{% block styles %}
+  {{ super() }}
+  <style type="text/css">
+    form .statement {
+      display:block;
+      padding: 15px 0 0 4.25%;
+      margin-bottom:20px;
+      color: #9b4dca;
+    }
+    form .likert {
+      list-style:none;
+      width:100%;
+      margin:0;
+      display:block;
+      border-bottom:2px solid #efefef;
+    }
+    form .likert:last-of-type {
+      border-bottom:0;
+    }
+    form .likert:before {
+      content: '';
+      position:relative;
+      top:11px;
+      left:5.5%;
+      display:block;
+      background-color:#efefef;
+      height:4px;
+      width:78%;
+    }
+    form .likert li {
+      display:inline-block;
+      width:12%;
+      text-align:center;
+      vertical-align: top;
+    }
+    form .likert li input[type=radio] {
+      display:block;
+      position:relative;
+      color: #000;
+      top:0;
+      left:50%;
+      margin-left:-6px;
+    }
+    form .likert li label {
+      width:100%;
+      font-weight: normal;
+      font-size: calc(9px + 0.50vw);
+      transform: scale(0.85, 1);
+      -webkit-transform: scale(0.85, 1);
+      display: inline-block;
+    }
+    #image {
+      height: 400px;
+      width: 450px;
+    }
+    @media only screen and (min-width: 601px) {
+      .container {
+        width: 100%;
+      }
+    }
+    @media only screen and (min-width: 993px) {
+      .container {
+        width: 100%;
+      }
+    }
+  </style>
+{% endblock %}
+
+{% block scripts %}
+  {{ super() }}
+  <script>
+    $(document).ready(function() {
+      Judicious.result = function () {
+        return {matching_confidence_with_cause: $('input[name=likert]:radio:checked').val()};
+      }
+    });
+  </script>
+{% endblock %}
+
+{% block task %}
+  <p style =  "font-size:140%;width:800px;position:relative; right:300px;">
+    <strong>Instructions:</strong> Please assume the statement below is correct and select your confidence as to whether these are two photos of same individual.
+    <label class="statement">&ldquo;{{ task.parameters.prompt }}&rdquo;</label>
+
+  </p>
+  <div class="row" id="image">
+    <img id="image" src="{{ task.parameters.face_A_src }}" style="position:relative; right: 225px"/>
+    <img id="image" src="{{ task.parameters.face_B_src }}" style="position:relative; right:170px;" />
+  <form action="" style="position:absolute; width: 600px; right:250px; top:590px;">
+    <ul class='likert'>
+      <li>
+        <input type="radio" name="likert" value="1">
+        <label>Exteremly Confident They are NOT a Match</label>
+      </li>
+      <li>
+        <input type="radio" name="likert" value="2">
+        <label></label>
+      </li>
+      <li>
+        <input type="radio" name="likert" value="3">
+        <label></label>
+      </li>
+      <li>
+        <input type="radio" name="likert" value="4">
+        <label>I am not sure</label>
+      </li>
+      <li>
+        <input type="radio" name="likert" value="5">
+        <label></label>
+      </li>
+      <li>
+        <input type="radio" name="likert" value="6">
+        <label></label>
+      </li>
+      <li>
+        <input type="radio" name="likert" value="7">
+        <label>Exteremly Confident They are a Match </label>
+      </li>
+    </ul>
+
+  </form>
+{% endblock %}
