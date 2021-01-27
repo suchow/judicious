@@ -70,6 +70,8 @@ from .tasks import (
     multiply,
     match_faces_feedback,
     match_faces_no_feedback,
+    matching_confidence_with_cause,
+    matching_confidence,
 )
 
 from . import tasks
@@ -136,4 +138,6 @@ __all__ = (
     "multiply",
     "match_faces_feedback",
     "match_faces_no_feedback",
+    "matching_confidence_with_cause",
+    "matching_confidence",
 )
