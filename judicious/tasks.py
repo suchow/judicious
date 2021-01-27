@@ -369,3 +369,13 @@ def multiply(number1, number2, **kwargs):
     """Simple multipication"""
     r = collect("multiply", math_input=number1, math_input2=number2, **kwargs)
     return int(r['mathsolution'])
+
+def matching_confidence_with_cause (faceA, faceB, prompt, **kwargs):
+    """Determine causal factor effect on confidence level of matching decision"""
+    r = collect("matching_confidence_with_cause", face_A_src=faceA, face_B_src=faceB, prompt = prompt, **kwargs)
+    return r['matching_confidence_with_cause']
+
+def matching_confidence (faceA, faceB, **kwargs):
+    """Determine confidence level of matching decision"""
+    r = collect("matching_confidence", face_A_src=faceA, face_B_src=faceB, **kwargs)
+    return r['matching_confidence']
