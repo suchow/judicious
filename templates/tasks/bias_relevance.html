@@ -10,61 +10,11 @@
     .center-screen {
       display: flex;
       flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
+      justify-content: start;
+      align-items: start;
+      text-align: left;
       min-height: 100vh;
-      padding: 0;
-    }
-
-    .scenario {
-      display: block;
-      margin: 0 auto;
-      width: 300px;
-    }
-
-    .slider {
-      -webkit-appearance: none;
-      display: block;
-      margin: 0 auto;
-      width: 600px;
-      height: 15px;
-      border-radius: 5px;
-      background: #d3d3d3;
-      outline: none;
-      opacity: 1;
-      -webkit-transition: 0.2s;
-      transition: opacity 0.2s;
-      font-size: 0px;
-      /*Needed to prevent FireFox from diplaying weird grey line. */
-    }
-
-    .slider::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      appearance: none;
-      width: 25px;
-      height: 25px;
-      border-radius: 50%;
-      background: #2c3e50;
-      cursor: pointer;
-    }
-
-    .slider::-moz-range-thumb {
-      width: 25px;
-      height: 25px;
-      border-radius: 50%;
-      background: #2c3e50;
-      cursor: pointer;
-    }
-
-    .slider.not-clicked::-webkit-slider-thumb {
-      opacity: 0;
-      cursor: none;
-    }
-
-    .slider.not-clicked::-moz-range-thumb {
-      opacity: 0;
-      cursor: none;
+      padding: 0 20px;
     }
 
     .container {
@@ -72,10 +22,9 @@
       width: 700px !important;
       display: flex;
       flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      min-height: 100vh;
+      justify-content: start;
+      align-items: start;
+      text-align: left;
       padding: 0;
     }
 
@@ -86,6 +35,11 @@
     #survey {
       width: 700px;
     }
+
+    .input-number {
+      width: 100px;
+      text-align: center;
+    }
   </style>
   {{ super() }}
 {% endblock %}
@@ -95,7 +49,6 @@
   <script>
     window.onload = function(){
       window.scrollTo(0,0);
-      content.scrollTo(0,0);
     }
 
     $(document).ready(function() {
@@ -107,20 +60,16 @@
         return {
           scenario: '{{ task.parameters.scenario }}',
           justification: '{{ task.parameters.justification }}',
-          rating: parseFloat($("#taskSlider")[0].value).toFixed(4),
+          relevance: parseFloat($("#taskInput")[0].value).toFixed(2),
           rt: (performance.now() - start).toFixed(4),
         };
       }
 
-      $("#taskSlider").on("input", function() {
-        $("#taskSlider").removeClass("not-clicked");
-        $("#taskSlider").removeClass("invis");
-      })
-
       Judicious.validate = function () {
-        const valid = !$("#taskSlider").hasClass("not-clicked");
+        const relevance = parseFloat($("#taskInput")[0].value);
+        const valid = relevance >= 0 && relevance <= 100;
         if (!valid) {
-          alert("Please make your selection by clicking/dragging on the grey slider.");
+          alert("Please enter a relevance rating between 0 and 100.");
         }
         return valid;
       }
@@ -129,11 +78,18 @@
 {% endblock %}
 
 {% block task %}
-  <form id="survey">
-    <p>{{ task.parameters.scenario }}</h2>
+  <form id="survey" class="center-screen">
+    <p>In this task, you will judge how relevant a cognitive error is to an everyday decision-making scenario. First, read the scenario below. Then, read the argument for why a particular cognitive error might be relevant to that scenario. Your job is to rate how relevant the cognitive error is to the scenario on a scale from 0 (not relevant at all) to 100 (highly relevant).</p>
+    
+    <h3>Scenario</h3>
+    <p>{{ task.parameters.scenario }}</p>
+
+    <h3>Justification</h3>
     <p>{{ task.parameters.justification }}</p>
-    <input type="range" id="taskSlider" class="slider text-center my-3 not-clicked" value="0" min="0" max="100"
-    step="any">
+
+    <label for="taskInput">Relevance (0-100):</label>
+    <input type="number" id="taskInput" class="input-number my-3" value="0" min="0" max="100" step="1">
+
     <p id="leftLabel" class="float-left">Not at all relevant</p>
     <p id="rightLabel" class="float-right">Extremely relevant</p>
   </form>
