@@ -41,6 +41,10 @@ app.secret_key = os.environ["JUDICIOUS_SECRET_KEY"]
 
 DB_URL_DEFAULT = 'postgresql://postgres@localhost/judicious'
 DB_URL = os.environ.get("DATABASE_URL", DB_URL_DEFAULT)
+
+if DB_URL.startswith("postgres://"):
+    DB_URL = DB_URL.replace("postgres://", "postgresql://", 1)
+    
 app.config['SQLALCHEMY_DATABASE_URI'] = DB_URL
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['JUDICIOUS_LOG_LEVEL'] = os.environ["JUDICIOUS_LOG_LEVEL"]
