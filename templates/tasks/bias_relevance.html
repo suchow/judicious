@@ -45,8 +45,8 @@
       }
 
       Judicious.validate = function () {
-        const relevance = parseFloat($("#taskInput")[0].value);
-        const valid = relevance >= 0 && relevance <= 100;
+        const relevance = $("#taskInput")[0].value;
+        const valid = relevance !== "" && parseFloat(relevance) >= 0 && parseFloat(relevance) <= 100;
         if (!valid) {
           alert("Please enter a relevance rating between 0 and 100.");
         }
@@ -67,7 +67,7 @@
     <p>{{ task.parameters.justification }}</p>
 
     <label for="taskInput">Relevance (0-100):</label>
-    <input type="number" id="taskInput" class="input-number my-3" value="0" min="0" max="100" step="1">
+    <input type="number" id="taskInput" class="input-number my-3" placeholder="Enter a number" min="0" max="100" step="1">
   </form>
   <br/>
 {% endblock %}
