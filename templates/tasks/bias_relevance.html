@@ -1,0 +1,141 @@
+{% extends "task.html" %}
+
+{% block styles %}
+  <style type="text/css">
+    body {
+      padding-top: 0px !important;
+      padding-bottom: 0px !important;
+    }
+
+    .center-screen {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      min-height: 100vh;
+      padding: 0;
+    }
+
+    .scenario {
+      display: block;
+      margin: 0 auto;
+      width: 300px;
+    }
+
+    .slider {
+      -webkit-appearance: none;
+      display: block;
+      margin: 0 auto;
+      width: 600px;
+      height: 15px;
+      border-radius: 5px;
+      background: #d3d3d3;
+      outline: none;
+      opacity: 1;
+      -webkit-transition: 0.2s;
+      transition: opacity 0.2s;
+      font-size: 0px;
+      /*Needed to prevent FireFox from diplaying weird grey line. */
+    }
+
+    .slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 25px;
+      height: 25px;
+      border-radius: 50%;
+      background: #2c3e50;
+      cursor: pointer;
+    }
+
+    .slider::-moz-range-thumb {
+      width: 25px;
+      height: 25px;
+      border-radius: 50%;
+      background: #2c3e50;
+      cursor: pointer;
+    }
+
+    .slider.not-clicked::-webkit-slider-thumb {
+      opacity: 0;
+      cursor: none;
+    }
+
+    .slider.not-clicked::-moz-range-thumb {
+      opacity: 0;
+      cursor: none;
+    }
+
+    .container {
+      max-width: none !important;
+      width: 700px !important;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      min-height: 100vh;
+      padding: 0;
+    }
+
+    #leftLabel, #rightLabel {
+      margin-bottom: 0;
+    }
+
+    #survey {
+      width: 700px;
+    }
+  </style>
+  {{ super() }}
+{% endblock %}
+
+{% block scripts %}
+  {{ super() }}
+  <script>
+    window.onload = function(){
+      window.scrollTo(0,0);
+      content.scrollTo(0,0);
+    }
+
+    $(document).ready(function() {
+      $("#skip-task").remove();
+
+      let start = performance.now();
+
+      Judicious.result = function () {
+        return {
+          scenario: {{ task.parameters.scenario }},
+          justification: '{{ task.parameters.justification }}',
+          rating: parseFloat($("#taskSlider")[0].value).toFixed(4),
+          rt: (performance.now() - start).toFixed(4),
+        };
+      }
+
+      $("#taskSlider").on("input", function() {
+        $("#taskSlider").removeClass("not-clicked");
+        $("#taskSlider").removeClass("invis");
+      })
+
+      Judicious.validate = function () {
+        const valid = !$("#taskSlider").hasClass("not-clicked");
+        if (!valid) {
+          alert("Please make your selection by clicking/dragging on the grey slider.");
+        }
+        return valid;
+      }
+    });
+  </script>
+{% endblock %}
+
+{% block task %}
+  <form id="survey">
+    <h2><center>How {{ task.parameters.scenario }}</center></h2>
+    <p>{{ task.parameters.justification }}</p>
+    <input type="range" id="taskSlider" class="slider text-center my-3 not-clicked" value="0" min="0" max="100"
+    step="any">
+    <p id="leftLabel" class="float-left">Not at all relevant</p>
+    <p id="rightLabel" class="float-right">Extremely relevant</p>
+  </form>
+  <br/>
+{% endblock %}
