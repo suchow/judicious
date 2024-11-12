@@ -7,7 +7,7 @@ from pq import PQ
 from psycopg2 import connect
 import pytz
 
-from app import db, Task
+from app import db, Task, app
 import recruiters
 
 # Set up connection to queue.
@@ -46,28 +46,30 @@ def outstanding():
 
 @sched.scheduled_job('interval', seconds=JUDICIOUS_RECRUIT_INTERVAL)
 def recruitment():
-    logger.info('Running recruiter...')
-    last_check = datetime.now() - timedelta(seconds=JUDICIOUS_RECRUIT_INTERVAL)
-    num_new_tasks = Task.query.filter(Task.last_queued_at > last_check).count()
-    logger.info("Found {} new tasks.".format(num_new_tasks))
-    redundancy = int(os.environ.get("JUDICIOUS_REDUNDANCY", 1))
-    for _ in range(num_new_tasks * redundancy):
-        recruiter.recruit()
+    with app.app_context():
+        logger.info('Running recruiter...')
+        last_check = datetime.now() - timedelta(seconds=JUDICIOUS_RECRUIT_INTERVAL)
+        num_new_tasks = Task.query.filter(Task.last_queued_at > last_check).count()
+        logger.info("Found {} new tasks.".format(num_new_tasks))
+        redundancy = int(os.environ.get("JUDICIOUS_REDUNDANCY", 1))
+        for _ in range(num_new_tasks * redundancy):
+            recruiter.recruit()
 
 
 @sched.scheduled_job('interval', seconds=JUDICIOUS_CLEANUP_INTERVAL)
 def cleanup():
-    logger.info('Cleaning up task table...')
-    # Timed out tasks have no result AND were last started over JUDICIOUS_TASK_TIMEOUT seconds ago.
-    unfinished_tasks = Task.query\
-        .filter_by(result=None)\
-        .filter(Task.last_started_at.isnot(None))\
-        .all()
-    for task in unfinished_tasks:
-        time_since = datetime.now() - task.last_started_at
-        time_given = timedelta(seconds=int(os.environ['JUDICIOUS_TASK_TIMEOUT']))
-        if time_since > time_given:
-            task.timeout()
+    with app.app_context():
+        logger.info('Cleaning up task table...')
+        # Timed out tasks have no result AND were last started over JUDICIOUS_TASK_TIMEOUT seconds ago.
+        unfinished_tasks = Task.query\
+            .filter_by(result=None)\
+            .filter(Task.last_started_at.isnot(None))\
+            .all()
+        for task in unfinished_tasks:
+            time_since = datetime.now() - task.last_started_at
+            time_given = timedelta(seconds=int(os.environ['JUDICIOUS_TASK_TIMEOUT']))
+            if time_since > time_given:
+                task.timeout()
 
 
 sched.start()
