@@ -4,7 +4,7 @@ Faker==1.0.4
 Flask==1.0.2
 Flask-Sockets==0.2.1
 Flask-SQLAlchemy==2.4.0
-gevent
+gevent==24.11.1
 gevent-websocket
 greenlet
 gunicorn==19.9.0
