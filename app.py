@@ -35,7 +35,8 @@ sockets = Sockets(app)
 
 REDIS_URL = os.environ['REDIS_URL']
 REDIS_CHAN = 'chat'
-redis = redis.from_url(REDIS_URL)
+REDIS_TLS_URL = os.environ.get('REDIS_TLS_URL', REDIS_URL)
+redis = redis.from_url(REDIS_TLS_URL, ssl_cert_reqs=None)
 
 app.secret_key = os.environ["JUDICIOUS_SECRET_KEY"]
 
