@@ -5,6 +5,7 @@ import os
 from apscheduler.schedulers.blocking import BlockingScheduler
 from pq import PQ
 from psycopg2 import connect
+import pytz
 
 from app import db, Task
 import recruiters
@@ -25,7 +26,7 @@ logger.addHandler(handler)
 logger.setLevel(logging.DEBUG)
 
 # Set up scheduler.
-sched = BlockingScheduler()
+sched = BlockingScheduler(timezone=pytz.utc)
 
 JUDICIOUS_RECRUIT_INTERVAL = os.environ.get(
     "JUDICIOUS_RECRUIT_INTERVAL", 10)
