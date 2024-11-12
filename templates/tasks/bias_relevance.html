@@ -105,7 +105,7 @@
 
       Judicious.result = function () {
         return {
-          scenario: {{ task.parameters.scenario }},
+          scenario: '{{ task.parameters.scenario }}',
           justification: '{{ task.parameters.justification }}',
           rating: parseFloat($("#taskSlider")[0].value).toFixed(4),
           rt: (performance.now() - start).toFixed(4),
@@ -130,7 +130,7 @@
 
 {% block task %}
   <form id="survey">
-    <h2><center>How {{ task.parameters.scenario }}</center></h2>
+    <p>{{ task.parameters.scenario }}</h2>
     <p>{{ task.parameters.justification }}</p>
     <input type="range" id="taskSlider" class="slider text-center my-3 not-clicked" value="0" min="0" max="100"
     step="any">
