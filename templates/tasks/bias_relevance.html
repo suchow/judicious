@@ -36,10 +36,13 @@
       let start = performance.now();
 
       Judicious.result = function () {
+        let relevance = parseFloat($("#taskInput")[0].value);
+        relevance = isNaN(relevance) ? null : relevance.toFixed(2);  // Set to null if NaN
+
         return {
           scenario: '{{ task.parameters.scenario }}',
           justification: '{{ task.parameters.justification }}',
-          relevance: parseFloat($("#taskInput")[0].value).toFixed(2),
+          relevance: relevance,
           rt: (performance.now() - start).toFixed(4),
         };
       }
