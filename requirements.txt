@@ -1,6 +1,6 @@
 APScheduler==3.6.3
 boto3
-Faker==1.0.4
+Faker==32.1.0
 Flask
 Flask-Sockets==0.2.1
 Flask-SQLAlchemy
