@@ -1,4 +1,8 @@
 $(document).ready(function() {
+  function scrollToTop() {
+    $(window).scrollTop(0);
+  }
+  scrollToTop();
   (function() {
     window.onbeforeunload = function() {
       return "Don't reload";
@@ -15,17 +19,20 @@ $(document).ready(function() {
         return;
       }
       window.onbeforeunload = null;
+      scrollToTop();
       $("body").fadeOut(650);
       Judicious.postResult(Judicious.taskUUID, result, function() {
         if (Judicious.turkSubmitTo !== "") {
           $("#mturk_form").submit();
         } else {
           location.reload();
+          scrollToTop();
         }
       });
     });
     $("#skip-task").click(function() {
       location.reload();
+      scrollToTop();
     });
   })();
 });
