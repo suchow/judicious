@@ -30,6 +30,19 @@
       $(window).scrollTop(0);
       $("#skip-task").remove();
 
+      const maxSubmissions = 10;
+      let submissionCount = parseInt(localStorage.getItem("submissionCount")) || 0;
+
+      // Debugging: Log the initial submission count on page load
+      console.log("Initial submission count on load:", submissionCount);
+
+      // Redirect immediately if the submission count has reached or exceeded maxSubmissions
+      if (submissionCount >= maxSubmissions) {
+        console.log("Max submissions reached. Redirecting immediately.");
+        window.location.href = "https://app.prolific.com/submissions/complete?cc=C1HSJTXT";
+        return;  // Exit the script to prevent further execution
+      }
+
       let start = performance.now();
 
       // Function to extract URL parameters
@@ -42,10 +55,6 @@
       const prolificPid = getUrlParameter("PROLIFIC_PID");
       const studyId = getUrlParameter("STUDY_ID");
       const sessionId = getUrlParameter("SESSION_ID");
-
-      // Initialize or retrieve the submission count from localStorage
-      const maxSubmissions = 10;
-      let submissionCount = parseInt(localStorage.getItem("submissionCount")) || 0;
 
       Judicious.result = function () {
         let relevance = parseFloat($("#taskInput")[0].value);
@@ -78,10 +87,15 @@
           submissionCount += 1;
           localStorage.setItem("submissionCount", submissionCount);
 
+          // Debugging: Log the updated submission count after increment
+          console.log("Updated submission count after increment:", submissionCount);
+
           if (submissionCount >= maxSubmissions) {
-            // Redirect to Prolific completion URL
+            console.log("Reached max submissions on submit. Redirecting to Prolific completion URL.");
             window.location.href = "https://app.prolific.com/submissions/complete?cc=C1HSJTXT";
           } else {
+            console.log("Submission count below maxSubmissions. Continuing with task submission.");
+
             // Proceed with the task submission process
             let result = Judicious.result();
             Judicious.postResult(Judicious.taskUUID, result, function() {
