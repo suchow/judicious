@@ -26,11 +26,9 @@
 {% block scripts %}
   {{ super() }}
   <script>
-    window.onload = function(){
-      window.scrollTo(0,0);
-    }
-
     $(document).ready(function() {
+      $(window).scrollTop(0);
+
       $("#skip-task").remove();
 
       let start = performance.now();
@@ -40,8 +38,6 @@
         relevance = isNaN(relevance) ? null : relevance.toFixed(2);  // Set to null if NaN
 
         return {
-          scenario: '{{ task.parameters.scenario }}',
-          justification: '{{ task.parameters.justification }}',
           relevance: relevance,
           rt: (performance.now() - start).toFixed(4),
         };
@@ -61,14 +57,15 @@
 
 {% block task %}
   <form id="survey" class="center-screen">
-    <p>In this task, you will judge how relevant a cognitive error is to an everyday decision-making scenario. First, read the scenario below. Then, read the argument for why a particular cognitive error might be relevant to that scenario. Your job is to rate how relevant the cognitive error is to the scenario on a scale from 0 (not relevant at all) to 100 (highly relevant).</p>
+    <p>In this task, you will judge how relevant a cognitive error is to an everyday decision-making scenario. First, read the scenario below. Then, read the argument in favor for why a particular cognitive error is relevant to that scenario. Note that the cognitive error may or may not actually be relevant. Your job is to consider the justification given and then rate how relevant the cognitive error is to the scenario on a scale from 0 (not relevant at all) to 100 (highly relevant).</p>
     
     <h3>Scenario</h3>
     <p>{{ task.parameters.scenario }}</p>
 
-    <h3>Justification</h3>
+    <h3>Cognitive Error</h3>
     <p>{{ task.parameters.justification }}</p>
 
+    <p>How relevant is this cognitive error to the scenario on a scale from 0 (not relevant at all) to 100 (highly relevant).</p>
     <label for="taskInput">Relevance (0-100):</label>
     <input type="number" id="taskInput" class="input-number my-3" placeholder="Enter a number" min="0" max="100" step="1">
   </form>
