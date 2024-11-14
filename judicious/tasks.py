@@ -380,7 +380,7 @@ def matching_confidence (faceA, faceB, **kwargs):
     r = collect("matching_confidence", face_A_src=faceA, face_B_src=faceB, **kwargs)
     return r['matching_confidence']
 
-def bias_relevance(scenario, justification, **kwargs):
+def bias_relevance(scenario, justification, idx=None, **kwargs):
     """Determine relevance of bias in a scenario"""
-    r = collect("bias_relevance", scenario=scenario, justification=justification, **kwargs)
+    r = collect("bias_relevance", scenario=scenario, justification=justification, idx=idx, **kwargs)
     return r['relevance']

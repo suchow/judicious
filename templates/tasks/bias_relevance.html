@@ -28,20 +28,38 @@
   <script>
     $(document).ready(function() {
       $(window).scrollTop(0);
-
       $("#skip-task").remove();
 
       let start = performance.now();
+
+      // Function to extract URL parameters
+      function getUrlParameter(name) {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(name);
+      }
+
+      // Get the URL parameters
+      const prolificPid = getUrlParameter("PROLIFIC_PID");
+      const studyId = getUrlParameter("STUDY_ID");
+      const sessionId = getUrlParameter("SESSION_ID");
+
+      // Initialize or retrieve the submission count from localStorage
+      const maxSubmissions = 10;
+      let submissionCount = parseInt(localStorage.getItem("submissionCount")) || 0;
 
       Judicious.result = function () {
         let relevance = parseFloat($("#taskInput")[0].value);
         relevance = isNaN(relevance) ? null : relevance.toFixed(2);  // Set to null if NaN
 
         return {
+          idx: {{ task.parameters.idx }},
           relevance: relevance,
           rt: (performance.now() - start).toFixed(4),
+          PROLIFIC_PID: prolificPid,
+          STUDY_ID: studyId,
+          SESSION_ID: sessionId,
         };
-      }
+      };
 
       Judicious.validate = function () {
         const relevance = $("#taskInput")[0].value;
@@ -50,7 +68,32 @@
           alert("Please enter a relevance rating between 0 and 100.");
         }
         return valid;
-      }
+      };
+
+      // Handle the submit button click
+      $(".submit-task").click(function(event) {
+        event.preventDefault();
+
+        if (Judicious.validate()) {
+          submissionCount += 1;
+          localStorage.setItem("submissionCount", submissionCount);
+
+          if (submissionCount >= maxSubmissions) {
+            // Redirect to Prolific completion URL
+            window.location.href = "https://app.prolific.com/submissions/complete?cc=C1HSJTXT";
+          } else {
+            // Proceed with the task submission process
+            let result = Judicious.result();
+            Judicious.postResult(Judicious.taskUUID, result, function() {
+              if (Judicious.turkSubmitTo !== "") {
+                $("#mturk_form").submit();
+              } else {
+                location.reload();
+              }
+            });
+          }
+        }
+      });
     });
   </script>
 {% endblock %}
