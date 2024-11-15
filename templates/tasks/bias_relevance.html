@@ -30,39 +30,38 @@
       $(window).scrollTop(0);
       $("#skip-task").remove();
 
-      const maxSubmissions = 10;
+      const maxSubmissions = 20;
       let submissionCount = parseInt(localStorage.getItem("submissionCount")) || 0;
 
-      // Debugging: Log the initial submission count on page load
       console.log("Initial submission count on load:", submissionCount);
 
-      // Redirect immediately if the submission count has reached or exceeded maxSubmissions
       if (submissionCount >= maxSubmissions) {
         console.log("Max submissions reached. Redirecting immediately.");
         window.location.href = "https://app.prolific.com/submissions/complete?cc=C1HSJTXT";
-        return;  // Exit the script to prevent further execution
+        return;
       }
 
       let start = performance.now();
 
-      // Function to extract URL parameters
       function getUrlParameter(name) {
         const urlParams = new URLSearchParams(window.location.search);
         return urlParams.get(name);
       }
 
-      // Get the URL parameters
       const prolificPid = getUrlParameter("PROLIFIC_PID");
       const studyId = getUrlParameter("STUDY_ID");
       const sessionId = getUrlParameter("SESSION_ID");
 
       Judicious.result = function () {
         let relevance = parseFloat($("#taskInput")[0].value);
-        relevance = isNaN(relevance) ? null : relevance.toFixed(2);  // Set to null if NaN
+        relevance = isNaN(relevance) ? null : relevance.toFixed(2);
+
+        let explanation = $("#explanationInput").val();
 
         return {
           idx: {{ task.parameters.idx }},
           relevance: relevance,
+          explanation: explanation,
           rt: (performance.now() - start).toFixed(4),
           PROLIFIC_PID: prolificPid,
           STUDY_ID: studyId,
@@ -72,14 +71,21 @@
 
       Judicious.validate = function () {
         const relevance = $("#taskInput")[0].value;
-        const valid = relevance !== "" && parseFloat(relevance) >= 0 && parseFloat(relevance) <= 100;
-        if (!valid) {
+        const explanation = $("#explanationInput").val();
+
+        const relevanceValid = relevance !== "" && parseFloat(relevance) >= 0 && parseFloat(relevance) <= 100;
+        const explanationValid = explanation.trim() !== "";
+
+        if (!relevanceValid) {
           alert("Please enter a relevance rating between 0 and 100.");
         }
-        return valid;
+        if (!explanationValid) {
+          alert("Please provide an explanation for your relevance rating.");
+        }
+
+        return relevanceValid && explanationValid;
       };
 
-      // Handle the submit button click
       $(".submit-task").click(function(event) {
         event.preventDefault();
 
@@ -87,7 +93,6 @@
           submissionCount += 1;
           localStorage.setItem("submissionCount", submissionCount);
 
-          // Debugging: Log the updated submission count after increment
           console.log("Updated submission count after increment:", submissionCount);
 
           if (submissionCount >= maxSubmissions) {
@@ -96,7 +101,6 @@
           } else {
             console.log("Submission count below maxSubmissions. Continuing with task submission.");
 
-            // Proceed with the task submission process
             let result = Judicious.result();
             Judicious.postResult(Judicious.taskUUID, result, function() {
               if (Judicious.turkSubmitTo !== "") {
@@ -119,6 +123,9 @@
     <p>Now, read the argument in favor of the presence of a cognitive error:<blockquote>{{ task.parameters.justification }}</blockquote></p>
     <p>In your judgment, how relevant is this cognitive error to the scenario on a scale from 0 (not relevant at all) to 100 (highly relevant)?</p>
     <input type="number" id="taskInput" class="input-number my-3" placeholder="Enter a number" min="0" max="100" step="1">
+
+    <p>Please explain your reasoning for the relevance rating in one or two sentences:</p>
+    <textarea id="explanationInput" class="input-textarea my-3" rows="4" placeholder="Enter your explanation here"></textarea>
   </form>
   <br/>
 {% endblock %}
