@@ -93,10 +93,12 @@ class Task(db.Model):
         self.requeue()
 
     def requeue(self):
+        task_id = str(self.id)  # Convert UUID to string
         if self.person_id:
-            pq[str(self.person_id)].put({"id": self.id})
+            person_id = str(self.person_id)  # Convert UUID to string
+            pq[person_id].put({"id": task_id})
         else:
-            pq["open"].put({"id": self.id})
+            pq["open"].put({"id": task_id})
 
 
 class Person(db.Model):
