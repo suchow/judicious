@@ -26,11 +26,11 @@
 {% block scripts %}
   {{ super() }}
   <script>
-    $(document).ready(function() {
+    $(document).ready(function () {
       $(window).scrollTop(0);
       $("#skip-task").remove();
 
-      const maxSubmissions = 20;
+      const maxSubmissions = 10;
       let submissionCount = parseInt(localStorage.getItem("submissionCount")) || 0;
 
       console.log("Initial submission count on load:", submissionCount);
@@ -86,7 +86,9 @@
         return relevanceValid && explanationValid;
       };
 
-      $(".submit-task").click(function(event) {
+      // Prevent multiple handler bindings
+      $(".submit-task").off("click").on("click", function (event) {
+        console.log("Submit button clicked");
         event.preventDefault();
 
         if (Judicious.validate()) {
@@ -102,7 +104,7 @@
             console.log("Submission count below maxSubmissions. Continuing with task submission.");
 
             let result = Judicious.result();
-            Judicious.postResult(Judicious.taskUUID, result, function() {
+            Judicious.postResult(Judicious.taskUUID, result, function () {
               if (Judicious.turkSubmitTo !== "") {
                 $("#mturk_form").submit();
               } else {
@@ -123,9 +125,8 @@
     <p>Now, read the argument in favor of the presence of a cognitive error:<blockquote>{{ task.parameters.justification }}</blockquote></p>
     <p>In your judgment, how relevant is this cognitive error to the scenario on a scale from 0 (not relevant at all) to 100 (highly relevant)?</p>
     <input type="number" id="taskInput" class="input-number my-3" placeholder="Enter a number" min="0" max="100" step="1">
-
-    <p>Please explain your reasoning for the relevance rating in one or two sentences:</p>
-    <textarea id="explanationInput" class="input-textarea my-3" rows="4" placeholder="Enter your explanation here"></textarea>
+    <p>Please explain your reasoning in a sentence or two:</p>
+    <textarea id="explanationInput" class="input-textarea my-3" placeholder="Write your explanation here..." rows="3" required></textarea>
   </form>
   <br/>
 {% endblock %}
