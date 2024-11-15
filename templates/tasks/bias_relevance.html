@@ -92,6 +92,9 @@
         event.preventDefault();
 
         if (Judicious.validate()) {
+          // Disable onbeforeunload to prevent unnecessary dialogs
+          window.onbeforeunload = null;
+
           submissionCount += 1;
           localStorage.setItem("submissionCount", submissionCount);
 
@@ -114,6 +117,9 @@
           }
         }
       });
+
+      // Disable onbeforeunload during navigation
+      window.onbeforeunload = null;
     });
   </script>
 {% endblock %}
@@ -125,8 +131,8 @@
     <p>Now, read the argument in favor of the presence of a cognitive error:<blockquote>{{ task.parameters.justification }}</blockquote></p>
     <p>In your judgment, how relevant is this cognitive error to the scenario on a scale from 0 (not relevant at all) to 100 (highly relevant)?</p>
     <input type="number" id="taskInput" class="input-number my-3" placeholder="Enter a number" min="0" max="100" step="1">
-    <p>Please explain your reasoning in a sentence or two:</p>
-    <textarea id="explanationInput" class="input-textarea my-3" placeholder="Write your explanation here..." rows="3" required></textarea>
+    <p>Please explain your reasoning for the rating you provided in one or two sentences, making explicit reference to the scenario and argument in favor of the cognitive error:</p>
+    <textarea id="explanationInput" class="input-text my-3" placeholder="Type your explanation here..." rows="3" required></textarea>
   </form>
   <br/>
 {% endblock %}
