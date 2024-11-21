@@ -1,5 +1,5 @@
 APScheduler==3.6.3
-boto3
+boto3==1.35.66
 Faker==1.0.4
 Flask
 Flask-Sockets==0.2.1
