@@ -8,7 +8,7 @@ gevent
 gevent-websocket
 greenlet
 gunicorn
-Pebble==4.3.10
+Pebble==5.1.0
 pq==1.6.1
 psycopg2
 python-dateutil==2.8.1
