@@ -16,4 +16,4 @@ pytz
 raven[flask]==6.10.0
 redis==3.2.1
 requests
-six
+six==1.17.0
